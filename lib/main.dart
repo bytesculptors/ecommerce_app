@@ -1,4 +1,6 @@
+import 'package:btl/features/onboarding/screens/onboarding_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +12,7 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
 
       theme: ThemeData(
         // This is the theme of your application.
@@ -30,6 +32,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
 
       ),
+      home: const OnBoardingScreen(),
 
     );
   }
