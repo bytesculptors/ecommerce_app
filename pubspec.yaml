@@ -1,5 +1,5 @@
 name: btl
-description: "A new Flutter project."
+description: "A ecommerce app Flutter project."
 # The following line prevents the package from being accidentally published to
 # pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
@@ -82,10 +82,9 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   assets:
-    - assets/icons/
     - assets/images/
-    - assets/images/onboarding
-  #   - assets/logos/
+    - assets/images/onboarding/
+    - assets/logos/
   # fonts:
   #   - family: Schyler
   #     fonts:

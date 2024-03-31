@@ -1,4 +1,4 @@
-import 'package:btl/features/authentication/screens/login_screen.dart';
+import 'package:btl/features/authentication/screens/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +16,7 @@ class OnBoardingController extends GetxController {
   // jump to selected dot page
   void dotNavigationClick(index) {
     currentPageIndex.value = index;
-    pageController.jumpTo(index);
+    pageController.jumpToPage(index);
   }
 
   // jump to next page
