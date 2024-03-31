@@ -1,4 +1,4 @@
-import 'package:btl/features/onboarding/onboarding_controller.dart';
+import 'package:btl/features/onboarding/controllers/onboarding_controller.dart';
 import 'package:btl/features/onboarding/screens/widgets/dot_navigation.dart';
 import 'package:btl/features/onboarding/screens/widgets/next_button.dart';
 import 'package:btl/features/onboarding/screens/widgets/onboarding_page.dart';

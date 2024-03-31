@@ -1,4 +1,4 @@
-import 'package:btl/features/onboarding/onboarding_controller.dart';
+import 'package:btl/features/onboarding/controllers/onboarding_controller.dart';
 import 'package:btl/utils/consts/colors.dart';
 import 'package:btl/utils/consts/sizes.dart';
 import 'package:btl/utils/device/device_utils.dart';
