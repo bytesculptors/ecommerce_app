@@ -1,3 +1,4 @@
+import 'package:btl/utils/consts/colors.dart';
 import 'package:btl/utils/consts/sizes.dart';
 import 'package:btl/utils/consts/text_strings.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class LoginForm extends StatelessWidget {
               children: [
                 TextButton(
                     onPressed: () {},
-                    child: const Text(Texts.forgetPassword))
+                    child: const Text(Texts.forgetPassword, style: TextStyle(color: MyColors.darkerGrey),))
               ],
             ),
             const SizedBox(height: Sizes.spaceBtwSections),

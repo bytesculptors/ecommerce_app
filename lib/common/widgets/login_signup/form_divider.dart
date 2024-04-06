@@ -1,8 +1,8 @@
 import 'package:btl/utils/consts/colors.dart';
 import 'package:flutter/material.dart';
 
-class LoginDivider extends StatelessWidget {
-  const LoginDivider({
+class FormDivider extends StatelessWidget {
+  const FormDivider({
     super.key,
     required this.dividerText
   });

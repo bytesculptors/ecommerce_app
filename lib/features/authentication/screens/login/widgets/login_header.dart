@@ -12,9 +12,10 @@ class LoginHeader extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           const Image(
-            height: 150,
+            height: 140,
             image: AssetImage(Images.appLogo),
           ),
           Text(Texts.loginTitle,
