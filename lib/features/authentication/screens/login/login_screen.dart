@@ -27,7 +27,7 @@ class LoginScreen extends StatelessWidget {
 
                   // Divider
                   LoginDivider(dividerText: Texts.orSignInWith.capitalize!),
-                  const SizedBox(height: Sizes.spaceBetweenSections),
+                  const SizedBox(height: Sizes.spaceBtwSections),
 
                   // Footer
                   const SocialButtons()

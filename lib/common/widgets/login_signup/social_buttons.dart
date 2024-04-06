@@ -24,7 +24,7 @@ class SocialButtons extends StatelessWidget {
             )
           )
         ),
-        const SizedBox(height: Sizes.spaceBetweenItems),
+        const SizedBox(height: Sizes.spaceBtwItems),
         Container(
           decoration: BoxDecoration(border: Border.all(color: MyColors.grey), borderRadius: BorderRadius.circular(100)),
           child: IconButton(
