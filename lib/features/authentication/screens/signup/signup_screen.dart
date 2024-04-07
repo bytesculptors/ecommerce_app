@@ -1,4 +1,4 @@
-import 'package:btl/common/appbar/appbar.dart';
+import 'package:btl/common/widgets/appbar/appbar.dart';
 import 'package:btl/common/widgets/login_signup/form_divider.dart';
 import 'package:btl/common/widgets/login_signup/social_buttons.dart';
 import 'package:btl/utils/consts/sizes.dart';

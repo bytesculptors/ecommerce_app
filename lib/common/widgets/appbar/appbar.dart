@@ -1,10 +1,11 @@
 import 'package:btl/utils/consts/colors.dart';
 import 'package:btl/utils/consts/sizes.dart';
 import 'package:btl/utils/device/device_utils.dart';
+import 'package:btl/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../utils/helpers/helper_functions.dart';
+
 
 class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
   /// Custom appbar for achieving a desired design goal.

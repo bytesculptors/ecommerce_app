@@ -1,5 +1,5 @@
 import 'package:btl/features/authentication/screens/password_configuration/forget_password.dart';
-import 'package:btl/features/authentication/screens/signup/signup.dart';
+import 'package:btl/features/authentication/screens/signup/signup_screen.dart';
 import 'package:btl/utils/consts/colors.dart';
 import 'package:btl/utils/consts/sizes.dart';
 import 'package:btl/utils/consts/text_strings.dart';
