@@ -1,3 +1,5 @@
+import 'package:btl/common/widgets/appbar/appbar.dart';
+import 'package:btl/features/authentication/controllers/forget_password_controller.dart';
 import 'package:btl/utils/constants/sizes.dart';
 import 'package:btl/utils/constants/text_strings.dart';
 import 'package:btl/validators/validation.dart';
@@ -13,9 +15,10 @@ class ForgetPasswordScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
+    final controller = Get.put(ForgetPasswordController());
     return Scaffold(
       /// Custom Appbar
-      appBar: AppBar(actions: [IconButton(onPressed: () => Get.back(), icon: const Icon(CupertinoIcons.clear))]),
+      appBar: MyAppBar(actions: [IconButton(onPressed: () => Get.back(), icon: const Icon(CupertinoIcons.clear))]),
       body: Padding(
         padding: const EdgeInsets.all(Sizes.defaultSpace),
         child: Column(
@@ -29,7 +32,9 @@ class ForgetPasswordScreen extends StatelessWidget {
 
             /// Text field
             Form(
+              key: controller.forgetPasswordFormKey,
               child: TextFormField(
+                controller: controller.email,
                 validator: Validator.validateEmail,
                 decoration: const InputDecoration(labelText: Texts.email, prefixIcon: Icon(Iconsax.direct_right)),
               ),
@@ -39,7 +44,7 @@ class ForgetPasswordScreen extends StatelessWidget {
             /// Submit Button
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () {}, child: const Text(Texts.submit)),
+              child: ElevatedButton(onPressed: () => controller.sendPasswordResetEmail(), child: const Text(Texts.submit)),
             ),
           ],
         ),
