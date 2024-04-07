@@ -7,4 +7,6 @@ class Images {
 
   static const String googleLogo = "assets/logos/google-logo.png";
   static const String facebookLogo = "assets/logos/facebook-logo.png";
+
+  static const String deliveredEmailIllustration = "assets/images/animations/receive-an-email.png";
 }

@@ -14,7 +14,7 @@ class LoginHeader extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const Image(
-            height: 150,
+            height: 140,
             image: AssetImage(Images.appLogo),
           ),
           Text(Texts.loginTitle,

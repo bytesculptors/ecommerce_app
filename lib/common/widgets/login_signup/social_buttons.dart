@@ -13,7 +13,9 @@ class SocialButtons extends StatelessWidget {
     return Row (
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
+        // Google
         Container(
+
           decoration: BoxDecoration(border: Border.all(color: MyColors.grey), borderRadius: BorderRadius.circular(100)),
           child: IconButton(
             onPressed: () {},
@@ -24,14 +26,17 @@ class SocialButtons extends StatelessWidget {
             )
           )
         ),
-        const SizedBox(height: Sizes.spaceBetweenItems),
+        const SizedBox(height: Sizes.spaceBtwItems),
+
+        // Facebook
         Container(
+
           decoration: BoxDecoration(border: Border.all(color: MyColors.grey), borderRadius: BorderRadius.circular(100)),
           child: IconButton(
             onPressed: () {},
             icon: const Image(
-              width: Sizes.iconMd,
-              height: Sizes.iconMd,
+              width: Sizes.iconMd + 8,
+              height: Sizes.iconMd + 8,
               image: AssetImage(Images.facebookLogo),
             )
           )
