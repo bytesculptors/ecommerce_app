@@ -1,4 +1,4 @@
-import 'package:btl/utils/consts/colors.dart';
+import 'package:btl/utils/constants/colors.dart';
 import 'package:btl/utils/theme/appbar_theme.dart';
 import 'package:btl/utils/theme/bottom_sheet_theme.dart';
 import 'package:btl/utils/theme/checkbox_theme.dart';
@@ -12,7 +12,7 @@ import 'package:flutter/material.dart';
 class AppTheme {
   AppTheme._();
 
-  static ThemeData appTheme = ThemeData(
+  static ThemeData lightTheme = ThemeData(
     useMaterial3: true,
     fontFamily: 'Poppins',
     disabledColor: MyColors.grey,

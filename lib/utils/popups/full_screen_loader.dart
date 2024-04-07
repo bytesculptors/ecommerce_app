@@ -1,4 +1,4 @@
-import 'package:btl/utils/consts/colors.dart';
+import 'package:btl/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import '../../common/widgets/loaders/animation_loader.dart';

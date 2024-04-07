@@ -30,7 +30,7 @@ class TBrandCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final isDark = THelperFunctions.isDarkMode(context);
+    final isDark = HelperFunctions.isDarkMode(context);
 
     return GestureDetector(
       onTap: onTap,
@@ -38,7 +38,7 @@ class TBrandCard extends StatelessWidget {
       child: TRoundedContainer(
         showBorder: showBorder,
         backgroundColor: Colors.transparent,
-        padding: const EdgeInsets.all(TSizes.sm),
+        padding: const EdgeInsets.all(Sizes.sm),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
@@ -48,10 +48,10 @@ class TBrandCard extends StatelessWidget {
                 image: brand.image,
                 isNetworkImage: true,
                 backgroundColor: Colors.transparent,
-                overlayColor: isDark ? TColors.white : TColors.black,
+                overlayColor: isDark ? MyColors.white : MyColors.black,
               ),
             ),
-            const SizedBox(width: TSizes.spaceBtwItems / 2),
+            const SizedBox(width: Sizes.spaceBtwItems / 2),
 
             /// -- Texts
             // [Expanded] & Column [MainAxisSize.min] is important to keep the elements in the vertical center and also

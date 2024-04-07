@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:cwt_ecommerce_app/data/repositories/brands/brand_repository.dart';
+import 'package:btl/data/repositories/brands/brand_repository.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

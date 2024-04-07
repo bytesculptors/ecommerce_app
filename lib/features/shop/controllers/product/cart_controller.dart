@@ -1,4 +1,4 @@
-import 'package:btl/utils/consts/enums.dart';
+import 'package:btl/utils/constants/enums.dart';
 import 'package:get/get.dart';
 
 import '../../../../utils/local_storage/storage_utility.dart';

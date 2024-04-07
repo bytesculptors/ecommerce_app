@@ -28,7 +28,7 @@ class TProductCardVertical extends StatelessWidget {
   Widget build(BuildContext context) {
     final productController = ProductController.instance;
     final salePercentage = productController.calculateSalePercentage(product.price, product.salePrice);
-    final dark = THelperFunctions.isDarkMode(context);
+    final dark = HelperFunctions.isDarkMode(context);
 
     return GestureDetector(
       onTap: () => Get.to(() => ProductDetailScreen(product: product)),
@@ -39,8 +39,8 @@ class TProductCardVertical extends StatelessWidget {
         padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
           boxShadow: [TShadowStyle.verticalProductShadow],
-          borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-          color: dark ? TColors.darkerGrey : TColors.white,
+          borderRadius: BorderRadius.circular(Sizes.productImageRadius),
+          color: dark ? MyColors.darkerGrey : MyColors.white,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -49,8 +49,8 @@ class TProductCardVertical extends StatelessWidget {
             TRoundedContainer(
               height: 180,
               width: 180,
-              padding: const EdgeInsets.all(TSizes.sm),
-              backgroundColor: dark ? TColors.dark : TColors.light,
+              padding: const EdgeInsets.all(Sizes.sm),
+              backgroundColor: dark ? MyColors.dark : MyColors.light,
               child: Stack(
                 children: [
                   /// -- Thumbnail Image
@@ -68,16 +68,16 @@ class TProductCardVertical extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: TSizes.spaceBtwItems / 2),
+            const SizedBox(height: Sizes.spaceBtwItems / 2),
 
             /// -- Details
             Padding(
-              padding: const EdgeInsets.only(left: TSizes.sm),
+              padding: const EdgeInsets.only(left: Sizes.sm),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   TProductTitleText(title: product.title, smallSize: true),
-                  const SizedBox(height: TSizes.spaceBtwItems / 2),
+                  const SizedBox(height: Sizes.spaceBtwItems / 2),
                   TBrandTitleWithVerifiedIcon(title: product.brand!.name, brandTextSize: TextSizes.small),
                 ],
               ),

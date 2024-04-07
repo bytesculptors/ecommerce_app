@@ -25,7 +25,7 @@ class TCartCounterIcon extends StatelessWidget {
     final controller = Get.put(CartController());
 
     // Check if the app is in dark mode
-    final dark = THelperFunctions.isDarkMode(context);
+    final dark = HelperFunctions.isDarkMode(context);
 
     return Stack(
       children: [
@@ -37,10 +37,10 @@ class TCartCounterIcon extends StatelessWidget {
         Positioned(
           right: 0,
           child: Container(
-            width: TSizes.fontSizeLg,
-            height: TSizes.fontSizeLg,
+            width: Sizes.fontSizeLg,
+            height: Sizes.fontSizeLg,
             decoration: BoxDecoration(
-              color: counterBgColor ?? (dark ? TColors.white : TColors.black),
+              color: counterBgColor ?? (dark ? MyColors.white : MyColors.black),
               borderRadius: BorderRadius.circular(100),
             ),
             child: Center(
@@ -48,7 +48,7 @@ class TCartCounterIcon extends StatelessWidget {
                 () => Text(
                   controller.noOfCartItems.value.toString(),
                   style: Theme.of(context).textTheme.labelLarge!.apply(
-                        color: counterTextColor ?? (dark ? TColors.black : TColors.white),
+                        color: counterTextColor ?? (dark ? MyColors.black : MyColors.white),
                         fontSizeFactor: 0.8,
                       ),
                 ),

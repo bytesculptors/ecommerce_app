@@ -1,4 +1,4 @@
-import 'package:btl/utils/consts/colors.dart';
+import 'package:btl/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 /// A circular container widget with optional child, border, and styling.

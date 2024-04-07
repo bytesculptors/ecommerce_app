@@ -1,4 +1,4 @@
-import 'package:cwt_ecommerce_app/features/shop/controllers/product/favourites_controller.dart';
+import 'package:btl/features/shop/controllers/product/favourites_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -24,7 +24,7 @@ class TFavouriteIcon extends StatelessWidget {
     return Obx(
       () => TCircularIcon(
         icon: controller.isFavourite(productId) ? Iconsax.heart5 : Iconsax.heart,
-        color: controller.isFavourite(productId) ? TColors.error : null,
+        color: controller.isFavourite(productId) ? MyColors.error : null,
         onPressed: () => controller.toggleFavoriteProduct(productId),
       ),
     );

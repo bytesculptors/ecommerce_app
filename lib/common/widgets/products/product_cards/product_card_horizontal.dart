@@ -1,3 +1,4 @@
+import 'package:btl/utils/constants/enums.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -5,7 +6,6 @@ import '../../../../features/shop/controllers/product/product_controller.dart';
 import '../../../../features/shop/models/product_model.dart';
 import '../../../../features/shop/screens/product_detail/product_detail.dart';
 import '../../../../utils/constants/colors.dart';
-import '../../../../utils/constants/enums.dart';
 import '../../../../utils/constants/sizes.dart';
 import '../../../../utils/helpers/helper_functions.dart';
 import '../../custom_shapes/containers/rounded_container.dart';
@@ -26,7 +26,7 @@ class TProductCardHorizontal extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final salePercentage = ProductController.instance.calculateSalePercentage(product.price, product.salePrice);
-    final isDark = THelperFunctions.isDarkMode(context);
+    final isDark = HelperFunctions.isDarkMode(context);
     return GestureDetector(
       onTap: () => Get.to(() => ProductDetailScreen(product: product)),
 
@@ -35,8 +35,8 @@ class TProductCardHorizontal extends StatelessWidget {
         width: 310,
         padding: const EdgeInsets.all(1),
         decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(TSizes.productImageRadius),
-          color: THelperFunctions.isDarkMode(context) ? TColors.darkerGrey : TColors.lightContainer,
+          borderRadius: BorderRadius.circular(Sizes.productImageRadius),
+          color: HelperFunctions.isDarkMode(context) ? MyColors.darkerGrey : MyColors.lightContainer,
         ),
         child: Row(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -44,8 +44,8 @@ class TProductCardHorizontal extends StatelessWidget {
             /// Thumbnail
             TRoundedContainer(
               height: 120,
-              padding: const EdgeInsets.all(TSizes.sm),
-              backgroundColor: isDark ? TColors.dark : TColors.light,
+              padding: const EdgeInsets.all(Sizes.sm),
+              backgroundColor: isDark ? MyColors.dark : MyColors.light,
               child: Stack(
                 children: [
                   /// -- Thumbnail Image
@@ -63,18 +63,18 @@ class TProductCardHorizontal extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: TSizes.spaceBtwItems / 2),
+            const SizedBox(height: Sizes.spaceBtwItems / 2),
 
             /// -- Details, Add to Cart, & Pricing
             Container(
-              padding: const EdgeInsets.only(left: TSizes.sm),
+              padding: const EdgeInsets.only(left: Sizes.sm),
               width: 172,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// -- Details
                   Padding(
-                    padding: const EdgeInsets.only(top: TSizes.sm),
+                    padding: const EdgeInsets.only(top: Sizes.sm),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -83,7 +83,7 @@ class TProductCardHorizontal extends StatelessWidget {
                           smallSize: true,
                           maxLines: 2,
                         ),
-                        const SizedBox(height: TSizes.spaceBtwItems / 2),
+                        const SizedBox(height: Sizes.spaceBtwItems / 2),
                         TBrandTitleWithVerifiedIcon(title: product.brand!.name, brandTextSize: TextSizes.small),
                       ],
                     ),

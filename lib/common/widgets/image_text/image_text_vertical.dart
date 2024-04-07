@@ -16,7 +16,7 @@ class TVerticalImageAndText extends StatelessWidget {
     required this.title,
     this.backgroundColor,
     this.isNetworkImage = true,
-    this.textColor = TColors.white,
+    this.textColor = MyColors.white,
   }) : super(key: key);
 
   /// The image asset path or URL.
@@ -42,18 +42,18 @@ class TVerticalImageAndText extends StatelessWidget {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.only(right: TSizes.spaceBtwItems),
+        padding: const EdgeInsets.only(right: Sizes.spaceBtwItems),
         child: Column(
           children: [
             TCircularImage(
               image: image,
               fit: BoxFit.fitWidth,
-              padding: TSizes.sm * 1.4,
+              padding: Sizes.sm * 1.4,
               isNetworkImage: isNetworkImage,
               backgroundColor: backgroundColor,
-              overlayColor: THelperFunctions.isDarkMode(context) ? TColors.light : TColors.dark,
+              overlayColor: HelperFunctions.isDarkMode(context) ? MyColors.light : MyColors.dark,
             ),
-            const SizedBox(height: TSizes.spaceBtwItems / 2),
+            const SizedBox(height: Sizes.spaceBtwItems / 2),
             SizedBox(width: 55, child: TBrandTitleText(title: title, color: textColor)),
           ],
         ),

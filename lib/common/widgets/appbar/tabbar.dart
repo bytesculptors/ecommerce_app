@@ -1,4 +1,4 @@
-import 'package:btl/utils/consts/colors.dart';
+import 'package:btl/utils/constants/colors.dart';
 import 'package:btl/utils/device/device_utils.dart';
 import 'package:btl/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';

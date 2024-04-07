@@ -1,4 +1,4 @@
-import 'package:cwt_ecommerce_app/features/shop/models/product_model.dart';
+import 'package:btl/features/shop/models/product_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../../features/shop/controllers/product/product_controller.dart';
@@ -20,7 +20,7 @@ class PricingWidget extends StatelessWidget {
           /// Actual Price if sale price not null
           if (product.productType == ProductType.single.toString() && product.salePrice > 0)
             Padding(
-              padding: const EdgeInsets.only(left: TSizes.sm),
+              padding: const EdgeInsets.only(left: Sizes.sm),
               child: Text(
                 product.price.toString(),
                 style: Theme.of(context).textTheme.labelMedium!.apply(decoration: TextDecoration.lineThrough),
@@ -29,7 +29,7 @@ class PricingWidget extends StatelessWidget {
 
           /// Price, Show sale price as main price if sale exist.
           Padding(
-            padding: const EdgeInsets.only(left: TSizes.sm),
+            padding: const EdgeInsets.only(left: Sizes.sm),
             child: TProductPriceText(price: ProductController.instance.getProductPrice(product)),
           ),
         ],

@@ -13,11 +13,11 @@ class TListTileShimmer extends StatelessWidget {
         Row(
           children: [
             TShimmerEffect(width: 50, height: 50, radius: 50),
-            SizedBox(width: TSizes.spaceBtwItems),
+            SizedBox(width: Sizes.spaceBtwItems),
             Column(
               children: [
                 TShimmerEffect(width: 100, height: 15),
-                SizedBox(height: TSizes.spaceBtwItems / 2),
+                SizedBox(height: Sizes.spaceBtwItems / 2),
                 TShimmerEffect(width: 80, height: 12),
               ],
             ),

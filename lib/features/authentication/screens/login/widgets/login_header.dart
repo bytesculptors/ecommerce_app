@@ -1,6 +1,6 @@
-import 'package:btl/utils/consts/image_paths.dart';
-import 'package:btl/utils/consts/sizes.dart';
-import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/utils/constants/image_paths.dart';
+import 'package:btl/utils/constants/sizes.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 
 class LoginHeader extends StatelessWidget {

@@ -3,9 +3,9 @@ import 'package:flutter/material.dart';
 import 'curved_edges.dart';
 
 /// Widget that adds curved edges to its child using a custom clipper.
-class CurvedEdgesWidget extends StatelessWidget {
+class TCurvedEdgesWidget extends StatelessWidget {
   /// Create a widget with curved edges.
-  const CurvedEdgesWidget({
+  const TCurvedEdgesWidget({
     super.key,
     required this.child,
   });

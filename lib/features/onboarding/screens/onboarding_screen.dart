@@ -3,8 +3,8 @@ import 'package:btl/features/onboarding/screens/widgets/dot_navigation.dart';
 import 'package:btl/features/onboarding/screens/widgets/next_button.dart';
 import 'package:btl/features/onboarding/screens/widgets/onboarding_page.dart';
 import 'package:btl/features/onboarding/screens/widgets/skip_button.dart';
-import 'package:btl/utils/consts/image_paths.dart';
-import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/utils/constants/image_paths.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

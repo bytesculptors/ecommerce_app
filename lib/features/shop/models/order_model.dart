@@ -28,9 +28,9 @@ class OrderModel {
     this.deliveryDate,
   });
 
-  String get formattedOrderDate => THelperFunctions.getFormattedDate(orderDate);
+  String get formattedOrderDate => HelperFunctions.getFormattedDate(orderDate);
 
-  String get formattedDeliveryDate => deliveryDate != null ? THelperFunctions.getFormattedDate(deliveryDate!) : '';
+  String get formattedDeliveryDate => deliveryDate != null ? HelperFunctions.getFormattedDate(deliveryDate!) : '';
 
   String get orderStatusText => status == OrderStatus.delivered
       ? 'Delivered'

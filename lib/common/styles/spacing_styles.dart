@@ -1,5 +1,5 @@
 
-import 'package:btl/utils/consts/sizes.dart';
+import 'package:btl/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
 class SpacingStyle {

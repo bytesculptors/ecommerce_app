@@ -1,8 +1,8 @@
+import 'package:btl/features/authentication/controllers/login_in_controller.dart';
 import 'package:btl/features/authentication/screens/password_configuration/forget_password.dart';
 import 'package:btl/features/authentication/screens/signup/signup_screen.dart';
-import 'package:btl/utils/consts/colors.dart';
-import 'package:btl/utils/consts/sizes.dart';
-import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/utils/constants/sizes.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:btl/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -15,57 +15,74 @@ class LoginForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(LoginController());
     return Form(
+      key: controller.loginFormKey,
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: Sizes.spaceBtwSections),
         child: Column(
           children: [
+            /// Email
             TextFormField(
+              controller: controller.email,
               validator: Validator.validateEmail,
-              decoration: const InputDecoration(
-                prefixIcon: Icon(Iconsax.direct_right),
-                labelText: Texts.email,
-              ),
+              decoration: const InputDecoration(prefixIcon: Icon(Iconsax.direct_right), labelText: Texts.email),
             ),
             const SizedBox(height: Sizes.spaceBtwInputFields),
-            TextFormField(
-              validator: (value) => Validator.validateEmptyText('Password', value),
-              decoration: const InputDecoration(
-                  prefixIcon: Icon(Iconsax.password_check),
+
+            /// Password
+            Obx(
+              () => TextFormField(
+                obscureText: controller.hidePassword.value,
+                controller: controller.password,
+                validator: (value) => Validator.validateEmptyText('Password', value),
+                decoration: InputDecoration(
                   labelText: Texts.password,
-                  suffixIcon: Icon(Iconsax.eye_slash)),
+                  prefixIcon: const Icon(Iconsax.password_check),
+                  suffixIcon: IconButton(
+                    onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
+                    icon: const Icon(Iconsax.eye_slash),
+                  ),
+                ),
+              ),
             ),
-            const SizedBox(
-                height: Sizes.spaceBtwInputFields / 2),
-    
-            // forget password
+            const SizedBox(height: Sizes.spaceBtwInputFields / 2),
+
+            /// Remember Me & Forget Password
             Row(
-              mainAxisAlignment: MainAxisAlignment.end,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                TextButton(
-                    onPressed: () => Get.to(() => const ForgetPasswordScreen()),
-                    child: const Text(Texts.forgetPassword, style: TextStyle(color: MyColors.darkerGrey),))
+                /// Remember Me
+                Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Obx(() => Checkbox(value: controller.rememberMe.value, onChanged: (value) => controller.rememberMe.value = value!)),
+                    const Text(Texts.rememberMe),
+                  ],
+                ),
+
+                /// Forget Password
+                TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child: const Text(Texts.forgetPassword)),
               ],
             ),
             const SizedBox(height: Sizes.spaceBtwSections),
-    
-            // sign in button
+
+            /// Sign In Button
             SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                    onPressed: () {},
-                    child: const Text(Texts.signIn))),
+              width: double.infinity,
+              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(), child: const Text(Texts.signIn)),
+            ),
             const SizedBox(height: Sizes.spaceBtwItems),
-    
-            // create account button
+
+            /// Create Account Button
             SizedBox(
-                width: double.infinity,
-                child: OutlinedButton(
-                    onPressed: () => Get.to(() => const SignupScreen()),
-                    child: const Text(Texts.createAccount))),
+              width: double.infinity,
+              child: OutlinedButton(onPressed: () => Get.to(() => const SignupScreen()), child: const Text(Texts.createAccount)),
+            ),
           ],
         ),
-      ));
+      ),
+    );
   }
 }
 

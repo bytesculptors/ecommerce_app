@@ -1,6 +1,6 @@
 import 'package:btl/common/widgets/custom_shapes/containers/circular_container.dart';
 import 'package:btl/common/widgets/custom_shapes/curved_edges/curved_edges_widget.dart';
-import 'package:btl/utils/consts/colors.dart';
+import 'package:btl/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 
 /// A container widget with a primary color background and curved edges.
@@ -18,7 +18,7 @@ class TPrimaryHeaderContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CurvedEdgesWidget(
+    return TCurvedEdgesWidget(
       child: Container(
         color: MyColors.primary,
         padding: const EdgeInsets.only(bottom: 0),

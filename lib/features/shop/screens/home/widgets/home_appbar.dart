@@ -1,5 +1,6 @@
-import 'package:btl/utils/consts/text_strings.dart';
-import 'package:cwt_ecommerce_app/common/widgets/shimmers/shimmer.dart';
+import 'package:btl/common/widgets/shimmers/shimmer.dart';
+import 'package:btl/utils/constants/colors.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -23,7 +24,7 @@ class THomeAppBar extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(Texts.homeAppbarTitle, style: Theme.of(context).textTheme.labelMedium!.apply(color: TColors.grey)),
+            Text(Texts.homeAppbarTitle, style: Theme.of(context).textTheme.labelMedium!.apply(color: MyColors.grey)),
             Obx(
               () {
                 // Check if user Profile is still loading
@@ -36,13 +37,13 @@ class THomeAppBar extends StatelessWidget {
                     // Display a message when no data is found
                     return Text(
                       'Your Name',
-                      style: Theme.of(context).textTheme.headlineSmall!.apply(color: TColors.white),
+                      style: Theme.of(context).textTheme.headlineSmall!.apply(color: MyColors.white),
                     );
                   } else {
                     // Display User Name
                     return Text(
                       userController.user.value.fullName,
-                      style: Theme.of(context).textTheme.headlineSmall!.apply(color: TColors.white),
+                      style: Theme.of(context).textTheme.headlineSmall!.apply(color: MyColors.white),
                     );
                   }
                 }
@@ -51,7 +52,7 @@ class THomeAppBar extends StatelessWidget {
           ],
         ),
       ),
-      actions: const [TCartCounterIcon(iconColor: TColors.white, counterBgColor: TColors.black, counterTextColor: TColors.white)],
+      actions: const [TCartCounterIcon(iconColor: MyColors.white, counterBgColor: MyColors.black, counterTextColor: MyColors.white)],
     );
   }
 }
