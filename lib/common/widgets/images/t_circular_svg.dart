@@ -11,7 +11,7 @@ class TCircularSvg extends StatelessWidget {
     this.height = 56,
     required this.svg,
     this.imageOverlayColor,
-    this.imageBackgroundColor = TColors.light,
+    this.imageBackgroundColor = MyColors.light,
   });
 
   final String svg;
@@ -24,10 +24,10 @@ class TCircularSvg extends StatelessWidget {
     return Container(
       width: width,
       height: height,
-      padding: const EdgeInsets.all(TSizes.xs),
+      padding: const EdgeInsets.all(Sizes.xs),
       decoration: BoxDecoration(color: imageBackgroundColor, borderRadius: BorderRadius.circular(100)),
       child: ClipRRect(
-        borderRadius: BorderRadius.circular(TSizes.productImageRadius),
+        borderRadius: BorderRadius.circular(Sizes.productImageRadius),
         child: SvgPicture.asset(svg, fit: BoxFit.fill),
       ),
     );

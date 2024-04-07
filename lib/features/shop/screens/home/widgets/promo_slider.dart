@@ -1,5 +1,5 @@
-import 'package:btl/utils/consts/colors.dart';
-import 'package:btl/utils/consts/sizes.dart';
+import 'package:btl/utils/constants/colors.dart';
+import 'package:btl/utils/constants/sizes.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

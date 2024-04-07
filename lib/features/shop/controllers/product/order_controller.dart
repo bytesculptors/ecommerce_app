@@ -1,5 +1,6 @@
-import 'package:cwt_ecommerce_app/common/widgets/success_screen/success_screen.dart';
-import 'package:cwt_ecommerce_app/data/services/paypal/paypal.dart';
+import 'package:btl/common/widgets/success_screen/success_screen.dart';
+import 'package:btl/data/services/paypal/paypal.dart';
+import 'package:btl/utils/constants/image_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,7 +8,6 @@ import '../../../../data/repositories/authentication/authentication_repository.d
 import '../../../../data/repositories/order/order_repository.dart';
 import '../../../../home_menu.dart';
 import '../../../../utils/constants/enums.dart';
-import '../../../../utils/constants/image_strings.dart';
 import '../../../../utils/popups/full_screen_loader.dart';
 import '../../../../utils/popups/loaders.dart';
 import '../../../personalization/controllers/address_controller.dart';
@@ -39,7 +39,7 @@ class OrderController extends GetxController {
   void processOrder(double totalAmount) async {
     try {
       // Start Loader
-      TFullScreenLoader.openLoadingDialog('Processing your order', TImages.pencilAnimation);
+      TFullScreenLoader.openLoadingDialog('Processing your order', Images.pencilAnimation);
 
       // Get user authentication Id
       final userId = AuthenticationRepository.instance.getUserID;
@@ -74,7 +74,7 @@ class OrderController extends GetxController {
 
       // Show Success screen
       Get.off(() => SuccessScreen(
-            image: TImages.orderCompletedAnimation,
+            image: Images.orderCompletedAnimation,
             title: 'Payment Success!',
             subTitle: 'Your item will be shipped soon!',
             onPressed: () => Get.offAll(() => const HomeMenu()),

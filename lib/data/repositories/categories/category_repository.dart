@@ -1,4 +1,4 @@
-import 'package:cwt_ecommerce_app/utils/exceptions/firebase_exceptions.dart';
+import 'package:btl/utils/exceptions/firebase_exceptions.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';

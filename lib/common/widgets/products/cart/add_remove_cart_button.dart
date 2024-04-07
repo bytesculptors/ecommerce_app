@@ -1,6 +1,6 @@
 import 'package:btl/common/widgets/icons/t_circular_icon.dart';
-import 'package:btl/utils/consts/colors.dart';
-import 'package:btl/utils/consts/sizes.dart';
+import 'package:btl/utils/constants/colors.dart';
+import 'package:btl/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 

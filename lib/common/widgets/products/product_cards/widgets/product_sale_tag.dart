@@ -17,10 +17,10 @@ class ProductSaleTagWidget extends StatelessWidget {
     return Positioned(
       top: 12,
       child: TRoundedContainer(
-        radius: TSizes.sm,
-        backgroundColor: TColors.secondary.withOpacity(0.8),
-        padding: const EdgeInsets.symmetric(horizontal: TSizes.sm, vertical: TSizes.xs),
-        child: Text('$salePercentage%', style: Theme.of(context).textTheme.labelLarge!.apply(color: TColors.black)),
+        radius: Sizes.sm,
+        backgroundColor: MyColors.secondary.withOpacity(0.8),
+        padding: const EdgeInsets.symmetric(horizontal: Sizes.sm, vertical: Sizes.xs),
+        child: Text('$salePercentage%', style: Theme.of(context).textTheme.labelLarge!.apply(color: MyColors.black)),
       ),
     );
   }

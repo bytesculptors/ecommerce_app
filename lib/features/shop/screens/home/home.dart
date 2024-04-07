@@ -1,6 +1,6 @@
 import 'package:btl/features/shop/controllers/product/product_controller.dart';
-import 'package:btl/utils/consts/sizes.dart';
-import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/utils/constants/sizes.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:btl/utils/device/device_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

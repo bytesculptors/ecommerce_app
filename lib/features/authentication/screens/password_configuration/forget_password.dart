@@ -1,5 +1,5 @@
-import 'package:btl/utils/consts/sizes.dart';
-import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/utils/constants/sizes.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:btl/validators/validation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

@@ -12,8 +12,8 @@ class TCouponCode extends StatelessWidget {
     final isDark = MediaQuery.of(context).platformBrightness == Brightness.dark;
     return TRoundedContainer(
       showBorder: true,
-      backgroundColor: isDark ? TColors.dark : TColors.white,
-      padding: const EdgeInsets.only(top: TSizes.sm,bottom: TSizes.sm,right: TSizes.sm,left: TSizes.md),
+      backgroundColor: isDark ? MyColors.dark : MyColors.white,
+      padding: const EdgeInsets.only(top: Sizes.sm,bottom: Sizes.sm,right: Sizes.sm,left: Sizes.md),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -37,7 +37,7 @@ class TCouponCode extends StatelessWidget {
             child: ElevatedButton(
               onPressed: () {},
               style: ElevatedButton.styleFrom(
-                foregroundColor: isDark ? TColors.white.withOpacity(0.5) : TColors.dark.withOpacity(0.5),
+                foregroundColor: isDark ? MyColors.white.withOpacity(0.5) : MyColors.dark.withOpacity(0.5),
                 backgroundColor: Colors.grey.withOpacity(0.2),
                 side: BorderSide(color: Colors.grey.withOpacity(0.1)),
               ),

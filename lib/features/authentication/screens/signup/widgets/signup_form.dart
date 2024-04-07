@@ -1,5 +1,6 @@
-import 'package:btl/utils/consts/sizes.dart';
-import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/features/authentication/controllers/signup_controller.dart';
+import 'package:btl/utils/constants/sizes.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:btl/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,7 +14,9 @@ class SignupForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(SignupController());
     return Form(
+      key: controller.signupFormKey,
       child: Column(
         children: [
           const SizedBox(height: Sizes.spaceBtwSections),
@@ -22,6 +25,7 @@ class SignupForm extends StatelessWidget {
             children: [
               Expanded(
                 child: TextFormField(
+                  controller: controller.firstName,
                   validator: (value) => Validator.validateEmptyText('First name', value),
                   expands: false,
                   decoration: const InputDecoration(labelText: Texts.firstName, prefixIcon: Icon(Iconsax.user)),
@@ -30,6 +34,7 @@ class SignupForm extends StatelessWidget {
               const SizedBox(width: Sizes.spaceBtwInputFields),
               Expanded(
                 child: TextFormField(
+                  controller: controller.lastName,
                   validator: (value) => Validator.validateEmptyText('Last name', value),
                   expands: false,
                   decoration: const InputDecoration(labelText: Texts.lastName, prefixIcon: Icon(Iconsax.user)),
@@ -41,6 +46,7 @@ class SignupForm extends StatelessWidget {
 
           /// Username
           TextFormField(
+            controller: controller.username,
             validator: Validator.validateUsername,
             expands: false,
             decoration: const InputDecoration(labelText: Texts.username, prefixIcon: Icon(Iconsax.user_edit)),
@@ -49,6 +55,7 @@ class SignupForm extends StatelessWidget {
 
           /// Email
           TextFormField(
+            controller: controller.email,
             validator: Validator.validateEmail,
             decoration: const InputDecoration(labelText: Texts.email, prefixIcon: Icon(Iconsax.direct)),
           ),
@@ -56,29 +63,36 @@ class SignupForm extends StatelessWidget {
 
           /// Phone Number
           TextFormField(
+            controller: controller.phoneNumber,
             validator: Validator.validatePhoneNumber,
             decoration: const InputDecoration(labelText: Texts.phoneNo, prefixIcon: Icon(Iconsax.call)),
           ),
           const SizedBox(height: Sizes.spaceBtwInputFields),
 
           /// Password
-          TextFormField(
-            validator: Validator.validatePassword,
-            decoration: InputDecoration(
-              labelText: Texts.password,
-              prefixIcon: const Icon(Iconsax.password_check),
-              suffixIcon: IconButton(
-                onPressed: () {},
-                icon: const Icon(Iconsax.eye_slash),
+          Obx(
+            () => TextFormField(
+              controller: controller.password,
+              validator: Validator.validatePassword,
+              obscureText: controller.hidePassword.value,
+              decoration: InputDecoration(
+                labelText: Texts.password,
+                prefixIcon: const Icon(Iconsax.password_check),
+                suffixIcon: IconButton(
+                  onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
+                  icon: const Icon(Iconsax.eye_slash),
+                ),
               ),
             ),
           ),
           const SizedBox(height: Sizes.spaceBtwSections),
 
+          const SizedBox(height: Sizes.spaceBtwSections),
+
           /// Sign Up Button
           SizedBox(
             width: double.infinity,
-            child: ElevatedButton(onPressed: () {}, child: const Text(Texts.createAccount)),
+            child: ElevatedButton(onPressed: () => controller.signup(), child: const Text(Texts.createAccount)),
           ),
         ],
       ),

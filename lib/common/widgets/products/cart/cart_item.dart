@@ -18,7 +18,7 @@ class TCartItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
+    final dark = HelperFunctions.isDarkMode(context);
     return Row(
       children: [
         /// 1 - Image
@@ -27,10 +27,10 @@ class TCartItem extends StatelessWidget {
           height: 60,
           isNetworkImage: true,
           imageUrl: item.image ?? '',
-          padding: const EdgeInsets.all(TSizes.sm),
-          backgroundColor: dark ? TColors.darkerGrey : TColors.light,
+          padding: const EdgeInsets.all(Sizes.sm),
+          backgroundColor: dark ? MyColors.darkerGrey : MyColors.light,
         ),
-        const SizedBox(width: TSizes.spaceBtwItems),
+        const SizedBox(width: Sizes.spaceBtwItems),
 
         /// 2 - Title, Price, & Size
         Expanded(

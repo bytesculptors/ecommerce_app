@@ -1,4 +1,4 @@
-import 'package:cwt_ecommerce_app/features/shop/models/product_model.dart';
+import 'package:btl/features/shop/models/product_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -34,20 +34,20 @@ class ProductCardAddToCartButton extends StatelessWidget {
           return AnimatedContainer(
             curve: Curves.easeInOutCubicEmphasized,
             decoration: BoxDecoration(
-              color: productQuantityInCart > 0 ? TColors.primary : TColors.dark,
+              color: productQuantityInCart > 0 ? MyColors.primary : MyColors.dark,
               borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(TSizes.cardRadiusMd),
-                bottomRight: Radius.circular(TSizes.productImageRadius),
+                topLeft: Radius.circular(Sizes.cardRadiusMd),
+                bottomRight: Radius.circular(Sizes.productImageRadius),
               ),
             ),
             duration: const Duration(milliseconds: 300),
             child: SizedBox(
-              width: TSizes.iconLg * 1.2,
-              height: TSizes.iconLg * 1.2,
+              width: Sizes.iconLg * 1.2,
+              height: Sizes.iconLg * 1.2,
               child: Center(
                 child: productQuantityInCart > 0
-                    ? Text(productQuantityInCart.toString(), style: Theme.of(context).textTheme.bodyLarge!.apply(color: TColors.white))
-                    : const Icon(Iconsax.add, color: TColors.white),
+                    ? Text(productQuantityInCart.toString(), style: Theme.of(context).textTheme.bodyLarge!.apply(color: MyColors.white))
+                    : const Icon(Iconsax.add, color: MyColors.white),
               ),
             ),
           );

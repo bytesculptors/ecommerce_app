@@ -16,23 +16,23 @@ class SuccessScreen extends StatelessWidget {
     return Scaffold(
       body: SingleChildScrollView(
         child: Padding(
-          padding: TSpacingStyle.paddingWithAppBarHeight * 2,
+          padding: SpacingStyle.paddingWithAppBarHeight * 2,
           child: Column(
             children: [
               /// Image
               Lottie.asset(image, width: MediaQuery.of(context).size.width * 0.6),
-              const SizedBox(height: TSizes.spaceBtwSections),
+              const SizedBox(height: Sizes.spaceBtwSections),
 
               /// Title & SubTitle
               Text(title, style: Theme.of(context).textTheme.headlineMedium, textAlign: TextAlign.center),
-              const SizedBox(height: TSizes.spaceBtwItems),
+              const SizedBox(height: Sizes.spaceBtwItems),
               Text(subTitle, style: Theme.of(context).textTheme.labelMedium, textAlign: TextAlign.center),
-              const SizedBox(height: TSizes.spaceBtwSections),
+              const SizedBox(height: Sizes.spaceBtwSections),
 
               /// Buttons
               SizedBox(
                 width: double.infinity,
-                child: ElevatedButton(onPressed: onPressed, child: const Text(TTexts.tContinue)),
+                child: ElevatedButton(onPressed: onPressed, child: const Text(Texts.tContinue)),
               ),
             ],
           ),

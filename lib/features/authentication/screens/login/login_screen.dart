@@ -3,8 +3,8 @@ import 'package:btl/common/widgets/login_signup/form_divider.dart';
 import 'package:btl/common/widgets/login_signup/social_buttons.dart';
 import 'package:btl/features/authentication/screens/login/widgets/login_form.dart';
 import 'package:btl/features/authentication/screens/login/widgets/login_header.dart';
-import 'package:btl/utils/consts/sizes.dart';
-import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/utils/constants/sizes.dart';
+import 'package:btl/utils/constants/text_strings.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 

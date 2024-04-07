@@ -28,15 +28,15 @@ class TBrandShowcase extends StatelessWidget {
     return GestureDetector(
       onTap: () => Get.to(BrandScreen(brand: brand)),
       child: TRoundedContainer(
-        margin: const EdgeInsets.only(bottom: TSizes.spaceBtwItems),
+        margin: const EdgeInsets.only(bottom: Sizes.spaceBtwItems),
         showBorder: true,
-        borderColor: TColors.darkGrey,
+        borderColor: MyColors.darkGrey,
         backgroundColor: Colors.transparent,
         child: Column(
           children: [
             /// Brand with Products Count
             TBrandCard(showBorder: false, brand: brand),
-            const SizedBox(height: TSizes.spaceBtwItems / 2),
+            const SizedBox(height: Sizes.spaceBtwItems / 2),
 
             /// Brand Top 3 Product Images
             Row(children: images.map((e) => brandTopProductImageWidget(e, context)).toList()),
@@ -51,9 +51,9 @@ class TBrandShowcase extends StatelessWidget {
     return Expanded(
       child: TRoundedContainer(
         height: 100,
-        padding: const EdgeInsets.all(TSizes.md),
-        margin: const EdgeInsets.only(right: TSizes.sm),
-        backgroundColor: THelperFunctions.isDarkMode(context) ? TColors.darkerGrey : TColors.light,
+        padding: const EdgeInsets.all(Sizes.md),
+        margin: const EdgeInsets.only(right: Sizes.sm),
+        backgroundColor: HelperFunctions.isDarkMode(context) ? MyColors.darkerGrey : MyColors.light,
         child: CachedNetworkImage(
           fit: BoxFit.contain,
           imageUrl: image,

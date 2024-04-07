@@ -21,15 +21,15 @@ class TBottomAddToCart extends StatelessWidget {
   Widget build(BuildContext context) {
     final controller = CartController.instance;
     controller.updateAlreadyAddedProductCount(product);
-    final dark = THelperFunctions.isDarkMode(context);
+    final dark = HelperFunctions.isDarkMode(context);
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace, vertical: TSizes.defaultSpace / 2),
+      padding: const EdgeInsets.symmetric(horizontal: Sizes.defaultSpace, vertical: Sizes.defaultSpace / 2),
       decoration: BoxDecoration(
-        color: dark ? TColors.darkerGrey : TColors.light,
+        color: dark ? MyColors.darkerGrey : MyColors.light,
         borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(TSizes.cardRadiusLg),
-          topRight: Radius.circular(TSizes.cardRadiusLg),
+          topLeft: Radius.circular(Sizes.cardRadiusLg),
+          topRight: Radius.circular(Sizes.cardRadiusLg),
         ),
       ),
       child: Obx(
@@ -47,12 +47,12 @@ class TBottomAddToCart extends StatelessWidget {
             ElevatedButton(
               onPressed: controller.productQuantityInCart.value < 1 ? null : () => controller.addToCart(product),
               style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.all(TSizes.md),
-                backgroundColor: TColors.black,
-                side: const BorderSide(color: TColors.black),
+                padding: const EdgeInsets.all(Sizes.md),
+                backgroundColor: MyColors.black,
+                side: const BorderSide(color: MyColors.black),
               ),
               child: const Row(
-                children: [Icon(Iconsax.shopping_bag), SizedBox(width: TSizes.spaceBtwItems / 2), Text('Add to Bag')],
+                children: [Icon(Iconsax.shopping_bag), SizedBox(width: Sizes.spaceBtwItems / 2), Text('Add to Bag')],
               ),
             ),
           ],

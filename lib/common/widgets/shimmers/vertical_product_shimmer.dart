@@ -22,11 +22,11 @@ class TVerticalProductShimmer extends StatelessWidget {
           children: [
             /// Image
             TShimmerEffect(width: 180, height: 180),
-            SizedBox(height: TSizes.spaceBtwItems),
+            SizedBox(height: Sizes.spaceBtwItems),
 
             /// Text
             TShimmerEffect(width: 160, height: 15),
-            SizedBox(height: TSizes.spaceBtwItems / 2),
+            SizedBox(height: Sizes.spaceBtwItems / 2),
             TShimmerEffect(width: 110, height: 15),
           ],
         ),

@@ -1,9 +1,9 @@
+import 'package:btl/utils/device/device_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 import '../../../../../utils/constants/colors.dart';
 import '../../../../../utils/constants/sizes.dart';
-import '../../../../../utils/device/device_utility.dart';
 import '../../../../../utils/helpers/helper_functions.dart';
 import '../../search/search.dart';
 
@@ -15,7 +15,7 @@ class TSearchContainer extends StatelessWidget {
     this.showBackground = true,
     this.showBorder = true,
     this.onTap,
-    this.padding = const EdgeInsets.symmetric(horizontal: TSizes.defaultSpace),
+    this.padding = const EdgeInsets.symmetric(horizontal: Sizes.defaultSpace),
   });
 
   final String text;
@@ -26,27 +26,27 @@ class TSearchContainer extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final dark = THelperFunctions.isDarkMode(context);
+    final dark = HelperFunctions.isDarkMode(context);
     return GestureDetector(
       onTap: () => Get.to(() => SearchScreen()),
       child: Padding(
         padding: padding,
         child: Container(
-          width: TDeviceUtils.getScreenWidth(context),
-          padding: const EdgeInsets.all(TSizes.md),
+          width: DeviceUtils.getScreenWidth(context),
+          padding: const EdgeInsets.all(Sizes.md),
           decoration: BoxDecoration(
             color: showBackground
                 ? dark
-                    ? TColors.dark
-                    : TColors.light
+                    ? MyColors.dark
+                    : MyColors.light
                 : Colors.transparent,
-            borderRadius: BorderRadius.circular(TSizes.cardRadiusLg),
-            border: showBorder ? Border.all(color: TColors.grey) : null,
+            borderRadius: BorderRadius.circular(Sizes.cardRadiusLg),
+            border: showBorder ? Border.all(color: MyColors.grey) : null,
           ),
           child: Row(
             children: [
-              Icon(icon, color: dark ? TColors.darkerGrey : Colors.grey),
-              const SizedBox(width: TSizes.spaceBtwItems),
+              Icon(icon, color: dark ? MyColors.darkerGrey : Colors.grey),
+              const SizedBox(width: Sizes.spaceBtwItems),
               Text(text, style: Theme.of(context).textTheme.bodySmall),
             ],
           ),

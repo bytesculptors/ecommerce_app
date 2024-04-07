@@ -18,13 +18,13 @@ class THeaderCategories extends StatelessWidget {
     final categoryController = Get.put(CategoryController());
 
     return Padding(
-      padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+      padding: const EdgeInsets.only(left: Sizes.defaultSpace),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           /// -- Heading
-          const TSectionHeading(title: 'Popular Categories', textColor: TColors.white, showActionButton: false),
-          const SizedBox(height: TSizes.spaceBtwItems),
+          const TSectionHeading(title: 'Popular Categories', textColor: MyColors.white, showActionButton: false),
+          const SizedBox(height: Sizes.spaceBtwItems),
 
           /// Obx widget for reactive UI updates based on the state of [categoryController].
           /// It displays a shimmer loader while categories are being loaded, shows a message if no data is found,
