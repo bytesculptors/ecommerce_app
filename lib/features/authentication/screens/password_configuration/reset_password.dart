@@ -1,4 +1,4 @@
-import 'package:btl/common/appbar/appbar.dart';
+import 'package:btl/common/widgets/appbar/appbar.dart';
 import 'package:btl/features/authentication/screens/login/login_screen.dart';
 import 'package:btl/utils/consts/image_paths.dart';
 import 'package:btl/utils/consts/sizes.dart';
