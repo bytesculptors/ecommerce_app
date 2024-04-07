@@ -1,4 +1,5 @@
 import 'package:btl/common/widgets/appbar/appbar.dart';
+import 'package:btl/features/authentication/controllers/forget_password_controller.dart';
 import 'package:btl/features/authentication/screens/login/login_screen.dart';
 import 'package:btl/utils/constants/image_paths.dart';
 import 'package:btl/utils/constants/sizes.dart';
@@ -17,6 +18,7 @@ class ResetPasswordScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final controller = Get.put(ForgetPasswordController());
     return Scaffold(
       /// Appbar to go back OR close all screens and Goto LoginScreen()
       appBar: MyAppBar(
@@ -53,7 +55,7 @@ class ResetPasswordScreen extends StatelessWidget {
               const SizedBox(height: Sizes.spaceBtwItems),
               SizedBox(
                   width: double.infinity,
-                  child: TextButton(onPressed: () {}, child: const Text(Texts.resendEmail))),
+                  child: TextButton(onPressed: () => controller.resendPasswordResetEmail(email), child: const Text(Texts.resendEmail))),
             ],
           ),
         ),
