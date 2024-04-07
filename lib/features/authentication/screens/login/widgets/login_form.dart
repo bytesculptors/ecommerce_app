@@ -1,6 +1,7 @@
 import 'package:btl/utils/consts/colors.dart';
 import 'package:btl/utils/consts/sizes.dart';
 import 'package:btl/utils/consts/text_strings.dart';
+import 'package:btl/validators/validation.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -17,6 +18,7 @@ class LoginForm extends StatelessWidget {
         child: Column(
           children: [
             TextFormField(
+              validator: Validator.validateEmail,
               decoration: const InputDecoration(
                 prefixIcon: Icon(Iconsax.direct_right),
                 labelText: Texts.email,
@@ -24,6 +26,7 @@ class LoginForm extends StatelessWidget {
             ),
             const SizedBox(height: Sizes.spaceBtwInputFields),
             TextFormField(
+              validator: (value) => Validator.validateEmptyText('Password', value),
               decoration: const InputDecoration(
                   prefixIcon: Icon(Iconsax.password_check),
                   labelText: Texts.password,
