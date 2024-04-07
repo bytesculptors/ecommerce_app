@@ -1,6 +1,7 @@
 import 'package:btl/features/authentication/controllers/login_in_controller.dart';
 import 'package:btl/features/authentication/screens/password_configuration/forget_password.dart';
 import 'package:btl/features/authentication/screens/signup/signup_screen.dart';
+import 'package:btl/utils/constants/colors.dart';
 import 'package:btl/utils/constants/sizes.dart';
 import 'package:btl/utils/constants/text_strings.dart';
 import 'package:btl/validators/validation.dart';
@@ -62,7 +63,7 @@ class LoginForm extends StatelessWidget {
                 ),
 
                 /// Forget Password
-                TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child: const Text(Texts.forgetPassword)),
+                TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child: const Text(Texts.forgetPassword, style: TextStyle(color: MyColors.darkerGrey))),
               ],
             ),
             const SizedBox(height: Sizes.spaceBtwSections),

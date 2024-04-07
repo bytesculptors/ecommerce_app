@@ -1,4 +1,7 @@
+import 'package:btl/features/personalization/screens/setting/settings.dart';
+import 'package:btl/features/shop/screens/favourites/favourite.dart';
 import 'package:btl/features/shop/screens/home/home.dart';
+import 'package:btl/features/shop/screens/store/store.dart';
 import 'package:btl/utils/constants/colors.dart';
 import 'package:btl/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
@@ -40,5 +43,5 @@ class AppScreenController extends GetxController {
 
   final Rx<int> selectedMenu = 0.obs;
 
-  final screens = [const HomeScreen(), const HomeScreen(), const HomeScreen(), const HomeScreen()];
+  final screens = [const HomeScreen(), const StoreScreen(), const FavouriteScreen(), const SettingsScreen()];
 }
