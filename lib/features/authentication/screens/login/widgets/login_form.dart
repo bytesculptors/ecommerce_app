@@ -1,8 +1,11 @@
+import 'package:btl/features/authentication/screens/password_configuration/forget_password.dart';
+import 'package:btl/features/authentication/screens/signup/signup.dart';
 import 'package:btl/utils/consts/colors.dart';
 import 'package:btl/utils/consts/sizes.dart';
 import 'package:btl/utils/consts/text_strings.dart';
 import 'package:btl/validators/validation.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
 class LoginForm extends StatelessWidget {
@@ -40,7 +43,7 @@ class LoginForm extends StatelessWidget {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 TextButton(
-                    onPressed: () {},
+                    onPressed: () => Get.to(() => const ForgetPasswordScreen()),
                     child: const Text(Texts.forgetPassword, style: TextStyle(color: MyColors.darkerGrey),))
               ],
             ),
@@ -58,7 +61,7 @@ class LoginForm extends StatelessWidget {
             SizedBox(
                 width: double.infinity,
                 child: OutlinedButton(
-                    onPressed: () {},
+                    onPressed: () => Get.to(() => const SignupScreen()),
                     child: const Text(Texts.createAccount))),
           ],
         ),

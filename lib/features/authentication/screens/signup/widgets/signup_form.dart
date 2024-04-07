@@ -62,16 +62,14 @@ class SignupForm extends StatelessWidget {
           const SizedBox(height: Sizes.spaceBtwInputFields),
 
           /// Password
-          Obx(
-            () => TextFormField(
-              validator: Validator.validatePassword,
-              decoration: InputDecoration(
-                labelText: Texts.password,
-                prefixIcon: const Icon(Iconsax.password_check),
-                suffixIcon: IconButton(
-                  onPressed: () {},
-                  icon: const Icon(Iconsax.eye_slash),
-                ),
+          TextFormField(
+            validator: Validator.validatePassword,
+            decoration: InputDecoration(
+              labelText: Texts.password,
+              prefixIcon: const Icon(Iconsax.password_check),
+              suffixIcon: IconButton(
+                onPressed: () {},
+                icon: const Icon(Iconsax.eye_slash),
               ),
             ),
           ),
