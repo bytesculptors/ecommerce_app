@@ -2,7 +2,7 @@ import 'package:btl/common/widgets/appbar/appbar.dart';
 import 'package:btl/features/authentication/controllers/forget_password_controller.dart';
 import 'package:btl/utils/constants/sizes.dart';
 import 'package:btl/utils/constants/text_strings.dart';
-import 'package:btl/validators/validation.dart';
+import 'package:btl/utils/validators/validation.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
