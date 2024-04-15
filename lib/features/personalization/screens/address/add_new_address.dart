@@ -24,13 +24,13 @@ class AddNewAddressScreen extends StatelessWidget {
               children: [
                 TextFormField(
                   controller: controller.name,
-                  validator: (value) => TValidator.validateEmptyText('Name', value),
+                  validator: (value) => Validator.validateEmptyText('Name', value),
                   decoration: const InputDecoration(prefixIcon: Icon(Iconsax.user), labelText: 'Name'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
                   controller: controller.phoneNumber,
-                  validator: TValidator.validatePhoneNumber,
+                  validator: Validator.validatePhoneNumber,
                   decoration: const InputDecoration(prefixIcon: Icon(Iconsax.mobile), labelText: 'Phone Number'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
@@ -39,7 +39,7 @@ class AddNewAddressScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: controller.street,
-                        validator: (value) => TValidator.validateEmptyText('Street', value),
+                        validator: (value) => Validator.validateEmptyText('Street', value),
                         expands: false,
                         decoration: const InputDecoration(
                           labelText: 'Street',
@@ -51,7 +51,7 @@ class AddNewAddressScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: controller.postalCode,
-                        validator: (value) => TValidator.validateEmptyText('Postal Code', value),
+                        validator: (value) => Validator.validateEmptyText('Postal Code', value),
                         expands: false,
                         decoration: const InputDecoration(
                           labelText: 'Postal Code',
@@ -67,7 +67,7 @@ class AddNewAddressScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: controller.city,
-                        validator: (value) => TValidator.validateEmptyText('City', value),
+                        validator: (value) => Validator.validateEmptyText('City', value),
                         expands: false,
                         decoration: const InputDecoration(
                           labelText: 'City',
@@ -79,7 +79,7 @@ class AddNewAddressScreen extends StatelessWidget {
                     Expanded(
                       child: TextFormField(
                         controller: controller.state,
-                        validator: (value) => TValidator.validateEmptyText('State', value),
+                        validator: (value) => Validator.validateEmptyText('State', value),
                         expands: false,
                         decoration: const InputDecoration(
                           labelText: 'State',
@@ -92,7 +92,7 @@ class AddNewAddressScreen extends StatelessWidget {
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
                   controller: controller.country,
-                  validator: (value) => TValidator.validateEmptyText('Country', value),
+                  validator: (value) => Validator.validateEmptyText('Country', value),
                   decoration: const InputDecoration(prefixIcon: Icon(Iconsax.global), labelText: 'Country'),
                 ),
                 const SizedBox(height: Sizes.defaultSpace),

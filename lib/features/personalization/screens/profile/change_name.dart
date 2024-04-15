@@ -39,14 +39,14 @@ class ChangeName extends StatelessWidget {
                   children: [
                     TextFormField(
                       controller: controller.firstName,
-                      validator: (value) => TValidator.validateEmptyText('First name', value),
+                      validator: (value) => Validator.validateEmptyText('First name', value),
                       expands: false,
                       decoration: const InputDecoration(labelText: Texts.firstName, prefixIcon: Icon(Iconsax.user)),
                     ),
                     const SizedBox(height: Sizes.spaceBtwInputFields),
                     TextFormField(
                       controller: controller.lastName,
-                      validator: (value) => TValidator.validateEmptyText('Last name', value),
+                      validator: (value) => Validator.validateEmptyText('Last name', value),
                       expands: false,
                       decoration: const InputDecoration(labelText: Texts.lastName, prefixIcon: Icon(Iconsax.user)),
                     ),

@@ -25,7 +25,7 @@ class ReAuthLoginForm extends StatelessWidget {
                 /// Email
                 TextFormField(
                   controller: controller.verifyEmail,
-                  validator: TValidator.validateEmail,
+                  validator: Validator.validateEmail,
                   decoration: const InputDecoration(prefixIcon: Icon(Iconsax.direct_right), labelText: Texts.email),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
@@ -35,7 +35,7 @@ class ReAuthLoginForm extends StatelessWidget {
                   () => TextFormField(
                     obscureText: controller.hidePassword.value,
                     controller: controller.verifyPassword,
-                    validator: (value) => TValidator.validateEmptyText('Password', value),
+                    validator: (value) => Validator.validateEmptyText('Password', value),
                     decoration: InputDecoration(
                       labelText: Texts.password,
                       prefixIcon: const Icon(Iconsax.password_check),
