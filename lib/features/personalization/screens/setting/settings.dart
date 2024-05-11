@@ -72,14 +72,14 @@ class SettingsScreen extends StatelessWidget {
                       subTitle: 'In-progress and Completed Orders',
                       onTap: () => Get.to(() => const OrderScreen()),
                     ),
-                    const TSettingsMenuTile(
-                        icon: Iconsax.bank, title: 'Bank Account', subTitle: 'Withdraw balance to registered bank account'),
-                    const TSettingsMenuTile(
-                        icon: Iconsax.discount_shape, title: 'My Coupons', subTitle: 'List of all the discounted coupons'),
-                    TSettingsMenuTile(
-                        icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', onTap: () {}),
-                    const TSettingsMenuTile(
-                        icon: Iconsax.security_card, title: 'Account Privacy', subTitle: 'Manage data usage and connected accounts'),
+                    // const TSettingsMenuTile(
+                    //     icon: Iconsax.bank, title: 'Bank Account', subTitle: 'Withdraw balance to registered bank account'),
+                    // const TSettingsMenuTile(
+                    //     icon: Iconsax.discount_shape, title: 'My Coupons', subTitle: 'List of all the discounted coupons'),
+                    // TSettingsMenuTile(
+                    //     icon: Iconsax.notification, title: 'Notifications', subTitle: 'Set any kind of notification message', onTap: () {}),
+                    // const TSettingsMenuTile(
+                    //     icon: Iconsax.security_card, title: 'Account Privacy', subTitle: 'Manage data usage and connected accounts'),
 
                     /// -- App Settings
                     // const SizedBox(height: Sizes.spaceBtwSections),
