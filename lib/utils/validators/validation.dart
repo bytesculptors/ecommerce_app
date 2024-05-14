@@ -1,5 +1,3 @@
-
-
 /// VALIDATION CLASS
 class Validator {
   /// Empty Text Validation
@@ -28,7 +26,10 @@ class Validator {
 
     // Check if the username doesn't start or end with an underscore or hyphen.
     if (isValid) {
-      isValid = !username.startsWith('_') && !username.startsWith('-') && !username.endsWith('_') && !username.endsWith('-');
+      isValid = !username.startsWith('_') &&
+          !username.startsWith('-') &&
+          !username.endsWith('_') &&
+          !username.endsWith('-');
     }
 
     if (!isValid) {
@@ -93,11 +94,9 @@ class Validator {
     final phoneRegExp = RegExp(r'^\d{10}$');
 
     if (!phoneRegExp.hasMatch(value)) {
-      return 'Invalid phone number format (12 digits required).';
+      return 'Invalid phone number format (10 digits required).';
     }
 
     return null;
   }
-
-// Add more custom validators as needed for your specific requirements.
 }

@@ -29,78 +29,27 @@ class TDummyData {
     BannerModel(imageUrl: Images.banner8, targetScreen: TRoutes.checkout, active: false),
   ];
 
-  /// -- User
-  static final UserModel user = UserModel(
-    firstName: 'Coding',
-    lastName: 'with T',
-    email: 'support@codingwithT.com',
-    phoneNumber: '+14155552671',
-    profilePicture: Images.user,
-    addresses: [
-      AddressModel(
-        id: '1',
-        name: 'Coding with T',
-        phoneNumber: '+923178059528',
-        street: '82356 Timmy Coves',
-        city: 'South Liana',
-        state: 'Maine',
-        postalCode: '87665',
-        country: 'USA',
-      ),
-      AddressModel(
-        id: '6',
-        name: 'John Doe',
-        phoneNumber: '+1234567890',
-        street: '123 Main Street',
-        city: 'New York',
-        state: 'New York',
-        postalCode: '10001',
-        country: 'United States',
-      ),
-      AddressModel(
-        id: '2',
-        name: 'Alice Smith',
-        phoneNumber: '+9876543210',
-        street: '456 Elm Avenue',
-        city: 'Los Angeles',
-        state: 'California',
-        postalCode: '90001',
-        country: 'United States',
-      ),
-      AddressModel(
-        id: '3',
-        name: 'Taimoor Sikander',
-        phoneNumber: '+923178059528',
-        street: 'Street 35',
-        city: 'Islamabad',
-        state: 'Federal',
-        postalCode: '48000',
-        country: 'Pakistan',
-      ),
-      AddressModel(
-        id: '4',
-        name: 'Maria Garcia',
-        phoneNumber: '+5412345678',
-        street: '789 Oak Road',
-        city: 'Buenos Aires',
-        state: 'Buenos Aires',
-        postalCode: '1001',
-        country: 'Argentina',
-      ),
-      AddressModel(
-        id: '5',
-        name: 'Liam Johnson',
-        phoneNumber: '+447890123456',
-        street: '10 Park Lane',
-        city: 'London',
-        state: 'England',
-        postalCode: 'SW1A 1AA',
-        country: 'United Kingdom',
-      )
-    ],
-    username: '',
-    id: '',
-  );
+  // /// -- User
+  // static final UserModel user = UserModel(
+  //   firstName: 'Hong',
+  //   lastName: 'Vu',
+  //   email: 'vphphuonghong@gmail.com',
+  //   phoneNumber: '+14155552671',
+  //   profilePicture: Images.user,
+  //   addresses: [
+  //     AddressModel(
+  //       id: '1',
+  //       name: 'Vu Phuong Hong',
+  //       phoneNumber: '+923178059528',
+  //       province: 'Ha Noi',
+  //       district: 'Cau Giay',
+  //       commune: 'Dich Vong Hau',
+  //       detailedAddress: 'Duong Xuan Thuy',
+  //     ),
+  //   ],
+  //   username: '',
+  //   id: '',
+  // );
 
   /// -- Cart
   static final CartModel cart = CartModel(

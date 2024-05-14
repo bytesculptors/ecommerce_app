@@ -19,11 +19,13 @@ class AddressController extends GetxController {
 
   final name = TextEditingController();
   final phoneNumber = TextEditingController();
-  final street = TextEditingController();
-  final postalCode = TextEditingController();
-  final city = TextEditingController();
-  final state = TextEditingController();
-  final country = TextEditingController();
+  final detailedAddress = TextEditingController();
+  String province = '';
+  String provinceID = '';
+  String district = '';
+  String districtID = '';
+  String commune = '';
+  String communeID = '';
   GlobalKey<FormState> addressFormKey = GlobalKey<FormState>();
 
   RxBool refreshData = true.obs;
@@ -84,11 +86,13 @@ class AddressController extends GetxController {
         id: '',
         name: name.text.trim(),
         phoneNumber: phoneNumber.text.trim(),
-        street: street.text.trim(),
-        city: city.text.trim(),
-        state: state.text.trim(),
-        postalCode: postalCode.text.trim(),
-        country: country.text.trim(),
+        provinceID: provinceID.trim(),
+        province: province.trim(),
+        districtID: districtID.trim(),
+        district: district.trim(),
+        communeID: communeID.trim(),
+        commune: commune.trim(),
+        detailedAddress: detailedAddress.text.trim(),
         selectedAddress: true,
       );
       final id = await addressRepository.addAddress(address, AuthenticationRepository.instance.getUserID);
@@ -151,7 +155,7 @@ class AddressController extends GetxController {
             const SizedBox(height: Sizes.defaultSpace * 2),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () => Get.to(() => const AddNewAddressScreen()), child: const Text('Add new address')),
+              child: ElevatedButton(onPressed: () => Get.to(() => AddNewAddressScreen()), child: const Text('Add new address')),
             ),
           ],
         ),
@@ -163,11 +167,13 @@ class AddressController extends GetxController {
   void resetFormFields() {
     name.clear();
     phoneNumber.clear();
-    street.clear();
-    postalCode.clear();
-    city.clear();
-    state.clear();
-    country.clear();
+    provinceID = '';
+    province = '';
+    districtID = '';
+    district = '';
+    communeID = '';
+    commune = '';
+    detailedAddress.clear();
     addressFormKey.currentState?.reset();
   }
 }

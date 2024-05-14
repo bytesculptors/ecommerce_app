@@ -2,16 +2,18 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 
 class THttpHelper {
-  static const String _baseUrl = 'https://your-api-base-url.com'; // Replace with your API base URL
+  static const String _baseUrl =
+      'https://your-api-base-url.com'; // Replace with your API base URL
 
   // Helper method to make a GET request
   static Future<Map<String, dynamic>> get(String endpoint) async {
-    final response = await http.get(Uri.parse('$_baseUrl/$endpoint'));
+    final response = await http.get(Uri.parse(endpoint));
     return _handleResponse(response);
   }
 
   // Helper method to make a POST request
-  static Future<Map<String, dynamic>> post(String endpoint, dynamic data) async {
+  static Future<Map<String, dynamic>> post(
+      String endpoint, dynamic data) async {
     final response = await http.post(
       Uri.parse('$_baseUrl/$endpoint'),
       headers: {'Content-Type': 'application/json'},
@@ -43,5 +45,60 @@ class THttpHelper {
     } else {
       throw Exception('Failed to load data: ${response.statusCode}');
     }
+  }
+
+  static Future<List<dynamic>> getProvincesVN() async {
+    final url = Uri.parse(
+        'https://online-gateway.ghn.vn/shiip/public-api/master-data/province');
+    final response = await http.get(
+      url,
+      headers: {
+        'Token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch province');
+    }
+
+    final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final List<dynamic> responseData = responseBody['data'];
+    return responseData;
+  }
+
+  static Future<List<dynamic>> getDistricts(String? provinceId) async {
+    final url = Uri.https(
+        'online-gateway.ghn.vn',
+        'shiip/public-api/master-data/district',
+        {'province_id': '$provinceId'});
+    final response = await http.get(url, headers: {
+      'Token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+    });
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch district');
+    }
+
+    final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final List<dynamic> responseData = responseBody['data'];
+    return responseData;
+  }
+
+  static Future<List<dynamic>> getCommunes(String? districtId) async {
+    final url = Uri.https(
+        'online-gateway.ghn.vn',
+        'shiip/public-api/master-data/ward',
+        {'district_id': '$districtId'});
+    final response = await http.get(url, headers: {
+      'Token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+    });
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to fetch commune');
+    }
+
+    final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final List<dynamic> responseData = responseBody['data'];
+    return responseData;
   }
 }

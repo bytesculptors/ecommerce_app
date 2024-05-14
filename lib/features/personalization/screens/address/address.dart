@@ -60,7 +60,7 @@ class UserAddressScreen extends StatelessWidget {
       /// Add new Address button
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.primary,
-        onPressed: () => Get.to(() => const AddNewAddressScreen()),
+        onPressed: () => Get.to(() => AddNewAddressScreen()),
         child: const Icon(Iconsax.add, color: MyColors.white),
       ),
     );

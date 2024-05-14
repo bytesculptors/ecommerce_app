@@ -6,11 +6,13 @@ class AddressModel {
   String id;
   final String name;
   final String phoneNumber;
-  final String street;
-  final String city;
-  final String state;
-  final String postalCode;
-  final String country;
+  final String provinceID;
+  final String province;
+  final String districtID;
+  final String district;
+  final String communeID;
+  final String commune;
+  final String detailedAddress;
   final DateTime? dateTime;
   bool selectedAddress;
 
@@ -18,11 +20,13 @@ class AddressModel {
     required this.id,
     required this.name,
     required this.phoneNumber,
-    required this.street,
-    required this.city,
-    required this.state,
-    required this.postalCode,
-    required this.country,
+    required this.provinceID,
+    required this.province,
+    required this.districtID,
+    required this.district,
+    required this.communeID,
+    required this.commune,
+    required this.detailedAddress,
     this.dateTime,
     this.selectedAddress = true,
   });
@@ -30,7 +34,7 @@ class AddressModel {
   String get formattedPhoneNo => TFormatter.formatPhoneNumber(phoneNumber);
 
 
-  static AddressModel empty() => AddressModel(id: '', name: '', phoneNumber: '', street: '', city: '', state: '', postalCode: '', country: '');
+  static AddressModel empty() => AddressModel(id: '', name: '', phoneNumber: '', provinceID: '', province: '', districtID: '', district: '', communeID: '', commune: '', detailedAddress: '');
 
 
   Map<String, dynamic> toJson() {
@@ -38,11 +42,10 @@ class AddressModel {
       'Id': id,
       'Name': name,
       'PhoneNumber': phoneNumber,
-      'Street': street,
-      'City': city,
-      'State': state,
-      'PostalCode': postalCode,
-      'Country': country,
+      'Province': province,
+      'District': district,
+      'Commune': commune,
+      'DetailedAddress': detailedAddress,
       'DateTime' : DateTime.now(),
       'SelectedAddress' : selectedAddress,
     };
@@ -54,11 +57,13 @@ class AddressModel {
       id: data['Id'] as String,
       name: data['Name'] as String,
       phoneNumber: data['PhoneNumber'] as String,
-      street: data['Street'] as String,
-      city: data['City'] as String,
-      state: data['State'] as String,
-      postalCode: data['PostalCode'] as String,
-      country: data['Country'] as String,
+      provinceID: data['ProvinceID'] as String,
+      province: data['Province'] as String,
+      districtID: data['DistrictID'] as String,
+      district: data['District'] as String,
+      communeID: data['CommuneID'] as String,
+      commune: data['Commune'] as String,
+      detailedAddress: data['DetailedAddress'] as String,
       selectedAddress: data['SelectedAddress'] as bool,
       dateTime: (data['DateTime'] as Timestamp).toDate(),
     );
@@ -72,11 +77,13 @@ class AddressModel {
       id: snapshot.id,
       name: data['Name'] ?? '',
       phoneNumber: data['PhoneNumber'] ?? '',
-      street: data['Street'] ?? '',
-      city: data['City'] ?? '',
-      state: data['State'] ?? '',
-      postalCode: data['PostalCode'] ?? '',
-      country: data['Country'] ?? '',
+      provinceID: data['ProvinceID'] ?? '',
+      province: data['Province'] ?? '',
+      districtID: data['DistrictID'] ?? '',
+      district: data['District'] ?? '',
+      communeID: data['CommuneID'] ?? '',
+      commune: data['Commune'] ?? '',
+      detailedAddress: data['DetailedAddress'] ?? '',
       dateTime: (data['DateTime'] as Timestamp).toDate(),
       selectedAddress: data['SelectedAddress'] as bool,
     );
@@ -84,6 +91,6 @@ class AddressModel {
 
   @override
   String toString() {
-    return '$street, $city, $state $postalCode, $country';
+    return '$detailedAddress, $commune, $district, $province';
   }
 }
