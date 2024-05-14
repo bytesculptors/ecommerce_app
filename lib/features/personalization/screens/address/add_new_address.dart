@@ -46,6 +46,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
             'Province': e['ProvinceName'],
           };
         }).toList();
+        listProvinces.sort((a, b) => a['Province'].compareTo(b['Province']));
       });
       print(listProvinces);
     } catch (error) {
@@ -68,6 +69,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
             'District': e['DistrictName'],
           };
         }).toList();
+        listDistricts.sort((a, b) => a['District'].compareTo(b['District']));
       });
       print(listDistricts);
     } catch (error) {
@@ -91,6 +93,7 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
           };
         }).toList();
       });
+      listCommunes.sort((a, b) => a['Commune'].compareTo(b['Commune']));
       print(listCommunes);
     } catch (error) {
       // Handle any errors that occur during fetching
