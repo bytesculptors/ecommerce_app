@@ -208,7 +208,6 @@ class _AddNewAddressScreenState extends State<AddNewAddressScreen> {
                       prefixIcon: Icon(Iconsax.building),
                       labelText: 'House Number, Building, Street'),
                 ),
-                const SizedBox(height: Sizes.spaceBtwInputFields),
                 const SizedBox(height: Sizes.defaultSpace),
                 SizedBox(
                   width: double.infinity,

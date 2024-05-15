@@ -36,7 +36,9 @@ class AddressController extends GetxController {
   Future<List<AddressModel>> allUserAddresses() async {
     try {
       final addresses = await addressRepository.fetchUserAddresses();
-      selectedAddress.value = addresses.firstWhere((element) => element.selectedAddress, orElse: () => AddressModel.empty());
+      selectedAddress.value = addresses.firstWhere(
+          (element) => element.selectedAddress,
+          orElse: () => AddressModel.empty());
       return addresses;
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
@@ -47,8 +49,11 @@ class AddressController extends GetxController {
   Future selectAddress(AddressModel newSelectedAddress) async {
     try {
       // Clear the "selected" field
-      if(selectedAddress.value.id.isNotEmpty){
-        await addressRepository.updateSelectedField(AuthenticationRepository.instance.getUserID, selectedAddress.value.id, false);
+      if (selectedAddress.value.id.isNotEmpty) {
+        await addressRepository.updateSelectedField(
+            AuthenticationRepository.instance.getUserID,
+            selectedAddress.value.id,
+            false);
       }
 
       // Assign selected address
@@ -56,9 +61,13 @@ class AddressController extends GetxController {
       selectedAddress.value = newSelectedAddress;
 
       // Set the "selected" field to true for the newly selected address
-      await addressRepository.updateSelectedField(AuthenticationRepository.instance.getUserID, selectedAddress.value.id, true);
+      await addressRepository.updateSelectedField(
+          AuthenticationRepository.instance.getUserID,
+          selectedAddress.value.id,
+          true);
     } catch (e) {
-      TLoaders.errorSnackBar(title: 'Error in Selection', message: e.toString());
+      TLoaders.errorSnackBar(
+          title: 'Error in Selection', message: e.toString());
     }
   }
 
@@ -66,7 +75,8 @@ class AddressController extends GetxController {
   addNewAddresses() async {
     try {
       // Start Loading
-      TFullScreenLoader.openLoadingDialog('Storing Address...', Images.docerAnimation);
+      TFullScreenLoader.openLoadingDialog(
+          'Storing Address...', Images.docerAnimation);
 
       // Check Internet Connectivity
       final isConnected = await NetworkManager.instance.isConnected();
@@ -95,7 +105,8 @@ class AddressController extends GetxController {
         detailedAddress: detailedAddress.text.trim(),
         selectedAddress: true,
       );
-      final id = await addressRepository.addAddress(address, AuthenticationRepository.instance.getUserID);
+      final id = await addressRepository.addAddress(
+          address, AuthenticationRepository.instance.getUserID);
 
       // Update Selected Address status
       address.id = id;
@@ -105,7 +116,9 @@ class AddressController extends GetxController {
       TFullScreenLoader.stopLoading();
 
       // Show Success Message
-      TLoaders.successSnackBar(title: 'Congratulations', message: 'Your address has been saved successfully.');
+      TLoaders.successSnackBar(
+          title: 'Congratulations',
+          message: 'Your address has been saved successfully.');
 
       // Refresh Addresses Data
       refreshData.toggle();
@@ -126,40 +139,92 @@ class AddressController extends GetxController {
   Future<dynamic> selectNewAddressPopup(BuildContext context) {
     return showModalBottomSheet(
       context: context,
+      isScrollControlled: true,
       builder: (_) => Container(
         padding: const EdgeInsets.all(Sizes.lg),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const TSectionHeading(title: 'Select Address'),
-            FutureBuilder(
-              future: allUserAddresses(),
-              builder: (_, snapshot) {
-                /// Helper Function: Handle Loader, No Record, OR ERROR Message
-                final response = TCloudHelperFunctions.checkMultiRecordState(snapshot: snapshot);
-                if (response != null) return response;
+            Obx(
+              () => FutureBuilder(
+                key: Key(refreshData.value.toString()),
+                future: allUserAddresses(),
+                builder: (_, snapshot) {
+                  /// Helper Function: Handle Loader, No Record, OR ERROR Message
+                  final response = TCloudHelperFunctions.checkMultiRecordState(
+                      snapshot: snapshot);
+                  if (response != null) return response;
 
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (_, index) => TSingleAddress(
-                    address: snapshot.data![index],
-                    onTap: () async {
-                      await selectAddress(snapshot.data![index]);
-                      Get.back();
-                    },
-                  ),
-                );
-              },
+                  return Flexible(
+                    child: ListView.builder(
+                      shrinkWrap: true,
+                      itemCount: snapshot.data!.length,
+                      itemBuilder: (_, index) => TSingleAddress(
+                        address: snapshot.data![index],
+                        onTap: () async {
+                          await selectAddress(snapshot.data![index]);
+                          Get.back();
+                        },
+                      ),
+                    ),
+                  );
+                },
+              ),
             ),
             const SizedBox(height: Sizes.defaultSpace * 2),
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () => Get.to(() => AddNewAddressScreen()), child: const Text('Add new address')),
+              child: ElevatedButton(
+                  onPressed: () => Get.to(() => AddNewAddressScreen()),
+                  child: const Text('Add new address')),
             ),
           ],
         ),
       ),
+    );
+  }
+
+  // Show confirm dialog before deleting address
+  void showConfirmDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this address?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              onPressed: () async {
+                try {
+                  Navigator.of(context).pop();
+                  await addressRepository.deleteAddress(
+                      AuthenticationRepository.instance.getUserID,
+                      selectedAddress.value.id);
+                  selectedAddress.value = AddressModel.empty();
+                  refreshData.toggle();
+                  // ignore: use_build_context_synchronously
+                  TLoaders.successSnackBar(
+                      title: 'Deleted',
+                      message: 'Your address has been deleted successfully.');
+                } catch (e) {
+                  TLoaders.warningSnackBar(
+                      title: 'Oh Snap!', message: e.toString());
+                }
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -174,6 +239,6 @@ class AddressController extends GetxController {
     communeID = '';
     commune = '';
     detailedAddress.clear();
-    addressFormKey.currentState?.reset();
+    // addressFormKey.currentState?.reset();
   }
 }

@@ -32,7 +32,9 @@ class TSingleAddress extends StatelessWidget {
             showBorder: true,
             padding: const EdgeInsets.all(Sizes.md),
             width: double.infinity,
-            backgroundColor: isAddressSelected ? MyColors.primary.withOpacity(0.5) : Colors.transparent,
+            backgroundColor: isAddressSelected
+                ? MyColors.primary.withOpacity(0.5)
+                : Colors.transparent,
             borderColor: isAddressSelected
                 ? Colors.transparent
                 : dark
@@ -42,17 +44,41 @@ class TSingleAddress extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned(
-                  right: 5,
-                  top: 0,
-                  child: Icon(
-                    isAddressSelected ? Iconsax.tick_circle1 : Iconsax.tick_circle1,
-                    color: isAddressSelected
-                        ? MyColors.primary
-                        : dark
-                            ? MyColors.darkerGrey
-                            : MyColors.grey,
-                  ),
-                ),
+                    right: 0,
+                    top: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        isAddressSelected ? Iconsax.trash : Iconsax.trash,
+                        color: isAddressSelected
+                            ? MyColors.primary
+                            : dark
+                                ? MyColors.darkerGrey
+                                : MyColors.grey,
+                      ),
+                      onPressed: () async {
+                        
+                        // ignore: use_build_context_synchronously
+                        controller.showConfirmDialog(context);
+                        await controller.selectAddress(address);
+                      },
+                    )),
+                Positioned(
+                    right: 40,
+                    top: 0,
+                    child: IconButton(
+                      icon: Icon(
+                        isAddressSelected ? Iconsax.edit : Iconsax.edit,
+                        color: isAddressSelected
+                            ? MyColors.primary
+                            : dark
+                                ? MyColors.darkerGrey
+                                : MyColors.grey,
+                      ),
+                      onPressed: () async {
+                        await controller.selectAddress(address);
+                        // ignore: use_build_context_synchronously
+                      },
+                    )),
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -63,7 +89,8 @@ class TSingleAddress extends StatelessWidget {
                       style: Theme.of(context).textTheme.titleLarge,
                     ),
                     const SizedBox(height: Sizes.sm / 2),
-                    Text(address.formattedPhoneNo, maxLines: 1, overflow: TextOverflow.ellipsis),
+                    Text(address.formattedPhoneNo,
+                        maxLines: 1, overflow: TextOverflow.ellipsis),
                     const SizedBox(height: Sizes.sm / 2),
                     Text(address.toString(), softWrap: true),
                   ],

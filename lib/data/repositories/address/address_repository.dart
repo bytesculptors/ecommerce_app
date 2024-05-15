@@ -44,4 +44,12 @@ class AddressRepository extends GetxController {
       throw 'Unable to update your address selection. Try again later';
     }
   }
+
+  Future<void> deleteAddress(String userId, String addressId) async {
+    try {
+      await _db.collection('Users').doc(userId).collection('Addresses').doc(addressId).delete();
+    } catch (e) {
+      throw 'Unable to delete the selected address. Try again later';
+    }
+  }
 }
