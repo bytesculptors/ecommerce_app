@@ -1,3 +1,4 @@
+import 'package:btl/features/personalization/screens/my_store/my_store.dart';
 import 'package:btl/features/personalization/screens/my_store/start_selling.dart';
 
 import '../../../../common/widgets/list_tiles/user_profile_tile.dart';
@@ -59,11 +60,11 @@ class SettingsScreen extends StatelessWidget {
                     const TSectionHeading(title: 'Account Settings', showActionButton: false),
                     const SizedBox(height: Sizes.spaceBtwItems),
                     controller.user.value.isSelling
-                        ? const TSettingsMenuTile(
+                        ? TSettingsMenuTile(
                             icon: Iconsax.shop,
-                            title: 'My shop',
+                            title: 'My Shop',
                             subTitle: 'Manage your shop',
-                            // onTap: () => Get.to(() => const MyStoreScreen()),
+                            onTap: () => Get.to(() => const MyStoreScreen()),
                           )
                         : TSettingsMenuTile(
                             icon: Iconsax.shop_add,

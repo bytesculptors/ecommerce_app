@@ -47,6 +47,7 @@ class StoreModel {
       "DistrictID": districtID,
       'Commune': commune,
       "CommuneID": communeID,
+      "DetailedAddress": detailedAddress,
       'Image': image,
     };
   }
@@ -89,5 +90,10 @@ class StoreModel {
       detailedAddress: data['DetailedAddress'] ?? '',
       image: data['Image'] ?? ''
     );
+  }
+
+  @override
+  String toString() {
+    return '$detailedAddress, $commune, $district, $province';
   }
 }

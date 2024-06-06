@@ -1,6 +1,7 @@
 import 'package:btl/data/repositories/store/store_repository.dart';
 import 'package:btl/features/personalization/controllers/user_controller.dart';
-import 'package:btl/features/shop/models/store_model.dart';
+import 'package:btl/features/personalization/screens/my_store/my_store.dart';
+import 'package:btl/features/personalization/models/store_model.dart';
 import 'package:btl/utils/constants/image_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -91,6 +92,7 @@ class StartSellingController extends GetxController {
 
       // Redirect
       Navigator.of(Get.context!).pop();
+      Get.to(() => const MyStoreScreen());
     } catch (e) {
       // Remove Loader
       TFullScreenLoader.stopLoading();
