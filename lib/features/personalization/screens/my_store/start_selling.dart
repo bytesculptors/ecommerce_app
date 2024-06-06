@@ -106,7 +106,7 @@ class _StartSellingScreenState extends State<StartSellingScreen> {
     final controller = Get.put(StartSellingController());
     return Scaffold(
       appBar:
-          const MyAppBar(showBackArrow: true, title: Text('Start Selling Now!')),
+          const MyAppBar(showBackArrow: true, title: Text('Register to become a seller')),
       body: SingleChildScrollView(
         child: Container(
           padding: const EdgeInsets.all(Sizes.defaultSpace),
@@ -135,7 +135,7 @@ class _StartSellingScreenState extends State<StartSellingScreen> {
                   controller: controller.ownerCitizenID,
                   validator: Validator.validateCitizenID,
                   decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.personalcard), labelText: 'Citizen ID'),
+                      prefixIcon: Icon(Iconsax.personalcard), labelText: 'Owner\'s Citizen ID'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(

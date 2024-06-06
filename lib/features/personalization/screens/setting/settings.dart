@@ -25,6 +25,8 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = UserController.instance;
+    print(controller.user.value.isSelling);
+    print(controller.user.value.storeId);
     return PopScope(
       canPop: false,
       // Intercept the back button press and redirect to Home Screen
@@ -57,7 +59,7 @@ class SettingsScreen extends StatelessWidget {
                     const TSectionHeading(title: 'Account Settings', showActionButton: false),
                     const SizedBox(height: Sizes.spaceBtwItems),
                     controller.user.value.isSelling
-                        ? TSettingsMenuTile(
+                        ? const TSettingsMenuTile(
                             icon: Iconsax.shop,
                             title: 'My shop',
                             subTitle: 'Manage your shop',

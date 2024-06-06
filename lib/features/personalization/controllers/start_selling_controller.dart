@@ -1,4 +1,5 @@
 import 'package:btl/data/repositories/store/store_repository.dart';
+import 'package:btl/features/personalization/controllers/user_controller.dart';
 import 'package:btl/features/shop/models/store_model.dart';
 import 'package:btl/utils/constants/image_paths.dart';
 import 'package:flutter/material.dart';
@@ -27,6 +28,7 @@ class StartSellingController extends GetxController {
 
   RxBool refreshData = true.obs;
   final storeRepository = Get.put(StoreRepository());
+  final userController = UserController.instance;
 
 
   /// Add new Address
@@ -65,8 +67,13 @@ class StartSellingController extends GetxController {
         detailedAddress: detailedAddress.text.trim(),
 
       );
-      await storeRepository.openStore(
+      final storeId = await storeRepository.openStore(
           store, AuthenticationRepository.instance.getUserID);
+
+      // Update the Rx User value
+      userController.user.value.isSelling = true;
+      userController.user.value.storeId = storeId;
+
 
       // Remove Loader
       TFullScreenLoader.stopLoading();
@@ -74,7 +81,7 @@ class StartSellingController extends GetxController {
       // Show Success Message
       TLoaders.successSnackBar(
           title: 'Congratulations',
-          message: 'Your store has been opened successfully. Upload products to sell now!');
+          message: 'Your shop has been opened successfully. Upload products to sell now!');
 
       // Refresh Addresses Data
       refreshData.toggle();

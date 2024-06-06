@@ -66,8 +66,8 @@ class UserModel {
       'Email': email,
       'PhoneNumber': phoneNumber,
       'ProfilePicture': profilePicture,
-      'IsSelling': isSelling,
-      'StoreId': storeId
+      'isSelling': isSelling,
+      'storeId': storeId
     };
   }
 
@@ -75,6 +75,7 @@ class UserModel {
   factory UserModel.fromSnapshot(DocumentSnapshot<Map<String, dynamic>> document) {
     if (document.data() != null) {
       final data = document.data()!;
+      print(data);
       return UserModel(
         id: document.id,
         firstName: data['FirstName'] ?? '',
@@ -83,8 +84,8 @@ class UserModel {
         email: data['Email'] ?? '',
         phoneNumber: data['PhoneNumber'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
-        isSelling: data['IsSelling'] ?? false,
-        storeId: data['StoreId']
+        isSelling: data['isSelling'] ?? false,
+        storeId: data['storeId']
       );
     } else {
       return UserModel.empty();
