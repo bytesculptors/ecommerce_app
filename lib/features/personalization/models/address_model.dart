@@ -4,16 +4,16 @@ import '../../../utils/formatters/formatter.dart';
 
 class AddressModel {
   String id;
-  final String name;
-  final String phoneNumber;
-  final String provinceID;
-  final String province;
-  final String districtID;
-  final String district;
-  final String communeID;
-  final String commune;
-  final String detailedAddress;
-  final DateTime? dateTime;
+  String name;
+  String phoneNumber;
+  String provinceID;
+  String province;
+  String districtID;
+  String district;
+  String communeID;
+  String commune;
+  String detailedAddress;
+  DateTime? dateTime;
   bool selectedAddress;
 
   AddressModel({
@@ -43,8 +43,11 @@ class AddressModel {
       'Name': name,
       'PhoneNumber': phoneNumber,
       'Province': province,
+      'ProvinceID': provinceID,
       'District': district,
+      "DistrictID": districtID,
       'Commune': commune,
+      "CommuneID": communeID,
       'DetailedAddress': detailedAddress,
       'DateTime' : DateTime.now(),
       'SelectedAddress' : selectedAddress,

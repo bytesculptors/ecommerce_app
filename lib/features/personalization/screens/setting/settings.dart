@@ -1,3 +1,5 @@
+import 'package:btl/features/personalization/screens/my_store/start_selling.dart';
+
 import '../../../../common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -54,6 +56,19 @@ class SettingsScreen extends StatelessWidget {
                     /// -- Account  Settings
                     const TSectionHeading(title: 'Account Settings', showActionButton: false),
                     const SizedBox(height: Sizes.spaceBtwItems),
+                    controller.user.value.isSelling
+                        ? TSettingsMenuTile(
+                            icon: Iconsax.shop,
+                            title: 'My shop',
+                            subTitle: 'Manage your shop',
+                            // onTap: () => Get.to(() => const MyStoreScreen()),
+                          )
+                        : TSettingsMenuTile(
+                            icon: Iconsax.shop_add,
+                            title: 'Start Selling',
+                            subTitle: 'Register to become a seller now',
+                            onTap: () => Get.to(() => StartSellingScreen()),
+                          ),
                     TSettingsMenuTile(
                       icon: Iconsax.safe_home,
                       title: 'My Addresses',

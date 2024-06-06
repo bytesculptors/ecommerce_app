@@ -64,6 +64,7 @@ class SignupController extends GetxController {
         email: email.text.trim(),
         phoneNumber: phoneNumber.text.trim(),
         profilePicture: '',
+        isSelling: false
       );
 
       await UserController.instance.saveUserRecord(user: newUser);

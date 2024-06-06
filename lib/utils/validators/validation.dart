@@ -90,11 +90,27 @@ class Validator {
       return 'Phone number is required.';
     }
 
-    // Regular expression for phone number validation (assuming a 10-digit US phone number format)
+    // Regular expression for phone number validation (assuming a 10-digit phone number format)
     final phoneRegExp = RegExp(r'^\d{10}$');
 
     if (!phoneRegExp.hasMatch(value)) {
       return 'Invalid phone number format (10 digits required).';
+    }
+
+    return null;
+  }
+
+  /// Citizen ID Validation
+  static String? validateCitizenID(String? value) {
+    if (value == null || value.isEmpty) {
+      return 'Citizen ID is required.';
+    }
+
+    // Regular expression for citizen ID validation (assuming a 12-digit format)
+    final citizenIDRegExp = RegExp(r'^\d{12}$');
+
+    if (!citizenIDRegExp.hasMatch(value)) {
+      return 'Invalid citizen ID format (12 digits required).';
     }
 
     return null;

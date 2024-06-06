@@ -16,6 +16,8 @@ class UserModel {
   String profilePicture;
   final CartModel? cart;
   final List<AddressModel>? addresses;
+  bool isSelling;
+  String? storeId;
 
   /// Constructor for UserModel.
   UserModel({
@@ -28,6 +30,8 @@ class UserModel {
     required this.profilePicture,
     this.cart,
     this.addresses,
+    required this.isSelling,
+    this.storeId
   });
 
   /// Helper function to get the full name.
@@ -51,7 +55,7 @@ class UserModel {
   }
 
   /// Static function to create an empty user model.
-  static UserModel empty() => UserModel(id: '', firstName: '', lastName: '', username: '', email: '', phoneNumber: '', profilePicture: '');
+  static UserModel empty() => UserModel(id: '', firstName: '', lastName: '', username: '', email: '', phoneNumber: '', profilePicture: '', isSelling: false);
 
   /// Convert model to JSON structure for storing data in Firebase.
   Map<String, dynamic> toJson() {
@@ -62,6 +66,8 @@ class UserModel {
       'Email': email,
       'PhoneNumber': phoneNumber,
       'ProfilePicture': profilePicture,
+      'IsSelling': isSelling,
+      'StoreId': storeId
     };
   }
 
@@ -77,6 +83,8 @@ class UserModel {
         email: data['Email'] ?? '',
         phoneNumber: data['PhoneNumber'] ?? '',
         profilePicture: data['ProfilePicture'] ?? '',
+        isSelling: data['IsSelling'] ?? false,
+        storeId: data['StoreId']
       );
     } else {
       return UserModel.empty();
