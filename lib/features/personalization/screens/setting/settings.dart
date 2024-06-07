@@ -60,18 +60,18 @@ class SettingsScreen extends StatelessWidget {
                     const TSectionHeading(title: 'Account Settings', showActionButton: false),
                     const SizedBox(height: Sizes.spaceBtwItems),
                     controller.user.value.isSelling
-                        ? TSettingsMenuTile(
-                            icon: Iconsax.shop,
-                            title: 'My Shop',
-                            subTitle: 'Manage your shop',
-                            onTap: () => Get.to(() => const MyStoreScreen()),
-                          )
-                        : TSettingsMenuTile(
-                            icon: Iconsax.shop_add,
-                            title: 'Start Selling',
-                            subTitle: 'Register to become a seller now',
-                            onTap: () => Get.to(() => StartSellingScreen()),
-                          ),
+                      ? TSettingsMenuTile(
+                          icon: Iconsax.shop,
+                          title: 'My Shop',
+                          subTitle: 'Manage your shop',
+                          onTap: () => Get.to(() => const MyStoreScreen()),
+                        )
+                      : TSettingsMenuTile(
+                          icon: Iconsax.shop_add,
+                          title: 'Start Selling',
+                          subTitle: 'Register to become a seller now',
+                          onTap: () => Get.to(() => StartSellingScreen()),
+                        ),
                     TSettingsMenuTile(
                       icon: Iconsax.safe_home,
                       title: 'My Addresses',

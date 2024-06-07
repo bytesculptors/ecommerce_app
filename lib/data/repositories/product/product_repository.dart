@@ -40,6 +40,12 @@ class ProductRepository extends GetxController {
     return snapshot.docs.map((querySnapshot) => ProductModel.fromSnapshot(querySnapshot)).toList();
   }
 
+  /// Get all products of a store using Stream.
+  Future<List<ProductModel>> getAllStoreProducts(String storeId) async {
+    final snapshot = await _db.collection('Products').where('StoreID', isEqualTo: storeId).get();
+    return snapshot.docs.map((querySnapshot) => ProductModel.fromSnapshot(querySnapshot)).toList();
+  }
+
   /// Get Products based on the Brand
   Future<List<ProductModel>> fetchProductsByQuery(Query query) async {
     try {

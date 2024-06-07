@@ -10,6 +10,7 @@ class ProductController extends GetxController {
   final isLoading = false.obs;
   final productRepository = Get.put(ProductRepository());
   RxList<ProductModel> featuredProducts = <ProductModel>[].obs;
+  RxList<ProductModel> storeProducts = <ProductModel>[].obs;
 
   /// -- Initialize Products from your backend
   @override
@@ -29,6 +30,23 @@ class ProductController extends GetxController {
 
       // Assign Products
       featuredProducts.assignAll(products);
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void fetchStoreProducts(String storeId) async {
+    try {
+      // Show loader while loading Products
+      isLoading.value = true;
+
+      // Fetch Products
+      final products = await productRepository.getAllStoreProducts(storeId);
+
+      // Assign Products
+      storeProducts.assignAll(products);
     } catch (e) {
       TLoaders.errorSnackBar(title: 'Oh Snap!', message: e.toString());
     } finally {

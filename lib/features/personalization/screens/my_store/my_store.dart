@@ -7,6 +7,7 @@ import 'package:btl/features/personalization/screens/my_store/widgets/category_t
 import 'package:btl/features/personalization/screens/my_store/widgets/order_tab.dart';
 import 'package:btl/features/personalization/screens/my_store/widgets/product_tab.dart';
 import 'package:btl/features/personalization/screens/my_store/widgets/statistics_tab.dart';
+import 'package:btl/features/shop/controllers/product/product_controller.dart';
 import 'package:btl/features/shop/screens/home/widgets/header_search_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -21,8 +22,10 @@ class MyStoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storeController = Get.put(StoreController());
+    final productController = ProductController.instance;
     final userController = UserController.instance;
     storeController.fetchStoreRecord(userController.user.value.storeId);
+    productController.fetchStoreProducts(userController.user.value.storeId!);
     return DefaultTabController(
         length: 4,
         child: Scaffold(

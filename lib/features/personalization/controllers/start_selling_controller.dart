@@ -2,6 +2,8 @@ import 'package:btl/data/repositories/store/store_repository.dart';
 import 'package:btl/features/personalization/controllers/user_controller.dart';
 import 'package:btl/features/personalization/screens/my_store/my_store.dart';
 import 'package:btl/features/personalization/models/store_model.dart';
+import 'package:btl/features/personalization/screens/setting/settings.dart';
+import 'package:btl/features/shop/screens/home/home.dart';
 import 'package:btl/utils/constants/image_paths.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -84,7 +86,7 @@ class StartSellingController extends GetxController {
           title: 'Congratulations',
           message: 'Your shop has been opened successfully. Upload products to sell now!');
 
-      // Refresh Addresses Data
+      // Refresh Data
       refreshData.toggle();
 
       // Reset fields

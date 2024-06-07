@@ -320,6 +320,7 @@ class TDummyData {
             id: '6', stock: 11, price: 332, image: Images.productImage21, attributeValues: {'Color': 'Red', 'Size': 'EU 32'}),
       ],
       productType: ProductType.variable.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '002',
@@ -340,6 +341,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '003',
@@ -360,6 +362,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '004',
@@ -404,6 +407,7 @@ class TDummyData {
             id: '8', stock: 11, price: 332, image: Images.productImage63, attributeValues: {'Color': 'Blue', 'Size': 'EU 34'}),
       ],
       productType: ProductType.variable.toString(),
+      storeId: ''
     ),
 
     ///Products after banner
@@ -446,6 +450,7 @@ class TDummyData {
             id: '6', stock: 11, price: 31, image: Images.productImage8, attributeValues: {'Color': 'Orange', 'Size': 'EU 32'}),
       ],
       productType: ProductType.variable.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '006',
@@ -465,6 +470,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '007',
@@ -484,6 +490,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     //008 after 040
     ProductModel(
@@ -505,6 +512,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '010',
@@ -524,6 +532,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '011',
@@ -544,6 +553,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '012',
@@ -564,6 +574,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '013',
@@ -584,6 +595,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     //Track suits
     ProductModel(
@@ -605,6 +617,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '015',
@@ -624,6 +637,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '016',
@@ -643,6 +657,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '017',
@@ -662,6 +677,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     //Sports Equipments
     ProductModel(
@@ -683,6 +699,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '019',
@@ -702,6 +719,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '020',
@@ -721,6 +739,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '021',
@@ -740,6 +759,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
 
     ///Furniture
@@ -784,6 +804,7 @@ class TDummyData {
             id: '6', stock: 11, price: 31, image: Images.productImage44, attributeValues: {'Color': 'Grey', 'Size': 'EU 32'}),
       ],
       productType: ProductType.variable.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '023',
@@ -802,6 +823,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '024',
@@ -820,6 +842,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '025',
@@ -838,6 +861,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     //Kitchen
     ProductModel(
@@ -857,6 +881,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '027',
@@ -875,6 +900,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '028',
@@ -893,6 +919,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     //Office
     ProductModel(
@@ -912,6 +939,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '030',
@@ -930,6 +958,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '031',
@@ -948,6 +977,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '032',
@@ -966,6 +996,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
 
     ///Electronics
@@ -1007,6 +1038,7 @@ class TDummyData {
             id: '6', stock: 11, price: 800, image: Images.productImage59, attributeValues: {'Ram': '16', 'hard': '2 tb'}),
       ],
       productType: ProductType.variable.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '034',
@@ -1025,6 +1057,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '035',
@@ -1043,6 +1076,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '036',
@@ -1061,6 +1095,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     //Mobiles
     ProductModel(
@@ -1080,6 +1115,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '038',
@@ -1098,6 +1134,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '039',
@@ -1116,6 +1153,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '040',
@@ -1161,6 +1199,7 @@ class TDummyData {
             id: '6', stock: 11, price: 800, image: Images.productImage73, attributeValues: {'Color': 'Black', 'Storage': '256 gb'}),
       ],
       productType: ProductType.variable.toString(),
+      storeId: ''
     ),
     ProductModel(
       id: '008',
@@ -1181,6 +1220,7 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
+      storeId: ''
     ),
   ];
 
