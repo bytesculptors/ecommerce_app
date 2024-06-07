@@ -21,6 +21,7 @@ class ProductModel {
   List<String>? images;
   List<ProductAttributeModel>? productAttributes;
   List<ProductVariationModel>? productVariations;
+  String storeId;
 
   ProductModel({
     required this.id,
@@ -29,6 +30,7 @@ class ProductModel {
     required this.price,
     required this.thumbnail,
     required this.productType,
+    required this.storeId,
     this.sku,
     this.brand,
     this.date,
@@ -42,7 +44,7 @@ class ProductModel {
   });
 
   /// Create Empty func for clean code
-  static ProductModel empty() => ProductModel(id: '', title: '', stock: 0, price: 0, thumbnail: '', productType: '');
+  static ProductModel empty() => ProductModel(id: '', title: '', stock: 0, price: 0, thumbnail: '', productType: '', storeId: '');
 
   /// Json Format
   toJson() {
@@ -61,6 +63,7 @@ class ProductModel {
       'ProductType': productType,
       'ProductAttributes': productAttributes != null ? productAttributes!.map((e) => e.toJson()).toList() : [],
       'ProductVariations': productVariations != null ? productVariations!.map((e) => e.toJson()).toList() : [],
+      'StoreID': storeId
     };
   }
 
@@ -83,6 +86,7 @@ class ProductModel {
       images: data['Images'] != null ? List<String>.from(data['Images']) : [],
       productAttributes: (data['ProductAttributes'] as List<dynamic>).map((e) => ProductAttributeModel.fromJson(e)).toList(),
       productVariations: (data['ProductVariations'] as List<dynamic>).map((e) => ProductVariationModel.fromJson(e)).toList(),
+      storeId: data['StoreID'] ?? ''
     );
   }
 
@@ -105,6 +109,7 @@ class ProductModel {
       images: data['Images'] != null ? List<String>.from(data['Images']) : [],
       productAttributes: (data['ProductAttributes'] as List<dynamic>).map((e) => ProductAttributeModel.fromJson(e)).toList(),
       productVariations: (data['ProductVariations'] as List<dynamic>).map((e) => ProductVariationModel.fromJson(e)).toList(),
+      storeId: data['StoreID'] ?? ''
     );
   }
 }

@@ -1,13 +1,12 @@
 import 'package:btl/common/widgets/appbar/tabbar.dart';
 import 'package:btl/common/widgets/custom_shapes/containers/primary_header_container.dart';
 import 'package:btl/common/widgets/list_tiles/store_info_tile.dart';
-import 'package:btl/common/widgets/list_tiles/user_profile_tile.dart';
 import 'package:btl/features/personalization/controllers/store_controller.dart';
+import 'package:btl/features/personalization/controllers/user_controller.dart';
 import 'package:btl/features/personalization/screens/my_store/widgets/category_tab.dart';
 import 'package:btl/features/personalization/screens/my_store/widgets/order_tab.dart';
 import 'package:btl/features/personalization/screens/my_store/widgets/product_tab.dart';
 import 'package:btl/features/personalization/screens/my_store/widgets/statistics_tab.dart';
-import 'package:btl/features/personalization/screens/profile/profile.dart';
 import 'package:btl/features/shop/screens/home/widgets/header_search_container.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -22,6 +21,8 @@ class MyStoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final storeController = Get.put(StoreController());
+    final userController = UserController.instance;
+    storeController.fetchStoreRecord(userController.user.value.storeId);
     return DefaultTabController(
         length: 4,
         child: Scaffold(
