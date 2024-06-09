@@ -320,7 +320,8 @@ class TDummyData {
             id: '6', stock: 11, price: 332, image: Images.productImage21, attributeValues: {'Color': 'Red', 'Size': 'EU 32'}),
       ],
       productType: ProductType.variable.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '002',
@@ -341,7 +342,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '003',
@@ -362,7 +364,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '004',
@@ -407,7 +410,8 @@ class TDummyData {
             id: '8', stock: 11, price: 332, image: Images.productImage63, attributeValues: {'Color': 'Blue', 'Size': 'EU 34'}),
       ],
       productType: ProductType.variable.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
 
     ///Products after banner
@@ -450,7 +454,8 @@ class TDummyData {
             id: '6', stock: 11, price: 31, image: Images.productImage8, attributeValues: {'Color': 'Orange', 'Size': 'EU 32'}),
       ],
       productType: ProductType.variable.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '006',
@@ -470,7 +475,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '007',
@@ -490,7 +496,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     //008 after 040
     ProductModel(
@@ -512,7 +519,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '010',
@@ -532,7 +540,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '011',
@@ -553,7 +562,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '012',
@@ -574,7 +584,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '013',
@@ -595,7 +606,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     //Track suits
     ProductModel(
@@ -617,7 +629,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '015',
@@ -637,7 +650,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '016',
@@ -657,7 +671,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '017',
@@ -677,7 +692,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     //Sports Equipments
     ProductModel(
@@ -699,7 +715,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '019',
@@ -719,7 +736,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '020',
@@ -739,7 +757,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '021',
@@ -759,7 +778,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
 
     ///Furniture
@@ -804,7 +824,8 @@ class TDummyData {
             id: '6', stock: 11, price: 31, image: Images.productImage44, attributeValues: {'Color': 'Grey', 'Size': 'EU 32'}),
       ],
       productType: ProductType.variable.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '023',
@@ -823,7 +844,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '024',
@@ -842,7 +864,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '025',
@@ -861,7 +884,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     //Kitchen
     ProductModel(
@@ -881,7 +905,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '027',
@@ -900,7 +925,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '028',
@@ -919,7 +945,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     //Office
     ProductModel(
@@ -939,7 +966,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '030',
@@ -958,7 +986,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '031',
@@ -977,7 +1006,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '032',
@@ -996,7 +1026,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
 
     ///Electronics
@@ -1038,7 +1069,8 @@ class TDummyData {
             id: '6', stock: 11, price: 800, image: Images.productImage59, attributeValues: {'Ram': '16', 'hard': '2 tb'}),
       ],
       productType: ProductType.variable.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '034',
@@ -1057,7 +1089,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '035',
@@ -1076,7 +1109,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '036',
@@ -1095,7 +1129,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     //Mobiles
     ProductModel(
@@ -1115,7 +1150,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '038',
@@ -1134,7 +1170,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '039',
@@ -1153,7 +1190,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '040',
@@ -1199,7 +1237,8 @@ class TDummyData {
             id: '6', stock: 11, price: 800, image: Images.productImage73, attributeValues: {'Color': 'Black', 'Storage': '256 gb'}),
       ],
       productType: ProductType.variable.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
     ProductModel(
       id: '008',
@@ -1220,7 +1259,8 @@ class TDummyData {
         ProductAttributeModel(name: 'Color', values: ['Green', 'Red', 'Blue']),
       ],
       productType: ProductType.single.toString(),
-      storeId: ''
+      storeId: '',
+      weight: 200
     ),
   ];
 

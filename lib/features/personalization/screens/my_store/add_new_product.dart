@@ -105,7 +105,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
     if (pickedFile != null) {
       _image = pickedFile;
       setState(() {
-        _imageList.last = _image;
+        _imageList.add(_image);
       });
       String uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
