@@ -3,10 +3,10 @@ import 'package:btl/common/widgets/custom_shapes/containers/primary_header_conta
 import 'package:btl/common/widgets/list_tiles/store_info_tile.dart';
 import 'package:btl/features/personalization/controllers/store_controller.dart';
 import 'package:btl/features/personalization/controllers/user_controller.dart';
-import 'package:btl/features/personalization/screens/my_store/widgets/category_tab.dart';
-import 'package:btl/features/personalization/screens/my_store/widgets/order_tab.dart';
-import 'package:btl/features/personalization/screens/my_store/widgets/product_tab.dart';
-import 'package:btl/features/personalization/screens/my_store/widgets/statistics_tab.dart';
+import 'package:btl/features/personalization/screens/my_store/tabs/category_tab.dart';
+import 'package:btl/features/personalization/screens/my_store/tabs/order_tab.dart';
+import 'package:btl/features/personalization/screens/my_store/tabs/product_tab.dart';
+import 'package:btl/features/personalization/screens/my_store/tabs/statistics_tab.dart';
 import 'package:btl/features/shop/controllers/product/product_controller.dart';
 import 'package:btl/features/shop/screens/home/widgets/header_search_container.dart';
 import 'package:flutter/material.dart';

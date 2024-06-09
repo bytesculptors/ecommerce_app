@@ -115,4 +115,62 @@ class Validator {
 
     return null;
   }
+
+  static String? validatePositiveInteger(String? value) {
+    // Check if the string is not empty
+    if (value == null || value.isEmpty) {
+      return 'Stock is required.';
+    }
+
+    // Try to parse the string to an integer
+    final int? number = int.tryParse(value);
+
+    // Check if the parsed integer is greater than 0
+    if (number != null && number > 0) {
+      return null;
+    } else {
+      return 'Stock must be a positive integer.';
+    }
+  }
+
+  static String? validatePositiveNumber(String? value) {
+    // Check if the string is not empty
+    if (value == null || value.isEmpty) {
+      return 'Price is required.';
+    }
+
+    // Try to parse the string to an integer
+    final double? number = double.tryParse(value);
+
+    // Check if the parsed integer is greater than 0
+    if (number != null && number > 0) {
+      return null;
+    } else {
+      return 'Price must be a positive number.';
+    }
+  }
+
+  static String? validateSalePrice(String? value, String originalPriceValue) {
+    // Check if the string is not empty
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    // Try to parse the string to an integer
+    final double? salePrice = double.tryParse(value);
+    final double? originalPrice = double.tryParse(originalPriceValue);
+
+
+
+    // Check if the parsed integer is greater than 0
+    if (salePrice != null && salePrice > 0) {
+      if (originalPrice != null && (salePrice > originalPrice || salePrice == originalPrice)) {
+        return "Sale price must be less than the original price.";
+      } else {
+        return null;
+      }
+    } else {
+      return 'Sale price must be a positive number.';
+    }
+  }
 }

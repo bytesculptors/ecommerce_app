@@ -1,6 +1,7 @@
 import 'package:btl/common/widgets/layouts/grid_layout.dart';
 import 'package:btl/common/widgets/products/product_cards/product_card_vertical.dart';
 import 'package:btl/common/widgets/shimmers/vertical_product_shimmer.dart';
+import 'package:btl/features/personalization/screens/my_store/add_new_product.dart';
 import 'package:btl/features/personalization/screens/my_store/widgets/product_card.dart';
 import 'package:btl/features/shop/controllers/product/product_controller.dart';
 import 'package:btl/utils/constants/colors.dart';
@@ -45,8 +46,7 @@ class ProductTab extends StatelessWidget {
       /// Add new product button
       floatingActionButton: FloatingActionButton(
         backgroundColor: MyColors.primary,
-        onPressed: () {},
-        // onPressed: () => Get.to(() => AddNewAddressScreen()),
+        onPressed: () => Get.to(() => AddNewProductScreen()),
         child: const Icon(Iconsax.add, color: MyColors.white),
       ),
     );
