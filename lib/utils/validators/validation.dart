@@ -116,7 +116,7 @@ class Validator {
     return null;
   }
 
-  static String? validatePositiveInteger(String? value) {
+  static String? validateStock(String? value) {
     // Check if the string is not empty
     if (value == null || value.isEmpty) {
       return 'Stock is required.';
@@ -133,7 +133,75 @@ class Validator {
     }
   }
 
-  static String? validatePositiveNumber(String? value) {
+  static String? validateWeight(String? value) {
+    // Check if the string is not empty
+    if (value == null || value.isEmpty) {
+      return 'Weight is required.';
+    }
+
+    // Try to parse the string to an integer
+    final int? number = int.tryParse(value);
+
+    // Check if the parsed integer is greater than 0
+    if (number != null && number > 0) {
+      return null;
+    } else {
+      return 'Weight must be a positive integer.';
+    }
+  }
+
+  static String? validateWidth(String? value) {
+    // Check if the string is not empty
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    // Try to parse the string to an integer
+    final int? number = int.tryParse(value);
+
+    // Check if the parsed integer is greater than 0
+    if (number != null && number > 0) {
+      return null;
+    } else {
+      return 'Width must be a positive integer.';
+    }
+  }
+
+  static String? validateLength(String? value) {
+    // Check if the string is not empty
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    // Try to parse the string to an integer
+    final int? number = int.tryParse(value);
+
+    // Check if the parsed integer is greater than 0
+    if (number != null && number > 0) {
+      return null;
+    } else {
+      return 'Length must be a positive integer.';
+    }
+  }
+
+  static String? validateHeight(String? value) {
+    // Check if the string is not empty
+    if (value == null || value.isEmpty) {
+      return null;
+    }
+
+    // Try to parse the string to an integer
+    final int? number = int.tryParse(value);
+
+    // Check if the parsed integer is greater than 0
+    if (number != null && number > 0) {
+      return null;
+    } else {
+      return 'Height must be a positive integer.';
+    }
+  }
+
+  static String? validatePrice(String? value) {
     // Check if the string is not empty
     if (value == null || value.isEmpty) {
       return 'Price is required.';
@@ -160,11 +228,10 @@ class Validator {
     final double? salePrice = double.tryParse(value);
     final double? originalPrice = double.tryParse(originalPriceValue);
 
-
-
     // Check if the parsed integer is greater than 0
     if (salePrice != null && salePrice > 0) {
-      if (originalPrice != null && (salePrice > originalPrice || salePrice == originalPrice)) {
+      if (originalPrice != null &&
+          (salePrice > originalPrice || salePrice == originalPrice)) {
         return "Sale price must be less than the original price.";
       } else {
         return null;

@@ -7,7 +7,7 @@ import 'package:btl/features/shop/models/brand_model.dart';
 import 'package:btl/features/shop/models/category_model.dart';
 import 'package:btl/features/shop/models/product_variation_model.dart';
 import 'package:btl/utils/constants/colors.dart';
-import 'package:btl/utils/http/http_client.dart';
+import 'package:btl/utils/constants/enums.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,6 @@ import 'package:image_picker/image_picker.dart';
 import '../../../../../utils/constants/sizes.dart';
 import '../../../../common/widgets/appbar/appbar.dart';
 import '../../../../utils/validators/validation.dart';
-import '../../controllers/address_controller.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 
 class AddNewProductScreen extends StatefulWidget {
@@ -128,10 +127,70 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
     }
   }
 
+  final List<XFile?> _multiImageList = [];
+  List<String> multiImageList_url = [];
+
+  Future<void> _pickImages() async {
+    var pickedFiles = await ImagePicker().pickMultiImage();
+
+    if (pickedFiles != null) {
+      setState(() {
+        _multiImageList.addAll(pickedFiles);
+      });
+
+      for (var pickedFile in pickedFiles) {
+        String uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
+
+        Reference referenceRoot = FirebaseStorage.instance.ref();
+        Reference referenceDirImages = referenceRoot.child('images');
+
+        Reference referenceImageToUpload =
+            referenceDirImages.child(uniqueFileName);
+
+        try {
+          await referenceImageToUpload.putFile(File(pickedFile.path));
+          image_url = await referenceImageToUpload.getDownloadURL();
+          setState(() {
+            multiImageList_url.add(image_url);
+          });
+        } catch (error) {
+          print(error);
+        }
+      }
+    }
+  }
+
+  void _deleteVariant(int index) {
+    setState(() {
+      listProductVariations.removeAt(index);
+      if (index < _imageList.length) {
+        _imageList.removeAt(index);
+      }
+
+      if (index < _multiImageList.length) {
+        _multiImageList.removeAt(index);
+      }
+    });
+  }
+
+  void _deleteImage(int index) {
+    setState(() {
+      _imageList.removeAt(index);
+      // imageList_url.removeAt(index);
+    });
+  }
+
+  void _deleteImages(int index) {
+    setState(() {
+      _multiImageList.removeAt(index);
+      // imageList_url.removeAt(index);
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    final productController = Get.put(ProductController());
-    final categoryController = Get.put(CategoryController());
+    final productController = ProductController.instance;
+    final categoryController = CategoryController.instance;
     final brandController = Get.put(BrandController());
     return Scaffold(
       appBar:
@@ -150,46 +209,6 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                       Validator.validateEmptyText('Title', value),
                   decoration: const InputDecoration(
                       prefixIcon: Icon(Iconsax.note_text), labelText: 'Title'),
-                ),
-                const SizedBox(height: Sizes.spaceBtwInputFields),
-                TextFormField(
-                  // controller: controller.stock,
-                  keyboardType: TextInputType.number,
-                  validator: Validator.validatePositiveInteger,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.square), labelText: 'Stock'),
-                ),
-                const SizedBox(height: Sizes.spaceBtwInputFields),
-                TextFormField(
-                  // controller: controller.price,
-                  keyboardType: TextInputType.number,
-                  validator: Validator.validatePositiveNumber,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.wallet_1), labelText: 'Price'),
-                ),
-                const SizedBox(height: Sizes.spaceBtwInputFields),
-                TextFormField(
-                  // controller: controller.description,
-                  keyboardType: TextInputType.multiline,
-                  minLines: 3,
-                  maxLines: null,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.clipboard_text),
-                      labelText: 'Description'),
-                ),
-                const SizedBox(height: Sizes.spaceBtwInputFields),
-                TextFormField(
-                  // controller: controller.salePrice,
-                  validator: (value) => Validator.validateSalePrice(value, ''),
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.flash_circle),
-                      labelText: 'Sale Price'),
-                ),
-                const SizedBox(height: Sizes.spaceBtwInputFields),
-                TextFormField(
-                  // controller: controller.sku,
-                  decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.barcode), labelText: 'SKU'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 DropdownButtonFormField(
@@ -232,6 +251,207 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                       value == null ? 'Please select an option.' : null,
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.description,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
+                  maxLines: null,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.clipboard_text),
+                      labelText: 'Description'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.stock,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validateStock,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.square), labelText: 'Stock'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.price,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validatePrice,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.wallet_1), labelText: 'Price'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.salePrice,
+                  validator: (value) => Validator.validateSalePrice(value, ''),
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.flash_circle),
+                      labelText: 'Sale Price'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.stock,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validateWeight,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.weight), labelText: 'Weight'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.stock,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validateWidth,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.arrow_swap_horizontal),
+                      labelText: 'Width'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.stock,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validateLength,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.arrow_swap),
+                      labelText: 'Length'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.stock,
+                  keyboardType: TextInputType.number,
+                  validator: Validator.validateHeight,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.programming_arrow),
+                      labelText: 'Height'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                TextFormField(
+                  // controller: controller.sku,
+                  decoration: const InputDecoration(
+                      prefixIcon: Icon(Iconsax.barcode), labelText: 'SKU'),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                const Text(
+                  'Thumbnail',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                ),
+                GestureDetector(
+                  onTap: _pickImage,
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _imageList.isNotEmpty && _imageList[0] != null
+                        ? Stack(
+                            children: [
+                              Positioned.fill(
+                                child: (_imageList[0]!.path.contains('http'))
+                                    ? Image.network(
+                                        _imageList[0]!.path,
+                                        fit: BoxFit.contain,
+                                      )
+                                    : Image.file(
+                                        File(_imageList[0]!.path),
+                                        fit: BoxFit.contain,
+                                      ),
+                              ),
+                              Positioned(
+                                top: 8,
+                                right: 8,
+                                child: GestureDetector(
+                                  onTap: () => _deleteImage(0),
+                                  child: const Icon(
+                                    Icons.close,
+                                    color: Colors.red,
+                                    size: 24,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          )
+                        : const Center(
+                            child: Icon(
+                              Icons.camera_alt,
+                              size: 40,
+                              color: Colors.grey,
+                            ),
+                          ),
+                  ),
+                ),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
+                const Text(
+                  'Images',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
+                ),
+                GestureDetector(
+                  onTap: _pickImages,
+                  child: Container(
+                    height: 200,
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _multiImageList.isNotEmpty
+                        ? GridView.builder(
+                            itemCount: _multiImageList.length,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                            ),
+                            itemBuilder: (context, imgIndex) {
+                              return _multiImageList[imgIndex] != null
+                                  ? Stack(
+                                      children: [
+                                        Positioned.fill(
+                                          child: _multiImageList[imgIndex]!
+                                                  .path
+                                                  .contains('http')
+                                              ? Image.network(
+                                                  _multiImageList[imgIndex]!
+                                                      .path,
+                                                  fit: BoxFit.contain,
+                                                )
+                                              : Image.file(
+                                                  File(
+                                                      _multiImageList[imgIndex]!
+                                                          .path),
+                                                  fit: BoxFit.contain,
+                                                ),
+                                        ),
+                                        Positioned(
+                                          top: 0,
+                                          right: 0,
+                                          child: IconButton(
+                                            icon: const Icon(
+                                              Icons.close,
+                                              color: Colors.red,
+                                            ),
+                                            onPressed: () {
+                                              setState(() {
+                                                _multiImageList
+                                                    .removeAt(imgIndex);
+                                              });
+                                            },
+                                          ),
+                                        ),
+                                      ],
+                                    )
+                                  : const Center(
+                                      child: Icon(
+                                        Icons.camera_alt,
+                                        size: 40,
+                                        color: Colors.grey,
+                                      ),
+                                    );
+                            },
+                          )
+                        : const Center(
+                            child: Icon(
+                              Icons.camera_alt,
+                              size: 40,
+                              color: Colors.grey,
+                            ),
+                          ),
+                  ),
+                ),
+                const SizedBox(height: Sizes.defaultSpace),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -240,10 +460,19 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Variant ${index + 1}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Variant ${index + 1}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              icon: const Icon(Icons.delete, color: Colors.red),
+                              onPressed: () => _deleteVariant(index),
+                            ),
+                          ],
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
                         TextField(
@@ -338,31 +567,126 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                         GestureDetector(
                           onTap: _pickImage,
                           child: Container(
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: (_imageList.length > index &&
-                                      _imageList[index] != null)
-                                  ? (_imageList[index]!.path.contains('http')
-                                      ? Image.network(
-                                          _imageList[index]!.path,
-                                          fit: BoxFit.contain,
-                                        )
-                                      : Image.file(
-                                          File(_imageList[index]!.path),
-                                          fit: BoxFit.contain,
-                                        ))
-                                  : const Center(
-                                      child: Icon(
-                                        Icons.camera_alt,
-                                        size: 40,
-                                        color: Colors.grey,
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: _imageList.length > index &&
+                                    _imageList[index] != null
+                                ? Stack(
+                                    children: [
+                                      Positioned.fill(
+                                        child: (_imageList[index]!
+                                                .path
+                                                .contains('http'))
+                                            ? Image.network(
+                                                _imageList[index]!.path,
+                                                fit: BoxFit.contain,
+                                              )
+                                            : Image.file(
+                                                File(_imageList[index]!.path),
+                                                fit: BoxFit.contain,
+                                              ),
                                       ),
-                                    )),
+                                      Positioned(
+                                        top: 8,
+                                        right: 8,
+                                        child: GestureDetector(
+                                          onTap: () => _deleteImage(index),
+                                          child: const Icon(
+                                            Icons.close,
+                                            color: Colors.red,
+                                            size: 24,
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  )
+                                : const Center(
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                          ),
                         ),
                         const SizedBox(height: 16),
+                        GestureDetector(
+                          onTap: _pickImages,
+                          child: Container(
+                            height: 200,
+                            decoration: BoxDecoration(
+                              color: Colors.grey[200],
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: _multiImageList.isNotEmpty
+                                ? GridView.builder(
+                                    itemCount: _multiImageList.length,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 3,
+                                    ),
+                                    itemBuilder: (context, imgIndex) {
+                                      return _multiImageList[imgIndex] != null
+                                          ? Stack(
+                                              children: [
+                                                Positioned.fill(
+                                                  child: _multiImageList[
+                                                              imgIndex]!
+                                                          .path
+                                                          .contains('http')
+                                                      ? Image.network(
+                                                          _multiImageList[
+                                                                  imgIndex]!
+                                                              .path,
+                                                          fit: BoxFit.contain,
+                                                        )
+                                                      : Image.file(
+                                                          File(_multiImageList[
+                                                                  imgIndex]!
+                                                              .path),
+                                                          fit: BoxFit.contain,
+                                                        ),
+                                                ),
+                                                Positioned(
+                                                  top: 0,
+                                                  right: 0,
+                                                  child: IconButton(
+                                                    icon: const Icon(
+                                                      Icons.close,
+                                                      color: Colors.red,
+                                                    ),
+                                                    onPressed: () {
+                                                      setState(() {
+                                                        _multiImageList
+                                                            .removeAt(imgIndex);
+                                                      });
+                                                    },
+                                                  ),
+                                                ),
+                                              ],
+                                            )
+                                          : const Center(
+                                              child: Icon(
+                                                Icons.camera_alt,
+                                                size: 40,
+                                                color: Colors.grey,
+                                              ),
+                                            );
+                                    },
+                                  )
+                                : const Center(
+                                    child: Icon(
+                                      Icons.camera_alt,
+                                      size: 40,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                          ),
+                        ),
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
                       ],
                     );
                   },
@@ -383,11 +707,11 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                     });
                   },
                   child: const Text(
-                    'Add Variant',
+                    'Add Product Variant',
                     style: TextStyle(color: MyColors.primary),
                   ),
                 ),
-                const SizedBox(height: Sizes.defaultSpace),
+                const SizedBox(height: Sizes.spaceBtwInputFields),
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(

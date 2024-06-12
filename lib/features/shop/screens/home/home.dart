@@ -1,3 +1,4 @@
+import 'package:btl/features/shop/controllers/brand_controller.dart';
 import 'package:btl/features/shop/controllers/product/product_controller.dart';
 import 'package:btl/utils/constants/sizes.dart';
 import 'package:btl/utils/constants/text_strings.dart';
@@ -23,6 +24,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.put(ProductController());
+    final brandController = Get.put(BrandController());
     return Scaffold(
       body: SingleChildScrollView(
         child: Column(
