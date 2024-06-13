@@ -201,9 +201,12 @@ class Validator {
     }
   }
 
-  static String? validatePrice(String? value) {
+  static String? validatePrice(String? value, bool isVariant) {
     // Check if the string is not empty
     if (value == null || value.isEmpty) {
+      if (isVariant) {
+        return null;
+      }
       return 'Price is required.';
     }
 

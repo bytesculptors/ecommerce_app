@@ -7,8 +7,6 @@ import 'package:btl/features/shop/models/brand_model.dart';
 import 'package:btl/features/shop/models/category_model.dart';
 import 'package:btl/features/shop/models/product_variation_model.dart';
 import 'package:btl/utils/constants/colors.dart';
-import 'package:btl/utils/constants/enums.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
@@ -38,15 +36,13 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
 
   String? selectedCategory;
   BrandModel? selectedBrand;
-  Color selectedColor = MyColors.light;
+  Color selectedColor = const Color.fromARGB(255, 234, 183, 183);
   List<ProductVariationModel> listProductVariations = [];
-
-  String image_url = '';
-
-  final List<XFile?> _imageList = [];
-
-  XFile? _image;
-  List<String> imageList_url = [];
+  String thumbnailUrl = '';
+  XFile? thumbnail;
+  final List<XFile?> imageList = [];
+  List<String> imageUrlList = [];
+  final List<XFile?> variantImageList = [];
 
   void openColorPicker(BuildContext context, int variantIndex) {
     showDialog(
@@ -98,92 +94,84 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
     return hexRegex.hasMatch(hexColor);
   }
 
-  Future<void> _pickImage() async {
-    var pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
+  Future<void> pickThumbnail() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      _image = pickedFile;
-      setState(() {
-        _imageList.add(_image);
-      });
-      String uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-      Reference referenceRoot = FirebaseStorage.instance.ref();
-      Reference referenceDirImages = referenceRoot.child('images');
-
-      Reference referenceImageToUpload =
-          referenceDirImages.child(uniqueFileName);
-
-      try {
-        await referenceImageToUpload.putFile(File(_image!.path));
-        image_url = await referenceImageToUpload.getDownloadURL();
-        setState(() {
-          imageList_url.add(image_url);
-        });
-        //print(imageList_url.length);
-      } catch (error) {
-        print(error);
-      }
+      thumbnail = pickedFile;
+      thumbnailUrl = await ProductController.instance.uploadImage(pickedFile);
     }
   }
 
-  final List<XFile?> _multiImageList = [];
-  List<String> multiImageList_url = [];
+  Future<void> pickMultiImages() async {
+    final pickedFiles = await ImagePicker().pickMultiImage();
 
-  Future<void> _pickImages() async {
-    var pickedFiles = await ImagePicker().pickMultiImage();
+    setState(() {
+      imageList.addAll(pickedFiles);
+    });
 
-    if (pickedFiles != null) {
+    for (final pickedFile in pickedFiles) {
+      final url = await ProductController.instance.uploadImage(pickedFile);
       setState(() {
-        _multiImageList.addAll(pickedFiles);
+        imageUrlList.add(url);
       });
-
-      for (var pickedFile in pickedFiles) {
-        String uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
-
-        Reference referenceRoot = FirebaseStorage.instance.ref();
-        Reference referenceDirImages = referenceRoot.child('images');
-
-        Reference referenceImageToUpload =
-            referenceDirImages.child(uniqueFileName);
-
-        try {
-          await referenceImageToUpload.putFile(File(pickedFile.path));
-          image_url = await referenceImageToUpload.getDownloadURL();
-          setState(() {
-            multiImageList_url.add(image_url);
-          });
-        } catch (error) {
-          print(error);
-        }
-      }
     }
   }
 
-  void _deleteVariant(int index) {
+  Future<void> pickVariantImage(int variantIndex) async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery);
+
+    if (pickedFile != null) {
+      setState(() {
+        variantImageList[variantIndex] = pickedFile;
+      });
+      final imageUrl = await ProductController.instance.uploadImage(pickedFile);
+      setState(() {
+        listProductVariations[variantIndex].image = imageUrl;
+      });
+    }
+  }
+
+  void deleteVariant(int index) async {
+    if (listProductVariations[index].image != '') {
+      await ProductController.instance
+          .deleteImage(listProductVariations[index].image);
+    }
     setState(() {
       listProductVariations.removeAt(index);
-      if (index < _imageList.length) {
-        _imageList.removeAt(index);
-      }
-
-      if (index < _multiImageList.length) {
-        _multiImageList.removeAt(index);
+      if (index < variantImageList.length) {
+        variantImageList.removeAt(index);
       }
     });
   }
 
-  void _deleteImage(int index) {
+  void deleteThumbnail() async {
+    await ProductController.instance.deleteImage(thumbnailUrl);
     setState(() {
-      _imageList.removeAt(index);
-      // imageList_url.removeAt(index);
+      thumbnail = null;
+      thumbnailUrl = '';
     });
   }
 
-  void _deleteImages(int index) {
+  void deleteImage(int index) async {
+    await ProductController.instance.deleteImage(imageUrlList[index]);
     setState(() {
-      _multiImageList.removeAt(index);
-      // imageList_url.removeAt(index);
+      imageList.removeAt(index);
+      imageUrlList.removeAt(index);
+    });
+  }
+
+  void deleteVariantImage(int index) async {
+    await ProductController.instance
+        .deleteImage(listProductVariations[index].image);
+
+    setState(() {
+      listProductVariations[index].image = '';
+      if (index < variantImageList.length) {
+        variantImageList.removeAt(index);
+      }
     });
   }
 
@@ -204,7 +192,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 TextFormField(
-                  // controller: controller.title,
+                  controller: productController.title,
                   validator: (value) =>
                       Validator.validateEmptyText('Title', value),
                   decoration: const InputDecoration(
@@ -222,8 +210,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                   }).toList(),
                   onChanged: (String? newValue) {
                     selectedCategory = newValue!;
-                    // controller.provinceID =
-                    //     selectedProvince!.split(':')[0].trim();
+                    productController.categoryId = selectedCategory;
                   },
                   decoration: const InputDecoration(
                       prefixIcon: Icon(Iconsax.category),
@@ -242,8 +229,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                   }).toList(),
                   onChanged: (BrandModel? newValue) {
                     selectedBrand = newValue!;
-                    // controller.provinceID =
-                    //     selectedProvince!.split(':')[0].trim();
+                    productController.brand = selectedBrand;
                   },
                   decoration: const InputDecoration(
                       prefixIcon: Icon(Iconsax.ranking), labelText: 'Brand'),
@@ -252,7 +238,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.description,
+                  controller: productController.description,
                   keyboardType: TextInputType.multiline,
                   minLines: 3,
                   maxLines: null,
@@ -262,7 +248,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.stock,
+                  controller: productController.stock,
                   keyboardType: TextInputType.number,
                   validator: Validator.validateStock,
                   decoration: const InputDecoration(
@@ -270,15 +256,16 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.price,
+                  controller: productController.price,
                   keyboardType: TextInputType.number,
-                  validator: Validator.validatePrice,
+                  validator: (value) => Validator.validatePrice(value, false),
                   decoration: const InputDecoration(
                       prefixIcon: Icon(Iconsax.wallet_1), labelText: 'Price'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.salePrice,
+                  controller: productController.salePrice,
+                  keyboardType: TextInputType.number,
                   validator: (value) => Validator.validateSalePrice(value, ''),
                   decoration: const InputDecoration(
                       prefixIcon: Icon(Iconsax.flash_circle),
@@ -286,7 +273,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.stock,
+                  controller: productController.weight,
                   keyboardType: TextInputType.number,
                   validator: Validator.validateWeight,
                   decoration: const InputDecoration(
@@ -294,34 +281,33 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.stock,
+                  controller: productController.width,
                   keyboardType: TextInputType.number,
                   validator: Validator.validateWidth,
                   decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.arrow_swap_horizontal),
-                      labelText: 'Width'),
+                      prefixIcon: Icon(Iconsax.arrow_swap), labelText: 'Width'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.stock,
+                  controller: productController.length,
                   keyboardType: TextInputType.number,
                   validator: Validator.validateLength,
                   decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.arrow_swap),
+                      prefixIcon: Icon(Iconsax.arrow_swap_horizontal),
                       labelText: 'Length'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.stock,
+                  controller: productController.height,
                   keyboardType: TextInputType.number,
                   validator: Validator.validateHeight,
                   decoration: const InputDecoration(
-                      prefixIcon: Icon(Iconsax.programming_arrow),
+                      prefixIcon: Icon(Iconsax.arrow_swap),
                       labelText: 'Height'),
                 ),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 TextFormField(
-                  // controller: controller.sku,
+                  controller: productController.sku,
                   decoration: const InputDecoration(
                       prefixIcon: Icon(Iconsax.barcode), labelText: 'SKU'),
                 ),
@@ -331,36 +317,40 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                 ),
                 GestureDetector(
-                  onTap: _pickImage,
+                  onTap: pickThumbnail,
                   child: Container(
                     height: 200,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: _imageList.isNotEmpty && _imageList[0] != null
+                    child: thumbnail != null
                         ? Stack(
                             children: [
                               Positioned.fill(
-                                child: (_imageList[0]!.path.contains('http'))
+                                child: (thumbnail!.path.contains('http'))
                                     ? Image.network(
-                                        _imageList[0]!.path,
+                                        thumbnail!.path,
                                         fit: BoxFit.contain,
                                       )
                                     : Image.file(
-                                        File(_imageList[0]!.path),
+                                        File(thumbnail!.path),
                                         fit: BoxFit.contain,
                                       ),
                               ),
                               Positioned(
-                                top: 8,
-                                right: 8,
+                                top: 3,
+                                right: 103,
                                 child: GestureDetector(
-                                  onTap: () => _deleteImage(0),
-                                  child: const Icon(
-                                    Icons.close,
-                                    color: Colors.red,
-                                    size: 24,
+                                  onTap: () => deleteThumbnail(),
+                                  child: const CircleAvatar(
+                                    radius: 15,
+                                    backgroundColor: Colors.black54,
+                                    child: Icon(
+                                      Icons.close,
+                                      size: 15,
+                                      color: Colors.white,
+                                    ),
                                   ),
                                 ),
                               ),
@@ -381,55 +371,53 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                   style: TextStyle(fontSize: 17, fontWeight: FontWeight.w500),
                 ),
                 GestureDetector(
-                  onTap: _pickImages,
+                  onTap: pickMultiImages,
                   child: Container(
                     height: 200,
                     decoration: BoxDecoration(
                       color: Colors.grey[200],
                       borderRadius: BorderRadius.circular(10),
                     ),
-                    child: _multiImageList.isNotEmpty
+                    child: imageList.isNotEmpty
                         ? GridView.builder(
-                            itemCount: _multiImageList.length,
+                            itemCount: imageList.length,
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                             ),
                             itemBuilder: (context, imgIndex) {
-                              return _multiImageList[imgIndex] != null
+                              return imageList[imgIndex] != null
                                   ? Stack(
                                       children: [
                                         Positioned.fill(
-                                          child: _multiImageList[imgIndex]!
+                                          child: imageList[imgIndex]!
                                                   .path
                                                   .contains('http')
                                               ? Image.network(
-                                                  _multiImageList[imgIndex]!
-                                                      .path,
+                                                  imageList[imgIndex]!.path,
                                                   fit: BoxFit.contain,
                                                 )
                                               : Image.file(
-                                                  File(
-                                                      _multiImageList[imgIndex]!
-                                                          .path),
+                                                  File(imageList[imgIndex]!
+                                                      .path),
                                                   fit: BoxFit.contain,
                                                 ),
                                         ),
                                         Positioned(
-                                          top: 0,
-                                          right: 0,
-                                          child: IconButton(
-                                            icon: const Icon(
-                                              Icons.close,
-                                              color: Colors.red,
-                                            ),
-                                            onPressed: () {
-                                              setState(() {
-                                                _multiImageList
-                                                    .removeAt(imgIndex);
-                                              });
-                                            },
-                                          ),
+                                          top: 3,
+                                          right: 3,
+                                          child: CircleAvatar(
+                                              radius: 15,
+                                              backgroundColor: Colors.black54,
+                                              child: IconButton(
+                                                icon: const Icon(
+                                                  Icons.close,
+                                                  size: 15,
+                                                  color: Colors.white,
+                                                ),
+                                                onPressed: () =>
+                                                    deleteImage(imgIndex),
+                                              )),
                                         ),
                                       ],
                                     )
@@ -469,26 +457,13 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                                   fontSize: 16, fontWeight: FontWeight.bold),
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
-                              onPressed: () => _deleteVariant(index),
+                              icon:
+                                  const Icon(Iconsax.trash, color: Colors.red),
+                              onPressed: () => deleteVariant(index),
                             ),
                           ],
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
-                        TextField(
-                          decoration: const InputDecoration(
-                            labelText: 'Size',
-                            border: OutlineInputBorder(),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              listProductVariations[index]
-                                  .attributeValues
-                                  .addAll({'Size': value});
-                            });
-                          },
-                        ),
-                        const SizedBox(height: 8),
                         InkWell(
                           onTap: () {
                             openColorPicker(context, index);
@@ -523,26 +498,55 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8),
-                        TextField(
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        TextFormField(
                           decoration: const InputDecoration(
-                            labelText: 'Price',
-                            border: OutlineInputBorder(),
+                            labelText: 'Size',
+                            prefixIcon: Icon(Iconsax.size),
                           ),
                           onChanged: (value) {
                             setState(() {
-                              listProductVariations[index].price =
-                                  double.parse(value);
+                              listProductVariations[index]
+                                  .attributeValues
+                                  .addAll({'Size': value});
                             });
                           },
-                          keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
-                        TextField(
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        TextFormField(
                           decoration: const InputDecoration(
-                            labelText: 'Stock',
-                            border: OutlineInputBorder(),
+                            labelText: 'Other Attribute',
+                            prefixIcon: Icon(Iconsax.add_circle),
                           ),
+                          onChanged: (value) {
+                            setState(() {
+                              listProductVariations[index]
+                                  .attributeValues
+                                  .addAll({'Other Attribute': value});
+                            });
+                          },
+                        ),
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        TextFormField(
+                          keyboardType: TextInputType.multiline,
+                          minLines: 3,
+                          maxLines: null,
+                          decoration: const InputDecoration(
+                            prefixIcon: Icon(Iconsax.clipboard_text),
+                            labelText: 'Variant Description',
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              listProductVariations[index].description = value;
+                            });
+                          },
+                        ),
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        TextFormField(
+                          validator: Validator.validateStock,
+                          decoration: const InputDecoration(
+                              labelText: 'Stock',
+                              prefixIcon: Icon(Iconsax.square)),
                           onChanged: (value) {
                             setState(() {
                               listProductVariations[index].stock =
@@ -551,131 +555,71 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                           },
                           keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
-                        TextField(
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        TextFormField(
+                          validator: (value) =>
+                              Validator.validatePrice(value, true),
                           decoration: const InputDecoration(
-                            labelText: 'Variant Description',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Price',
+                              prefixIcon: Icon(Iconsax.wallet_1)),
                           onChanged: (value) {
                             setState(() {
-                              listProductVariations[index].description = value;
+                              listProductVariations[index].price =
+                                  double.parse(value);
                             });
                           },
+                          keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        const Text(
+                          'Image',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.w500),
+                        ),
                         GestureDetector(
-                          onTap: _pickImage,
+                          onTap: () => pickVariantImage(index),
                           child: Container(
                             height: 200,
                             decoration: BoxDecoration(
                               color: Colors.grey[200],
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            child: _imageList.length > index &&
-                                    _imageList[index] != null
+                            child: variantImageList.length > index &&
+                                    variantImageList[index] != null
                                 ? Stack(
                                     children: [
                                       Positioned.fill(
-                                        child: (_imageList[index]!
+                                        child: (variantImageList[index]!
                                                 .path
                                                 .contains('http'))
                                             ? Image.network(
-                                                _imageList[index]!.path,
+                                                variantImageList[index]!.path,
                                                 fit: BoxFit.contain,
                                               )
                                             : Image.file(
-                                                File(_imageList[index]!.path),
+                                                File(variantImageList[index]!
+                                                    .path),
                                                 fit: BoxFit.contain,
                                               ),
                                       ),
                                       Positioned(
-                                        top: 8,
-                                        right: 8,
+                                        top: 3,
+                                        right: 103,
                                         child: GestureDetector(
-                                          onTap: () => _deleteImage(index),
-                                          child: const Icon(
-                                            Icons.close,
-                                            color: Colors.red,
-                                            size: 24,
+                                          onTap: () =>
+                                              deleteVariantImage(index),
+                                          child: const CircleAvatar(
+                                            radius: 15,
+                                            backgroundColor: Colors.black54,
+                                            child: Icon(
+                                              Icons.close,
+                                              size: 15,
+                                              color: Colors.white,
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ],
-                                  )
-                                : const Center(
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      size: 40,
-                                      color: Colors.grey,
-                                    ),
-                                  ),
-                          ),
-                        ),
-                        const SizedBox(height: 16),
-                        GestureDetector(
-                          onTap: _pickImages,
-                          child: Container(
-                            height: 200,
-                            decoration: BoxDecoration(
-                              color: Colors.grey[200],
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                            child: _multiImageList.isNotEmpty
-                                ? GridView.builder(
-                                    itemCount: _multiImageList.length,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 3,
-                                    ),
-                                    itemBuilder: (context, imgIndex) {
-                                      return _multiImageList[imgIndex] != null
-                                          ? Stack(
-                                              children: [
-                                                Positioned.fill(
-                                                  child: _multiImageList[
-                                                              imgIndex]!
-                                                          .path
-                                                          .contains('http')
-                                                      ? Image.network(
-                                                          _multiImageList[
-                                                                  imgIndex]!
-                                                              .path,
-                                                          fit: BoxFit.contain,
-                                                        )
-                                                      : Image.file(
-                                                          File(_multiImageList[
-                                                                  imgIndex]!
-                                                              .path),
-                                                          fit: BoxFit.contain,
-                                                        ),
-                                                ),
-                                                Positioned(
-                                                  top: 0,
-                                                  right: 0,
-                                                  child: IconButton(
-                                                    icon: const Icon(
-                                                      Icons.close,
-                                                      color: Colors.red,
-                                                    ),
-                                                    onPressed: () {
-                                                      setState(() {
-                                                        _multiImageList
-                                                            .removeAt(imgIndex);
-                                                      });
-                                                    },
-                                                  ),
-                                                ),
-                                              ],
-                                            )
-                                          : const Center(
-                                              child: Icon(
-                                                Icons.camera_alt,
-                                                size: 40,
-                                                color: Colors.grey,
-                                              ),
-                                            );
-                                    },
                                   )
                                 : const Center(
                                     child: Icon(
@@ -691,26 +635,21 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                     );
                   },
                 ),
-                OutlinedButton(
-                  style: const ButtonStyle(
-                    backgroundColor: MaterialStatePropertyAll<Color>(
-                        Color.fromARGB(255, 255, 255, 255)),
-                    minimumSize: MaterialStatePropertyAll<Size>(
-                        Size(double.infinity, 50)),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      // Add an empty variant when the button is pressed
-                      listProductVariations.add(ProductVariationModel(
-                          id: '', attributeValues: {'Size': '', 'Color': ''}));
-                      // _imageList.add(null);
-                    });
-                  },
-                  child: const Text(
-                    'Add Product Variant',
-                    style: TextStyle(color: MyColors.primary),
-                  ),
-                ),
+                SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                        child: const Text('Add Product Variant',
+                            style: TextStyle(color: MyColors.primary)),
+                        onPressed: () {
+                          setState(() {
+                            // Add an empty variant when the button is pressed
+                            listProductVariations.add(ProductVariationModel(
+                                id: '',
+                                attributeValues: {'Size': '', 'Color': ''}));
+
+                            variantImageList.add(null);
+                          });
+                        })),
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 SizedBox(
                   width: double.infinity,
