@@ -16,6 +16,7 @@ class ProductTab extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = ProductController.instance;
+    controller.fetchStoreProducts;
     return Scaffold(
       body: Obx(
         () {

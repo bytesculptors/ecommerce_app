@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:btl/features/personalization/screens/my_store/my_store.dart';
+import 'package:btl/features/personalization/screens/my_store/tabs/product_tab.dart';
 import 'package:btl/features/shop/models/brand_model.dart';
 import 'package:btl/features/shop/models/product_attribute_model.dart';
 import 'package:btl/features/shop/models/product_variation_model.dart';
@@ -40,6 +42,7 @@ class ProductController extends GetxController {
   List<ProductVariationModel>? productVariations;
   String storeId = '';
   List<ProductAttributeModel>? productAttributes;
+  String productType = 'single';
   GlobalKey<FormState> addProductFormKey = GlobalKey<FormState>();
 
   RxBool refreshData = true.obs;
@@ -146,10 +149,10 @@ class ProductController extends GetxController {
   Future<String> uploadImage(XFile image) async {
     try {
       String uniqueFileName =
-          '${image.name}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+          '${image.name}_${DateTime.now().millisecondsSinceEpoch}';
 
       Reference ref =
-          FirebaseStorage.instance.ref('images/').child(uniqueFileName);
+          FirebaseStorage.instance.ref('Products/').child(uniqueFileName);
 
       await ref.putFile(File(image.path));
       final imageUrl = await ref.getDownloadURL();
@@ -173,7 +176,7 @@ class ProductController extends GetxController {
   }
 
   /// Add new Product
-  addNewProduct() async {
+  Future<void> addNewProduct() async {
     try {
       // Start Loading
       TFullScreenLoader.openLoadingDialog(
@@ -192,42 +195,46 @@ class ProductController extends GetxController {
         return;
       }
 
-      if (productVariations != null && productVariations!.isNotEmpty) {
-        productAttributes = [];
+      if (productVariations != null) {
+        if (productVariations!.isNotEmpty) {
+          productAttributes = [];
+          productType = 'variable';
 
-        Set<String> colors = {};
-        for (final variation in productVariations!) {
-          if (variation.attributeValues['Color'] != '') {
-            colors.add(variation.attributeValues['Color']!);
+          Set<String> colors = {};
+          for (final variation in productVariations!) {
+            if (variation.attributeValues['Color'] != '') {
+              colors.add(variation.attributeValues['Color']!);
+            }
           }
-        }
-        if (colors.isNotEmpty) {
-          productAttributes!.add(
-              ProductAttributeModel(name: 'Color', values: colors.toList()));
-        }
-
-        Set<String> sizes = {};
-        for (final variation in productVariations!) {
-          if (variation.attributeValues['Size'] != '') {
-            colors.add(variation.attributeValues['Size']!);
+          if (colors.isNotEmpty) {
+            productAttributes!.add(
+                ProductAttributeModel(name: 'Color', values: colors.toList()));
           }
-        }
 
-        if (sizes.isNotEmpty) {
-          productAttributes!
-              .add(ProductAttributeModel(name: 'Size', values: sizes.toList()));
-        }
-
-        Set<String> otherAttributes = {};
-        for (final variation in productVariations!) {
-          if (variation.attributeValues['Other Attribute'] != '') {
-            colors.add(variation.attributeValues['Other Attribute']!);
+          Set<String> sizes = {};
+          for (final variation in productVariations!) {
+            if (variation.attributeValues['Size'] != '') {
+              colors.add(variation.attributeValues['Size']!);
+            }
           }
-        }
 
-        if (otherAttributes.isNotEmpty) {
-          productAttributes!
-              .add(ProductAttributeModel(name: 'Other Attribute', values: otherAttributes.toList()));
+          if (sizes.isNotEmpty) {
+            productAttributes!.add(
+                ProductAttributeModel(name: 'Size', values: sizes.toList()));
+          }
+
+          Set<String> otherAttributes = {};
+          for (final variation in productVariations!) {
+            if (variation.attributeValues['Other Attribute'] != '') {
+              colors.add(variation.attributeValues['Other Attribute']!);
+            }
+          }
+
+          if (otherAttributes.isNotEmpty) {
+            productAttributes!.add(ProductAttributeModel(
+                name: 'Other Attribute', values: otherAttributes.toList()));
+          }
+          print('Has variants');
         }
       }
 
@@ -238,24 +245,23 @@ class ProductController extends GetxController {
         stock: int.parse(stock.text),
         price: double.parse(price.text),
         thumbnail: thumbnail,
-        productType: productVariations != null && productVariations!.isNotEmpty
-            ? 'variable'
-            : 'single',
+        productType: productType,
         storeId: storeId,
         weight: int.parse(weight.text),
-        width: int.parse(width.text),
-        length: int.parse(length.text),
-        height: int.parse(height.text),
+        width: width.text != '' ? int.parse(width.text) : null,
+        length: length.text != '' ? int.parse(length.text) : null,
+        height: height.text != '' ? int.parse(height.text) : null,
         sku: sku.text.trim(),
         brand: brand,
         images: images,
-        salePrice: double.parse(salePrice.text),
+        salePrice: salePrice.text != '' ? double.parse(salePrice.text) : 0.0,
         isFeatured: false,
         categoryId: categoryId,
         description: description.text.trim(),
         productAttributes: productAttributes,
         productVariations: productVariations,
       );
+      print('still ok');
       await productRepository.addNewProduct(product);
 
       // Remove Loader
@@ -274,13 +280,80 @@ class ProductController extends GetxController {
 
       // Redirect
       Navigator.of(Get.context!).pop();
+      Get.to(() => const MyStoreScreen());
     } catch (e) {
       // Remove Loader
       TFullScreenLoader.stopLoading();
       TLoaders.errorSnackBar(
-          title: 'Something went wrong!', message: e.toString());
+          title: 'Something went wrong when uploading product!',
+          message: e.toString());
     }
   }
+
+  // Show confirm dialog before deleting product
+  void showConfirmDialog(BuildContext context, ProductModel product) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm Delete'),
+          content: const Text('Are you sure you want to delete this product?'),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('Cancel'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(foregroundColor: Colors.red),
+              onPressed: () async {
+                try {
+                  Navigator.of(context).pop();
+                  
+                  if (product.thumbnail != '') {
+                    await deleteImage(product.thumbnail);
+                  }
+
+                  if (product.images != null) {
+                    if (product.images!.isNotEmpty) {
+                      for (String image in product.images!) {
+                        await deleteImage(image);
+                      }
+                    }
+                  }
+
+                  if (product.productVariations != null) {
+                    if (product.productVariations!.isNotEmpty) {
+                      for (ProductVariationModel variant in product.productVariations!) {
+                        if (variant.image != '') {
+                          await deleteImage(variant.image);
+                        }
+                      }
+                    }
+                  }
+
+                  await productRepository.deleteProduct(product.id);
+                  refreshData.toggle();
+                  
+                  // ignore: use_build_context_synchronously
+                  TLoaders.successSnackBar(
+                      title: 'Deleted',
+                      message: 'Your product has been deleted successfully.');
+                  Get.to(() => const MyStoreScreen());
+                } catch (e) {
+                  TLoaders.warningSnackBar(
+                      title: 'Oh Snap!', message: e.toString());
+                }
+              },
+              child: const Text('Delete'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   void resetFormFields() {
     title.clear();

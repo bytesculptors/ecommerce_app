@@ -141,6 +141,7 @@ class TDummyData {
     CategoryModel(id: '15', image: Images.electronicsIcon, name: 'Mobile', parentId: '2', isFeatured: false),
 
     CategoryModel(id: '16', image: Images.clothIcon, name: 'Shirts', parentId: '3', isFeatured: false),
+    CategoryModel(id: '17', image: Images.otherCategoryIcon, name: 'Other', isFeatured: false),
   ];
 
   /// -- List of all Brands
@@ -151,6 +152,7 @@ class TDummyData {
     BrandModel(id: '9', image: Images.ikeaLogo, name: 'IKEA', productsCount: 36, isFeatured: false),
     BrandModel(id: '5', image: Images.appleLogo, name: 'Apple', productsCount: 16, isFeatured: true),
     BrandModel(id: '10', image: Images.acerlogo, name: 'Acer', productsCount: 36, isFeatured: false),
+    BrandModel(id: '11', image: Images.otherBrandLogo, name: 'Other', productsCount: 0, isFeatured: false),
     BrandModel(id: '3', image: Images.jordanLogo, name: 'Jordan', productsCount: 36, isFeatured: true),
     BrandModel(id: '4', image: Images.pumaLogo, name: 'Puma', productsCount: 65, isFeatured: true),
     BrandModel(id: '6', image: Images.zaraLogo, name: 'ZARA', productsCount: 36, isFeatured: true),
@@ -190,6 +192,7 @@ class TDummyData {
     BrandCategoryModel(brandId: '9', categoryId: '11'),
     BrandCategoryModel(brandId: '9', categoryId: '12'),
     BrandCategoryModel(brandId: '9', categoryId: '13'),
+    BrandCategoryModel(brandId: '11', categoryId: '17'),
   ];
 
   /// -- List of all Product Categories

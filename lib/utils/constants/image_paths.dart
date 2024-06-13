@@ -18,6 +18,7 @@ class Images {
   static const String furnitureIcon = "assets/icons/categories/icons8-dining-chair-64.png";
   static const String jeweleryIcon = "assets/icons/categories/icons8-sparkling-diamond-64.png";
   static const String electronicsIcon = "assets/icons/categories/icons8-smartphone-64.png";
+  static const String otherCategoryIcon = "assets/icons/categories/Other categories.jpg";
 
   // -- Brand Icons
   static const String nikeLogo = "assets/icons/brands/nike.png";
@@ -30,6 +31,7 @@ class Images {
   static const String hermanMillerLogo = "assets/icons/brands/herman-miller-logo.png";
   static const String ikeaLogo = "assets/icons/brands/ikea_logo.png";
   static const String acerlogo = "assets/icons/brands/acer_logo.png";
+  static const String otherBrandLogo = "assets/icons/brands/Other Brands.jpg";
 
   // -- Animations
   static const String productsIllustration = "assets/images/animations/sammy-line-workout.gif";

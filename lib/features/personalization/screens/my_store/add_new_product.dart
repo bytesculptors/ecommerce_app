@@ -44,6 +44,14 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
   final List<XFile?> imageList = [];
   List<String> imageUrlList = [];
   final List<XFile?> variantImageList = [];
+  final RxList<CategoryModel> categoryList =
+      CategoryController.instance.allCategories;
+  final RxList<BrandModel> brandList = BrandController.instance.allBrands;
+
+  void sortList() {
+    categoryList.sort((a, b) => a.name.compareTo(b.name));
+    brandList.sort((a, b) => a.name.compareTo(b.name));
+  }
 
   void openColorPicker(BuildContext context, int variantIndex) {
     showDialog(
@@ -76,8 +84,8 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                       .toRadixString(16)
                       .substring(2)
                       .toUpperCase();
-                  listProductVariations[variantIndex]
-                      .attributeValues['Color'] = colorString;
+                  listProductVariations[variantIndex].attributeValues['Color'] =
+                      colorString;
                 });
                 Navigator.of(context).pop();
               },
@@ -120,6 +128,8 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
         imageUrlList.add(url);
       });
     }
+
+    print('image url list length after pick images: ${imageUrlList.length}');
   }
 
   Future<void> pickVariantImage(int variantIndex) async {
@@ -138,53 +148,64 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
   }
 
   void deleteVariant(int index) async {
-    if (listProductVariations[index].image != '') {
-      await ProductController.instance
-          .deleteImage(listProductVariations[index].image);
-    }
-    setState(() {
-      listProductVariations.removeAt(index);
-      if (index < variantImageList.length) {
-        variantImageList.removeAt(index);
+    if (index < listProductVariations.length) {
+      if (listProductVariations[index].image != '') {
+        await ProductController.instance
+            .deleteImage(listProductVariations[index].image);
       }
-    });
+      setState(() {
+        listProductVariations.removeAt(index);
+        if (index < variantImageList.length) {
+          variantImageList.removeAt(index);
+        }
+      });
+    }
   }
 
   void deleteThumbnail() async {
-    await ProductController.instance.deleteImage(thumbnailUrl);
-    setState(() {
-      thumbnail = null;
-      thumbnailUrl = '';
-    });
+    if (thumbnailUrl != '') {
+      await ProductController.instance.deleteImage(thumbnailUrl);
+      setState(() {
+        thumbnail = null;
+        thumbnailUrl = '';
+      });
+    }
   }
 
   void deleteImage(int index) async {
-    await ProductController.instance.deleteImage(imageUrlList[index]);
-    setState(() {
-      imageList.removeAt(index);
-      imageUrlList.removeAt(index);
-    });
+    print('image list length: ${imageList.length}');
+    print('image url list length: ${imageUrlList.length}');
+
+    if (index < imageUrlList.length) {
+      await ProductController.instance.deleteImage(imageUrlList[index]);
+      setState(() {
+        imageList.removeAt(index);
+        imageUrlList.removeAt(index);
+      });
+    }
   }
 
   void deleteVariantImage(int index) async {
-    await ProductController.instance
-        .deleteImage(listProductVariations[index].image);
+    if (index < listProductVariations.length &&
+        listProductVariations[index].image != '') {
+      await ProductController.instance
+          .deleteImage(listProductVariations[index].image);
 
-    setState(() {
-      listProductVariations[index].image = '';
-      if (index < variantImageList.length) {
-        variantImageList[index] = null;
-      }
-    });
+      setState(() {
+        listProductVariations[index].image = '';
+        if (index < variantImageList.length) {
+          variantImageList[index] = null;
+        }
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     final productController = ProductController.instance;
-    final categoryController = CategoryController.instance;
     final userController = UserController.instance;
     productController.storeId = userController.user.value.storeId!;
-    final brandController = Get.put(BrandController());
+    sortList();
     return Scaffold(
       appBar:
           const MyAppBar(showBackArrow: true, title: Text('Add new Product')),
@@ -206,8 +227,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 DropdownButtonFormField(
                   value: selectedCategory,
-                  items: categoryController.allCategories
-                      .map((CategoryModel items) {
+                  items: categoryList.map((CategoryModel items) {
                     return DropdownMenuItem(
                       value: items.id,
                       child: Text(items.name),
@@ -226,7 +246,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 const SizedBox(height: Sizes.spaceBtwInputFields),
                 DropdownButtonFormField(
                   value: selectedBrand,
-                  items: brandController.allBrands.map((BrandModel items) {
+                  items: brandList.map((BrandModel items) {
                     return DropdownMenuItem(
                       value: items,
                       child: Text(items.name),
@@ -362,10 +382,25 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                             ],
                           )
                         : const Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 40,
-                              color: Colors.grey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  size: 40,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(
+                                    height:
+                                        8), // Add space between icon and text
+                                Text(
+                                  'Tap to add image',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                   ),
@@ -436,10 +471,25 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                             },
                           )
                         : const Center(
-                            child: Icon(
-                              Icons.camera_alt,
-                              size: 40,
-                              color: Colors.grey,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.camera_alt,
+                                  size: 40,
+                                  color: Colors.grey,
+                                ),
+                                SizedBox(
+                                    height:
+                                        8), // Add space between icon and text
+                                Text(
+                                  'Tap to add images',
+                                  style: TextStyle(
+                                    color: Colors.grey,
+                                    fontSize: 16,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                   ),
@@ -467,6 +517,22 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                               onPressed: () => deleteVariant(index),
                             ),
                           ],
+                        ),
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        TextFormField(
+                          key: ValueKey('Size_${listProductVariations.length}'),
+                          initialValue: listProductVariations[index]
+                              .attributeValues['Size'],
+                          decoration: const InputDecoration(
+                            labelText: 'Size',
+                            prefixIcon: Icon(Iconsax.size),
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              listProductVariations[index]
+                                  .attributeValues['Size'] = value;
+                            });
+                          },
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
                         InkWell(
@@ -505,19 +571,10 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
                         TextFormField(
-                          decoration: const InputDecoration(
-                            labelText: 'Size',
-                            prefixIcon: Icon(Iconsax.size),
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              listProductVariations[index]
-                                  .attributeValues['Size'] = value;
-                            });
-                          },
-                        ),
-                        const SizedBox(height: Sizes.spaceBtwInputFields),
-                        TextFormField(
+                          key:
+                              ValueKey('Other_${listProductVariations.length}'),
+                          initialValue: listProductVariations[index]
+                              .attributeValues['Other Attribute'],
                           decoration: const InputDecoration(
                             labelText: 'Other Attribute',
                             prefixIcon: Icon(Iconsax.add_circle),
@@ -531,6 +588,10 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
                         TextFormField(
+                          key: ValueKey(
+                              'Description_${listProductVariations.length}'),
+                          initialValue:
+                              listProductVariations[index].description,
                           keyboardType: TextInputType.multiline,
                           minLines: 3,
                           maxLines: null,
@@ -546,6 +607,11 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
                         TextFormField(
+                          key:
+                              ValueKey('Stock_${listProductVariations.length}'),
+                          initialValue: listProductVariations[index].stock == 0
+                              ? ''
+                              : listProductVariations[index].stock.toString(),
                           validator: Validator.validateStock,
                           decoration: const InputDecoration(
                               labelText: 'Stock',
@@ -560,6 +626,11 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
                         TextFormField(
+                          key:
+                              ValueKey('Price_${listProductVariations.length}'),
+                          initialValue: listProductVariations[index].price == 0
+                              ? ''
+                              : listProductVariations[index].price.toString(),
                           validator: (value) =>
                               Validator.validatePrice(value, true),
                           decoration: const InputDecoration(
@@ -575,8 +646,16 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                         ),
                         const SizedBox(height: Sizes.spaceBtwInputFields),
                         TextFormField(
-                          validator: (value) =>
-                              Validator.validateSalePrice(value, listProductVariations[index].price.toString()),
+                          key: ValueKey('Sale_${listProductVariations.length}'),
+                          initialValue:
+                              listProductVariations[index].salePrice == 0
+                                  ? ''
+                                  : listProductVariations[index]
+                                      .salePrice
+                                      .toString(),
+                          validator: (value) => Validator.validateSalePrice(
+                              value,
+                              listProductVariations[index].price.toString()),
                           decoration: const InputDecoration(
                               labelText: 'Sale Price',
                               prefixIcon: Icon(Iconsax.flash_circle)),
@@ -640,10 +719,26 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                                     ],
                                   )
                                 : const Center(
-                                    child: Icon(
-                                      Icons.camera_alt,
-                                      size: 40,
-                                      color: Colors.grey,
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Icon(
+                                          Icons.camera_alt,
+                                          size: 40,
+                                          color: Colors.grey,
+                                        ),
+                                        SizedBox(
+                                            height:
+                                                8), // Add space between icon and text
+                                        Text(
+                                          'Tap to add image',
+                                          style: TextStyle(
+                                            color: Colors.grey,
+                                            fontSize: 16,
+                                          ),
+                                        ),
+                                      ],
                                     ),
                                   ),
                           ),
@@ -676,13 +771,13 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () => {
-                            productController.thumbnail = thumbnailUrl,
-                            productController.images = imageUrlList,
-                            productController.productVariations =
-                                listProductVariations,
-                            productController.addNewProduct()
-                          },
+                      onPressed: () async {
+                        productController.thumbnail = thumbnailUrl;
+                        productController.images = imageUrlList;
+                        productController.productVariations =
+                            listProductVariations;
+                        await productController.addNewProduct();
+                      },
                       child: const Text('Save')),
                 ),
               ],

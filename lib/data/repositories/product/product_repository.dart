@@ -317,4 +317,12 @@ class ProductRepository extends GetxController {
       throw 'Something went wrong while saving Product Information. Try again later';
     }
   }
+
+  Future<void> deleteProduct(String productId) async {
+    try {
+      await _db.collection('Products').doc(productId).delete();
+    } catch (e) {
+      throw 'Unable to delete the product. Try again later';
+    }
+  }
 }
