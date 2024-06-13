@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:btl/features/personalization/controllers/user_controller.dart';
 import 'package:btl/features/shop/controllers/brand_controller.dart';
 import 'package:btl/features/shop/controllers/categories_controller.dart';
 import 'package:btl/features/shop/controllers/product/product_controller.dart';
@@ -76,8 +77,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                       .substring(2)
                       .toUpperCase();
                   listProductVariations[variantIndex]
-                      .attributeValues
-                      .addAll({'Color': colorString});
+                      .attributeValues['Color'] = colorString;
                 });
                 Navigator.of(context).pop();
               },
@@ -99,7 +99,10 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
         await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
-      thumbnail = pickedFile;
+      setState(() {
+        thumbnail = pickedFile;
+      });
+
       thumbnailUrl = await ProductController.instance.uploadImage(pickedFile);
     }
   }
@@ -170,7 +173,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
     setState(() {
       listProductVariations[index].image = '';
       if (index < variantImageList.length) {
-        variantImageList.removeAt(index);
+        variantImageList[index] = null;
       }
     });
   }
@@ -179,6 +182,8 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
   Widget build(BuildContext context) {
     final productController = ProductController.instance;
     final categoryController = CategoryController.instance;
+    final userController = UserController.instance;
+    productController.storeId = userController.user.value.storeId!;
     final brandController = Get.put(BrandController());
     return Scaffold(
       appBar:
@@ -187,7 +192,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
         child: Container(
           padding: const EdgeInsets.all(Sizes.defaultSpace),
           child: Form(
-            // key: controller.productFormKey,
+            key: productController.addProductFormKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               children: [
@@ -507,8 +512,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                           onChanged: (value) {
                             setState(() {
                               listProductVariations[index]
-                                  .attributeValues
-                                  .addAll({'Size': value});
+                                  .attributeValues['Size'] = value;
                             });
                           },
                         ),
@@ -521,8 +525,7 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                           onChanged: (value) {
                             setState(() {
                               listProductVariations[index]
-                                  .attributeValues
-                                  .addAll({'Other Attribute': value});
+                                  .attributeValues['Other Attribute'] = value;
                             });
                           },
                         ),
@@ -565,6 +568,21 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                           onChanged: (value) {
                             setState(() {
                               listProductVariations[index].price =
+                                  double.parse(value);
+                            });
+                          },
+                          keyboardType: TextInputType.number,
+                        ),
+                        const SizedBox(height: Sizes.spaceBtwInputFields),
+                        TextFormField(
+                          validator: (value) =>
+                              Validator.validateSalePrice(value, listProductVariations[index].price.toString()),
+                          decoration: const InputDecoration(
+                              labelText: 'Sale Price',
+                              prefixIcon: Icon(Iconsax.flash_circle)),
+                          onChanged: (value) {
+                            setState(() {
+                              listProductVariations[index].salePrice =
                                   double.parse(value);
                             });
                           },
@@ -644,8 +662,12 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                           setState(() {
                             // Add an empty variant when the button is pressed
                             listProductVariations.add(ProductVariationModel(
-                                id: '',
-                                attributeValues: {'Size': '', 'Color': ''}));
+                                id: listProductVariations.length.toString(),
+                                attributeValues: {
+                                  'Color': '',
+                                  'Size': '',
+                                  'Other Attribute': ''
+                                }));
 
                             variantImageList.add(null);
                           });
@@ -654,7 +676,14 @@ class _AddNewProductScreenState extends State<AddNewProductScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                      onPressed: () {}, child: const Text('Save')),
+                      onPressed: () => {
+                            productController.thumbnail = thumbnailUrl,
+                            productController.images = imageUrlList,
+                            productController.productVariations =
+                                listProductVariations,
+                            productController.addNewProduct()
+                          },
+                      child: const Text('Save')),
                 ),
               ],
             ),

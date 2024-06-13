@@ -1,7 +1,12 @@
 import 'dart:io';
 
 import 'package:btl/features/shop/models/brand_model.dart';
+import 'package:btl/features/shop/models/product_attribute_model.dart';
+import 'package:btl/features/shop/models/product_variation_model.dart';
 import 'package:btl/utils/constants/enums.dart';
+import 'package:btl/utils/constants/image_paths.dart';
+import 'package:btl/utils/helpers/network_manager.dart';
+import 'package:btl/utils/popups/full_screen_loader.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -32,6 +37,12 @@ class ProductController extends GetxController {
   final sku = TextEditingController();
   String thumbnail = '';
   List<String>? images;
+  List<ProductVariationModel>? productVariations;
+  String storeId = '';
+  List<ProductAttributeModel>? productAttributes;
+  GlobalKey<FormState> addProductFormKey = GlobalKey<FormState>();
+
+  RxBool refreshData = true.obs;
 
   /// -- Initialize Products from your backend
   @override
@@ -148,7 +159,6 @@ class ProductController extends GetxController {
     }
   }
 
-
   Future<void> deleteImage(String imageUrl) async {
     try {
       Reference storageReference =
@@ -160,5 +170,133 @@ class ProductController extends GetxController {
     } catch (error) {
       print('Error occurred while deleting image: $error');
     }
+  }
+
+  /// Add new Product
+  addNewProduct() async {
+    try {
+      // Start Loading
+      TFullScreenLoader.openLoadingDialog(
+          'Storing Product...', Images.docerAnimation);
+
+      // Check Internet Connectivity
+      final isConnected = await NetworkManager.instance.isConnected();
+      if (!isConnected) {
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      // Form Validation
+      if (!addProductFormKey.currentState!.validate()) {
+        TFullScreenLoader.stopLoading();
+        return;
+      }
+
+      if (productVariations != null && productVariations!.isNotEmpty) {
+        productAttributes = [];
+
+        Set<String> colors = {};
+        for (final variation in productVariations!) {
+          if (variation.attributeValues['Color'] != '') {
+            colors.add(variation.attributeValues['Color']!);
+          }
+        }
+        if (colors.isNotEmpty) {
+          productAttributes!.add(
+              ProductAttributeModel(name: 'Color', values: colors.toList()));
+        }
+
+        Set<String> sizes = {};
+        for (final variation in productVariations!) {
+          if (variation.attributeValues['Size'] != '') {
+            colors.add(variation.attributeValues['Size']!);
+          }
+        }
+
+        if (sizes.isNotEmpty) {
+          productAttributes!
+              .add(ProductAttributeModel(name: 'Size', values: sizes.toList()));
+        }
+
+        Set<String> otherAttributes = {};
+        for (final variation in productVariations!) {
+          if (variation.attributeValues['Other Attribute'] != '') {
+            colors.add(variation.attributeValues['Other Attribute']!);
+          }
+        }
+
+        if (otherAttributes.isNotEmpty) {
+          productAttributes!
+              .add(ProductAttributeModel(name: 'Other Attribute', values: otherAttributes.toList()));
+        }
+      }
+
+      // Save Product Data
+      final product = ProductModel(
+        id: '',
+        title: title.text.trim(),
+        stock: int.parse(stock.text),
+        price: double.parse(price.text),
+        thumbnail: thumbnail,
+        productType: productVariations != null && productVariations!.isNotEmpty
+            ? 'variable'
+            : 'single',
+        storeId: storeId,
+        weight: int.parse(weight.text),
+        width: int.parse(width.text),
+        length: int.parse(length.text),
+        height: int.parse(height.text),
+        sku: sku.text.trim(),
+        brand: brand,
+        images: images,
+        salePrice: double.parse(salePrice.text),
+        isFeatured: false,
+        categoryId: categoryId,
+        description: description.text.trim(),
+        productAttributes: productAttributes,
+        productVariations: productVariations,
+      );
+      await productRepository.addNewProduct(product);
+
+      // Remove Loader
+      TFullScreenLoader.stopLoading();
+
+      // Show Success Message
+      TLoaders.successSnackBar(
+          title: 'Congratulations',
+          message: 'Your product has been added successfully.');
+
+      // Refresh Addresses Data
+      refreshData.toggle();
+
+      // Reset fields
+      resetFormFields();
+
+      // Redirect
+      Navigator.of(Get.context!).pop();
+    } catch (e) {
+      // Remove Loader
+      TFullScreenLoader.stopLoading();
+      TLoaders.errorSnackBar(
+          title: 'Something went wrong!', message: e.toString());
+    }
+  }
+
+  void resetFormFields() {
+    title.clear();
+    categoryId = null;
+    brand = null;
+    description.clear();
+    stock.clear();
+    price.clear();
+    salePrice.clear();
+    weight.clear();
+    width.clear();
+    length.clear();
+    height.clear();
+    sku.clear();
+    thumbnail = '';
+    images = null;
+    productVariations = null;
   }
 }
