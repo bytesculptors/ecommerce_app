@@ -85,16 +85,73 @@ class THttpHelper {
   }
 
   static Future<List<dynamic>> getCommunes(String? districtId) async {
-    final url = Uri.https(
-        'online-gateway.ghn.vn',
-        'shiip/public-api/master-data/ward',
-        {'district_id': '$districtId'});
+    final url = Uri.https('online-gateway.ghn.vn',
+        'shiip/public-api/master-data/ward', {'district_id': '$districtId'});
     final response = await http.get(url, headers: {
       'Token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
     });
 
     if (response.statusCode != 200) {
       throw Exception('Failed to fetch commune');
+    }
+
+    final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final List<dynamic> responseData = responseBody['data'];
+    return responseData;
+  }
+
+  static Future<List<dynamic>> getShipServices(
+      int fromDistrict, int toDistrict) async {
+    final url = Uri.https('online-gateway.ghn.vn',
+        'shiip/public-api/v2/shipping-order/available-services', {
+      'shop_id': '',
+      'from_district': fromDistrict,
+      'to_district': toDistrict
+    });
+    final response = await http.get(url, headers: {
+      'Token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+    });
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to get ship services.');
+    }
+
+    final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+    final List<dynamic> responseData = responseBody['data'];
+    return responseData;
+  }
+
+  static Future<List<dynamic>> getShipFee(
+      int fromDistrict,
+      String fromCommune,
+      int serviceId,
+      int serviceTypeId,
+      int toDistrict,
+      String toCommune,
+      int weight,
+      int? height,
+      int? length,
+      int? width) async {
+    final url = Uri.https(
+        'online-gateway.ghn.vn', 'shiip/public-api/v2/shipping-order/fee', {
+      'from_district_id': fromDistrict,
+      'from_ward_code': fromCommune,
+      'service_id': serviceId,
+      'service_type_id': serviceTypeId,
+      'to_district_id': toDistrict,
+      "to_ward_code": toCommune,
+      "height": height,
+      "length": length,
+      "weight": weight,
+      "width": width,
+    });
+    final response = await http.get(url, headers: {
+      'Token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+      'ShopId': ''
+    });
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to get ship fee.');
     }
 
     final responseBody = jsonDecode(response.body) as Map<String, dynamic>;

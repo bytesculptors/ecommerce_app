@@ -201,33 +201,31 @@ class ProductController extends GetxController {
           productType = 'variable';
 
           Set<String> colors = {};
+          Set<String> sizes = {};
+          Set<String> otherAttributes = {};
+
           for (final variation in productVariations!) {
             if (variation.attributeValues['Color'] != '') {
               colors.add(variation.attributeValues['Color']!);
             }
+
+            if (variation.attributeValues['Size'] != '') {
+              sizes.add(variation.attributeValues['Size']!);
+            }
+            if (variation.attributeValues['Other Attribute'] != '') {
+              otherAttributes
+                  .add(variation.attributeValues['Other Attribute']!);
+            }
           }
+          
           if (colors.isNotEmpty) {
             productAttributes!.add(
                 ProductAttributeModel(name: 'Color', values: colors.toList()));
           }
 
-          Set<String> sizes = {};
-          for (final variation in productVariations!) {
-            if (variation.attributeValues['Size'] != '') {
-              colors.add(variation.attributeValues['Size']!);
-            }
-          }
-
           if (sizes.isNotEmpty) {
             productAttributes!.add(
                 ProductAttributeModel(name: 'Size', values: sizes.toList()));
-          }
-
-          Set<String> otherAttributes = {};
-          for (final variation in productVariations!) {
-            if (variation.attributeValues['Other Attribute'] != '') {
-              colors.add(variation.attributeValues['Other Attribute']!);
-            }
           }
 
           if (otherAttributes.isNotEmpty) {
@@ -309,8 +307,6 @@ class ProductController extends GetxController {
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               onPressed: () async {
                 try {
-                  Navigator.of(context).pop();
-                  
                   if (product.thumbnail != '') {
                     await deleteImage(product.thumbnail);
                   }
@@ -325,7 +321,8 @@ class ProductController extends GetxController {
 
                   if (product.productVariations != null) {
                     if (product.productVariations!.isNotEmpty) {
-                      for (ProductVariationModel variant in product.productVariations!) {
+                      for (ProductVariationModel variant
+                          in product.productVariations!) {
                         if (variant.image != '') {
                           await deleteImage(variant.image);
                         }
@@ -335,11 +332,13 @@ class ProductController extends GetxController {
 
                   await productRepository.deleteProduct(product.id);
                   refreshData.toggle();
-                  
+
                   // ignore: use_build_context_synchronously
                   TLoaders.successSnackBar(
                       title: 'Deleted',
                       message: 'Your product has been deleted successfully.');
+
+                  Navigator.of(context).pop();
                   Get.to(() => const MyStoreScreen());
                 } catch (e) {
                   TLoaders.warningSnackBar(
@@ -353,7 +352,6 @@ class ProductController extends GetxController {
       },
     );
   }
-
 
   void resetFormFields() {
     title.clear();
