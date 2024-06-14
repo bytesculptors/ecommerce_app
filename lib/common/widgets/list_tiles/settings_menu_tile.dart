@@ -1,6 +1,5 @@
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
-
-import '../../../utils/constants/colors.dart';
 
 class TSettingsMenuTile extends StatelessWidget {
   const TSettingsMenuTile({
@@ -20,9 +19,9 @@ class TSettingsMenuTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: Icon(icon, size: 28, color: MyColors.primary),
-      title: Text(title, style: Theme.of(context).textTheme.titleMedium),
-      subtitle: Text(subTitle, style: Theme.of(context).textTheme.labelMedium),
+      leading: Icon(icon, size: 20, color: TColors.primary,),
+      title: Text(title, style: Theme.of(context).textTheme.titleMedium,),
+      subtitle: Text(subTitle, style: Theme.of(context).textTheme.labelMedium,),
       trailing: trailing,
       onTap: onTap,
     );

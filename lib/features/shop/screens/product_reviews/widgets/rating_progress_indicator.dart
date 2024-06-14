@@ -1,36 +1,42 @@
-import 'package:btl/utils/device/device_utils.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/product_reviews/widgets/progress_indicator_and_rating.dart';
 import 'package:flutter/material.dart';
 
-import '../../../../../utils/constants/colors.dart';
-
-class TRatingProgressIndicator extends StatelessWidget {
-  const TRatingProgressIndicator({
+class TOverallProductRating extends StatelessWidget {
+  const TOverallProductRating({
     super.key,
-    required this.text,
-    required this.value,
+    required this.fiveStarRate,
+    required this.fourStarRate,
+    required this.threeStarRate,
+    required this.twoStarRate,
+    required this.oneStarRate,
+    required this.overall
   });
 
-  final String text;
-  final double value;
+  final double fiveStarRate;
+  final double fourStarRate;
+  final double threeStarRate;
+  final double twoStarRate;
+  final double oneStarRate;
+  final double overall;
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 1, child: Text(text, style: Theme.of(context).textTheme.bodyMedium)),
         Expanded(
-          flex: 11,
-          child: SizedBox(
-            width: DeviceUtils.getScreenWidth(context) * 0.8,
-            child: LinearProgressIndicator(
-              value: value,
-              minHeight: 11,
-              backgroundColor: MyColors.grey,
-              borderRadius: BorderRadius.circular(7),
-              valueColor: const AlwaysStoppedAnimation(MyColors.primary),
-            ),
-          ),
-        ),
+            flex: 3,
+            child:
+                Text(overall.toStringAsFixed(1), style: Theme.of(context).textTheme.displayLarge)),
+        Expanded(
+          flex: 7,
+          child: Column(children: [
+            TRatingProgressIndicator(text: "5", value: fiveStarRate),
+            TRatingProgressIndicator(text: "4", value: fourStarRate),
+            TRatingProgressIndicator(text: "3", value: threeStarRate),
+            TRatingProgressIndicator(text: "2", value: twoStarRate),
+            TRatingProgressIndicator(text: "1", value: oneStarRate)
+          ]),
+        )
       ],
     );
   }

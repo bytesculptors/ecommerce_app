@@ -1,4 +1,3 @@
-import '../../features/shop/models/cart_model.dart';
 
 class TPricingCalculator {
 
@@ -10,7 +9,7 @@ class TPricingCalculator {
   double shippingCost = getShippingCost(location);
 
   double totalPrice = productPrice + taxAmount + shippingCost;
-  return double.tryParse(totalPrice.toStringAsFixed(2)) ?? 0.0;
+  return totalPrice;
   }
 
   /// -- Calculate shipping cost
@@ -38,7 +37,7 @@ class TPricingCalculator {
   }
 
   /// -- Sum all cart values and return total amount
-  static double calculateCartTotal(CartModel cart) {
-    return cart.items.map((e) => e.price).fold(0, (previousPrice, currentPrice) => previousPrice + (currentPrice));
-  }
+  // static double calculateCartTotal(CartModel cart) {
+  //   return cart.items.map((e) => e.price).fold(0, (previousPrice, currentPrice) => previousPrice + (currentPrice ?? 0));
+  // }
 }

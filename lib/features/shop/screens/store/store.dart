@@ -1,114 +1,152 @@
-import 'package:btl/features/shop/controllers/categories_controller.dart';
-import 'package:btl/home_menu.dart';
+import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/appbar/tabbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
+import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
+import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/cart/cart_menu_icon.dart';
+
+import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/brand/all_brands.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/cart/cart.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/store/widgets/category_tab.dart';
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/widgets/appbar/appbar.dart';
-import '../../../../common/widgets/appbar/tabbar.dart';
-import '../../../../common/widgets/brands/brand_card.dart';
-import '../../../../common/widgets/layouts/grid_layout.dart';
-import '../../../../common/widgets/products/cart/cart_menu_icon.dart';
-import '../../../../common/widgets/shimmers/brands_shimmer.dart';
-import '../../../../common/widgets/texts/section_heading.dart';
-import '../../../../utils/constants/colors.dart';
-import '../../../../utils/constants/sizes.dart';
-import '../../../../utils/helpers/helper_functions.dart';
-import '../../controllers/brand_controller.dart';
-import '../brand/all_brands.dart';
-import '../brand/brand.dart';
-import '../home/widgets/header_search_container.dart';
-import 'widgets/category_tab.dart';
-
 class StoreScreen extends StatelessWidget {
-  const StoreScreen({super.key});
+  StoreScreen({super.key});
+
+  final controllerBrand = Get.put(BrandController());
 
   @override
   Widget build(BuildContext context) {
-    final categories = CategoryController.instance.featuredCategories;
-    final brandController = Get.put(BrandController());
-    final dark = HelperFunctions.isDarkMode(context);
-    return PopScope(
-      canPop: false,
-        // Intercept the back button press and redirect to Home Screen
-      onPopInvoked: (value) async => Get.offAll(const HomeMenu()),
-      child: DefaultTabController(
-        length: categories.length,
-        child: Scaffold(
-          /// -- Appbar -- Tutorial [Section # 3, Video # 7]
-          appBar: MyAppBar(
-            title: Text('Store', style: Theme.of(context).textTheme.headlineMedium),
-            actions: const [TCartCounterIcon()],
-          ),
-          body: NestedScrollView(
-            /// -- Header -- Tutorial [Section # 3, Video # 7]
-            headerSliverBuilder: (_, innerBoxIsScrolled) {
-              return [
-                SliverAppBar(
-                  pinned: true,
-                  floating: true,
-                  // Space between Appbar and TabBar. WithIn this height we have added [Search bar] and [Featured brands]
-                  expandedHeight: 440,
-                  automaticallyImplyLeading: false,
-                  backgroundColor: dark ? MyColors.black : MyColors.white,
+    return DefaultTabController(
+      length: 8,
+      child: Scaffold(
+        appBar: TAppBar(
+          showBackArrow: false,
+          title:
+              Text('Store', style: Theme.of(context).textTheme.headlineMedium),
+          actions: [
+            TCartCounterIcon(
+              onPressed: () => Get.to(CartScreen()),
+              iconColor: TColors.black,
+            )
+          ],
+        ),
+        body: NestedScrollView(
+          headerSliverBuilder: (_, innerBoxIsScrolled) {
+            return [
+              SliverAppBar(
+                automaticallyImplyLeading: false,
+                pinned: true,
+                floating: true,
+                backgroundColor: THelperFunctions.isDarkMode(context)
+                    ? TColors.black
+                    : TColors.white,
+                expandedHeight: 460,
 
-                  /// -- Search & Featured Store
-                  flexibleSpace: Padding(
-                    padding: const EdgeInsets.all(Sizes.defaultSpace),
-                    child: ListView(
-                      shrinkWrap: true,
-                      physics: const NeverScrollableScrollPhysics(),
-                      children: [
-                        /// -- Search bar
-                        const SizedBox(height: Sizes.spaceBtwItems),
-                        const TSearchContainer(text: 'Search in Store', showBorder: true, showBackground: false, padding: EdgeInsets.zero),
-                        const SizedBox(height: Sizes.spaceBtwSections),
+                flexibleSpace: Padding(
+                  padding: const EdgeInsets.all(TSizes.defaultSpace),
+                  child: ListView(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    children: [
+                      /// Search bar
+                      const SizedBox(height: TSizes.spaceBtwItems),
+                      const TSearchContainer(
+                        text: 'Search in Store',
+                        showBorder: true,
+                        showBackground: false,
+                        padding: EdgeInsets.zero,
+                      ),
+                      const SizedBox(height: TSizes.spaceBtwSections),
 
-                        /// -- Featured Brands
-                        TSectionHeading(title: 'Featured Brands', onPressed: () => Get.to(() => const AllBrandsScreen())),
-                        const SizedBox(height: Sizes.spaceBtwItems / 1.5),
-
-                        /// -- Brands
-                        Obx(
-                          () {
-                            // Check if categories are still loading
-                            if (brandController.isLoading.value) return const TBrandsShimmer();
-
-                            // Check if there are no featured categories found
-                            if (brandController.featuredBrands.isEmpty) {
-                              return Center(
-                                  child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium!.apply(color: Colors.white)));
+                      /// Featured Brands
+                      TSectionHeading(
+                        title: 'Featured Brands',
+                        onPressed: () => Get.to(() => AllBrandsScreen()),
+                      ),
+                      const SizedBox(height: TSizes.spaceBtwItems / 1.5),
+                      FutureBuilder(
+                          future: controllerBrand.getAllBrandsData(),
+                          builder: (context, snapshot) {
+                            if (snapshot.connectionState ==
+                                ConnectionState.done) {
+                              if (snapshot.hasData) {
+                                List<BrandModel> listProducts = snapshot.data!;
+                                listProducts
+                                    .sort(((a, b) => a.name.compareTo(b.name)));
+                                listProducts.sort((a, b) {
+                                  if (a.isVerified && !b.isVerified) {
+                                    return -1; // Put completed objects first
+                                  } else if (!a.isVerified && b.isVerified) {
+                                    return 1; // Put non-completed objects last
+                                  }
+                                  return 0; // Equal
+                                });
+                                return TGridLayout(
+                                  itemCount: 4,
+                                  mainAxisExtent: 80,
+                                  itemBuilder: (_, index) {
+                                    return TBrandCard(
+                                      showBorder: true,
+                                      brand: snapshot.data![index],
+                                      onTap: () {
+                                        Get.to(() => BrandProducts(
+                                            brand: snapshot.data![index]));
+                                      },
+                                    );
+                                  },
+                                );
+                              } else if (snapshot.hasError) {
+                                return Center(
+                                    child: Text(snapshot.error.toString()));
+                              } else {
+                                return const Center(child: Text("Smt wrong!"));
+                              }
                             } else {
-                              /// Data Found
-                              return TGridLayout(
-                                itemCount: 4,
-                                mainAxisExtent: 80,
-                                itemBuilder: (_, index) {
-                                  final brand = brandController.featuredBrands[index];
-                                  return TBrandCard(
-                                    brand: brand,
-                                    showBorder: true,
-                                    onTap: () => Get.to(() => BrandScreen(brand: brand)),
-                                  );
-                                },
-                              );
+                              return const CircularProgressIndicator();
                             }
-                          },
-                        ),
-                        const SizedBox(height: Sizes.spaceBtwSections),
-                      ],
-                    ),
+                          })
+                    ],
                   ),
+                ),
 
-                  /// -- TABS
-                  bottom: MyTabBar(tabs: categories.map((e) => Tab(child: Text(e.name))).toList()),
-                )
-              ];
-            },
+                /// Tabs
+                bottom: const TTabBar(
+                  tabs: [
+                    Tab(child: Text('Clothes')),
+                    Tab(child: Text('Cosmetics')),
+                    Tab(child: Text('Electronics')),
+                    Tab(child: Text('Furniture')),
+                    Tab(child: Text('Jewelery')),
+                    Tab(child: Text('Shoe')),
+                    Tab(child: Text('Sport')),
+                    Tab(child: Text('Toy')),
+                  ],
+                ),
+              ),
+            ];
+          },
 
-            /// -- TabBar Views
-            body: TabBarView(
-              children: categories.map((category) => TCategoryTab(category: category)).toList(),
-            ),
+          /// Body
+          body: TabBarView(
+            children: [
+              TCategoryTab(topic: 'Clothes'),
+              TCategoryTab(topic: 'Cosmetics'),
+              TCategoryTab(topic: 'Electronics'),
+              TCategoryTab(topic: 'Furniture'),
+              TCategoryTab(topic: 'Jewelery'),
+              TCategoryTab(topic: 'Shoe'),
+              TCategoryTab(topic: 'Sport'),
+              TCategoryTab(topic: 'Toy'),
+            ],
           ),
         ),
       ),

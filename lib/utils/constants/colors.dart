@@ -1,11 +1,21 @@
 import 'package:flutter/material.dart';
 
-class MyColors {
-
+class TColors {
   // App theme colors
   static const Color primary = Color.fromARGB(255, 3, 89, 49);
   static const Color secondary = Color(0xFFFFE24B);
   static const Color accent = Color(0xFFb0c7ff);
+
+  // Linear colors
+  static const Gradient linearGradient = LinearGradient(
+    begin: Alignment(0.0, 0.0),
+    end: Alignment(0.707, -0.707),
+    colors: [
+      Color(0xffff9a9e),
+      Color(0xfffad0c4),
+      Color(0xfffad0c4),
+    ],
+  );
 
   // Text colors
   static const Color textPrimary = Color(0xFF333333);
@@ -19,7 +29,7 @@ class MyColors {
 
   // Background Container colors
   static const Color lightContainer = Color(0xFFF6F6F6);
-  static Color darkContainer = MyColors.white.withOpacity(0.1);
+  static Color darkContainer = TColors.white.withOpacity(0.1);
 
   // Button colors
   static const Color buttonPrimary = Color(0xFF4b68ff);
@@ -44,4 +54,7 @@ class MyColors {
   static const Color softGrey = Color(0xFFF4F4F4);
   static const Color lightGrey = Color(0xFFF9F9F9);
   static const Color white = Color(0xFFFFFFFF);
+
+  //custom divider
+  static const Color divider = Color.fromARGB(255, 216, 216, 216);
 }

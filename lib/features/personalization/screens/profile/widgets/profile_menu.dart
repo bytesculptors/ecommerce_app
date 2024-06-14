@@ -1,6 +1,6 @@
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
-import '../../../../../utils/constants/sizes.dart';
 
 class TProfileMenu extends StatelessWidget {
   const TProfileMenu({
@@ -12,7 +12,7 @@ class TProfileMenu extends StatelessWidget {
   });
 
   final IconData icon;
-  final VoidCallback onPressed;
+  final void Function() onPressed;
   final String title, value;
 
   @override
@@ -20,15 +20,27 @@ class TProfileMenu extends StatelessWidget {
     return GestureDetector(
       onTap: onPressed,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: Sizes.spaceBtwItems / 1.5),
+        padding:
+            const EdgeInsets.symmetric(vertical: TSizes.spaceBtwItems / 1.5),
         child: Row(
           children: [
-            Expanded(flex: 3, child: Text(title, style: Theme.of(context).textTheme.bodySmall)),
+            Expanded(
+              flex: 3,
+              child: Text(
+                title,
+                style: Theme.of(context).textTheme.bodySmall,
+                overflow: TextOverflow.ellipsis,
+              ),
+            ),
             Expanded(
               flex: 5,
-              child: Text(value, style: Theme.of(context).textTheme.bodyMedium, overflow: TextOverflow.ellipsis),
+              child: Text(
+                value,
+                style: Theme.of(context).textTheme.bodyMedium,
+                overflow: TextOverflow.ellipsis,
+              ),
             ),
-            Expanded(child: Icon(icon, size: 18)),
+            Icon(icon),
           ],
         ),
       ),

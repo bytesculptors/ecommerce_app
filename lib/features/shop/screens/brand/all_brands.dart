@@ -1,58 +1,73 @@
+import 'package:ecommerce_app_mobile/common/styles/section_heading.dart';
+import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
+import 'package:ecommerce_app_mobile/common/widgets/brands/brand_card.dart';
+import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/brand/brand_products.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../../../../common/widgets/appbar/appbar.dart';
-import '../../../../common/widgets/brands/brand_card.dart';
-import '../../../../common/widgets/layouts/grid_layout.dart';
-import '../../../../common/widgets/shimmers/brands_shimmer.dart';
-import '../../../../common/widgets/texts/section_heading.dart';
-import '../../../../utils/constants/sizes.dart';
-import '../../controllers/brand_controller.dart';
-import 'brand.dart';
-
 class AllBrandsScreen extends StatelessWidget {
-  const AllBrandsScreen({super.key});
+  AllBrandsScreen({super.key});
+
+  final controller = Get.put(BrandController());
 
   @override
   Widget build(BuildContext context) {
-    final controller = BrandController.instance;
     return Scaffold(
-      appBar: const MyAppBar(showBackArrow: true, title: Text('Brand')),
+      appBar: const TAppBar(
+        title: Text('Brand'),
+        showBackArrow: true,
+      ),
       body: SingleChildScrollView(
         child: Padding(
-          padding: const EdgeInsets.all(Sizes.defaultSpace),
+          padding: const EdgeInsets.all(TSizes.defaultSpace),
           child: Column(
             children: [
-              /// Sub Categories
-              const TSectionHeading(title: 'Brands', showActionButton: false),
-              const SizedBox(height: Sizes.spaceBtwItems),
-
-              /// -- Brands
-              Obx(
-                () {
-                  // Check if categories are still loading
-                  if (controller.isLoading.value) return const TBrandsShimmer();
-
-                  // Check if there are no featured categories found
-                  if (controller.allBrands.isEmpty) {
-                    return Center(child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium!.apply(color: Colors.white)));
-                  } else {
-                    /// Data Found
-                    return TGridLayout(
-                      itemCount: controller.allBrands.length,
-                      mainAxisExtent: 80,
-                      itemBuilder: (_, index) {
-                        final brand = controller.allBrands[index];
-                        return TBrandCard(
-                          brand: brand,
-                          showBorder: true,
-                          onTap: () => Get.to(() => BrandScreen(brand: brand)),
-                        );
-                      },
-                    );
-                  }
-                },
+              /// Heading
+              const TSectionHeading(title: 'Brands'),
+              const SizedBox(
+                height: TSizes.spaceBtwItems,
               ),
+              FutureBuilder(
+                  future: controller.getAllBrandsData(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.done) {
+                      if (snapshot.hasData) {
+                        List<BrandModel> listProducts = snapshot.data!;
+                        listProducts.sort(((a, b) => a.name.compareTo(b.name)));
+                        listProducts.sort((a, b) {
+                          if (a.isVerified && !b.isVerified) {
+                            return -1; // Put completed objects first
+                          } else if (!a.isVerified && b.isVerified) {
+                            return 1; // Put non-completed objects last
+                          }
+                          return 0; // Equal
+                        });
+                        return TGridLayout(
+                          itemCount: snapshot.data!.length,
+                          mainAxisExtent: 80,
+                          itemBuilder: (context, index) => TBrandCard(
+                            brand: snapshot.data![index],
+                            showBorder: true,
+                            onTap: () => Get.to(() => BrandProducts(
+                                  brand: listProducts[index],
+                                )),
+                          ),
+                        );
+                      } else if (snapshot.hasError) {
+                        return Center(child: Text(snapshot.error.toString()));
+                      } else {
+                        return const Center(child: Text("smt went wrong"));
+                      }
+                    } else {
+                      return const CircularProgressIndicator();
+                    }
+                  }),
+
+              /// Brands
             ],
           ),
         ),

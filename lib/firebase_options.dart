@@ -17,10 +17,7 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      throw UnsupportedError(
-        'DefaultFirebaseOptions have not been configured for web - '
-        'you can reconfigure this by running the FlutterFire CLI again.',
-      );
+      return web;
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -28,10 +25,7 @@ class DefaultFirebaseOptions {
       case TargetPlatform.iOS:
         return ios;
       case TargetPlatform.macOS:
-        throw UnsupportedError(
-          'DefaultFirebaseOptions have not been configured for macos - '
-          'you can reconfigure this by running the FlutterFire CLI again.',
-        );
+        return macos;
       case TargetPlatform.windows:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for windows - '
@@ -49,22 +43,40 @@ class DefaultFirebaseOptions {
     }
   }
 
+  static const FirebaseOptions web = FirebaseOptions(
+    apiKey: 'AIzaSyBSaftHN0TwITMPx8jKyvVFB0sKTLuqCSM',
+    appId: '1:1002703289584:web:42df647c4b55ea31459635',
+    messagingSenderId: '1002703289584',
+    projectId: 'e-commerce-uet-project',
+    authDomain: 'e-commerce-uet-project.firebaseapp.com',
+    storageBucket: 'e-commerce-uet-project.appspot.com',
+  );
+
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyCaJxscvFapxulyC06BCgmTRaWSng9UIFU',
-    appId: '1:623913643834:android:2215af2bc3f0150ddeaa03',
-    messagingSenderId: '623913643834',
-    projectId: 'verdant-rider-403916',
-    storageBucket: 'verdant-rider-403916.appspot.com',
+    apiKey: 'AIzaSyDPEMcnMLqPiEjbYzdQ64CjG41nIqezNOk',
+    appId: '1:1002703289584:android:52775c5787953e3f459635',
+    messagingSenderId: '1002703289584',
+    projectId: 'e-commerce-uet-project',
+    storageBucket: 'e-commerce-uet-project.appspot.com',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAnup_daX0XM1Fk_9QjHswxYeIJWh3FvTA',
-    appId: '1:623913643834:ios:b29b30d63c4fd4f5deaa03',
-    messagingSenderId: '623913643834',
-    projectId: 'verdant-rider-403916',
-    storageBucket: 'verdant-rider-403916.appspot.com',
-    androidClientId: '623913643834-64hge9g0p7v74mhv4ppad11k0h5i0m5p.apps.googleusercontent.com',
-    iosClientId: '623913643834-odpc7u26dhiedkd240qq8g2c7vqk40n9.apps.googleusercontent.com',
-    iosBundleId: 'com.example.cwtEcommerceApp',
+    apiKey: 'AIzaSyAg1YvYRlk8iJBr5zqnZ9CaN8WkpMI7i9w',
+    appId: '1:1002703289584:ios:8318acc1950afb9d459635',
+    messagingSenderId: '1002703289584',
+    projectId: 'e-commerce-uet-project',
+    storageBucket: 'e-commerce-uet-project.appspot.com',
+    iosClientId: '1002703289584-or9ncnt9appnbdnbln95grg8ar5h0a2c.apps.googleusercontent.com',
+    iosBundleId: 'com.example.ecommerceAppMobile',
+  );
+
+  static const FirebaseOptions macos = FirebaseOptions(
+    apiKey: 'AIzaSyAg1YvYRlk8iJBr5zqnZ9CaN8WkpMI7i9w',
+    appId: '1:1002703289584:ios:46ff397ca285648b459635',
+    messagingSenderId: '1002703289584',
+    projectId: 'e-commerce-uet-project',
+    storageBucket: 'e-commerce-uet-project.appspot.com',
+    iosClientId: '1002703289584-oacnnecpn2e2ql56c0agi225b7qlbc0m.apps.googleusercontent.com',
+    iosBundleId: 'com.example.ecommerceAppMobile.RunnerTests',
   );
 }

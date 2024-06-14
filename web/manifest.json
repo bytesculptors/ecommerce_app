@@ -1,6 +1,6 @@
 {
-    "name": "btl",
-    "short_name": "btl",
+    "name": "ecommerce_app_mobile",
+    "short_name": "ecommerce_app_mobile",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

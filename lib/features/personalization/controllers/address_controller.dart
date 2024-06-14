@@ -1,173 +1,323 @@
-import 'package:btl/utils/constants/image_paths.dart';
+import 'dart:convert';
+
+import 'package:ecommerce_app_mobile/Service/Model/address_model.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
+import 'package:google_api_headers/google_api_headers.dart';
+import 'package:google_maps_webservice/places.dart';
+import 'package:uuid/uuid.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../common/widgets/texts/section_heading.dart';
-import '../../../data/repositories/address/address_repository.dart';
-import '../../../data/repositories/authentication/authentication_repository.dart';
-import '../../../utils/constants/sizes.dart';
-import '../../../utils/helpers/cloud_helper_functions.dart';
-import '../../../utils/helpers/network_manager.dart';
-import '../../../utils/popups/full_screen_loader.dart';
-import '../../../utils/popups/loaders.dart';
-import '../models/address_model.dart';
-import '../screens/address/add_new_address.dart';
-import '../screens/address/widgets/single_address_widget.dart';
+import 'package:google_geocoding_api/google_geocoding_api.dart';
 
 class AddressController extends GetxController {
   static AddressController get instance => Get.find();
 
+  @override
+  void onReady() async {
+    super.onReady();
+    listUserAddress.value = (_userRepo.currentUserModel!.address as List);
+  }
+
+  RxList<dynamic> listUserAddress = [].obs;
+
+  final _userRepo = Get.put(UserRepository());
   final name = TextEditingController();
   final phoneNumber = TextEditingController();
+  final address = TextEditingController();
+  final province = TextEditingController();
+  final district = TextEditingController();
+  final ward = TextEditingController();
   final street = TextEditingController();
-  final postalCode = TextEditingController();
-  final city = TextEditingController();
-  final state = TextEditingController();
-  final country = TextEditingController();
-  GlobalKey<FormState> addressFormKey = GlobalKey<FormState>();
+  final optional = TextEditingController();
+  late double lat;
+  late double lng;
 
-  RxBool refreshData = true.obs;
-  final addressRepository = Get.put(AddressRepository());
-  final Rx<AddressModel> selectedAddress = AddressModel.empty().obs;
+  String? provinceId;
+  String? districtid;
+  String? wardCode;
+  String? postalCode;
 
-  /// Fetch all user specific addresses
-  Future<List<AddressModel>> allUserAddresses() async {
-    try {
-      final addresses = await addressRepository.fetchUserAddresses();
-      selectedAddress.value = addresses.firstWhere((element) => element.selectedAddress, orElse: () => AddressModel.empty());
-      return addresses;
-    } catch (e) {
-      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
-      return [];
-    }
+  void clearTextField() {
+    name.text = phoneNumber.text = phoneNumber.text = province.text = district
+        .text = ward.text = street.text = optional.text = address.text = '';
   }
 
-  Future selectAddress(AddressModel newSelectedAddress) async {
-    try {
-      // Clear the "selected" field
-      if(selectedAddress.value.id.isNotEmpty){
-        await addressRepository.updateSelectedField(AuthenticationRepository.instance.getUserID, selectedAddress.value.id, false);
-      }
-
-      // Assign selected address
-      newSelectedAddress.selectedAddress = true;
-      selectedAddress.value = newSelectedAddress;
-
-      // Set the "selected" field to true for the newly selected address
-      await addressRepository.updateSelectedField(AuthenticationRepository.instance.getUserID, selectedAddress.value.id, true);
-    } catch (e) {
-      TLoaders.errorSnackBar(title: 'Error in Selection', message: e.toString());
+  Future<void> getCurrentLocation() async {
+    bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      Future.error('Location services is disabled');
     }
+
+    LocationPermission permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        return Future.error('Location permission is denied');
+      }
+    }
+    Get.back();
+    SmartDialog.showLoading();
+    final currentLocation = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+    const String googelApiKey = 'bn7OlF8CF3syL2gzOFztPdJVLtHBLlxzAQd2VcaE';
+    const bool isDebugMode = true;
+    final api = GoogleGeocodingApi(
+      googelApiKey,
+      isLogged: isDebugMode,
+    );
+    final reversedSearchResults = await api.reverse(
+      '${currentLocation.latitude},${currentLocation.longitude}',
+      language: 'vn',
+    );
+    lat = currentLocation.latitude;
+    lng = currentLocation.longitude;
+
+    // print(reversedSearchResults.results.toList().first.addressComponents);
+    final streetList = [];
+
+    for (GoogleGeocodingAddressComponent element
+        in reversedSearchResults.results.toList().first.addressComponents) {
+      // if (element.types.contains('administrative_area_level_2') ||
+      //     element.types.contains('administrative_area_level_1') ||
+      //     element.types.contains('country')) {
+      //   break;
+      // } else {
+      //   if (element.types.contains('street_number') ||
+      //       element.types.contains('plus_code')) {
+      //     continue;
+      //   }
+      //   streetList.add(element.longName);
+      // }
+      streetList.add(element.longName);
+    }
+    street.text = streetList.join(', ');
+
+    await SmartDialog.dismiss();
   }
 
-  /// Add new Address
-  addNewAddresses() async {
-    try {
-      // Start Loading
-      TFullScreenLoader.openLoadingDialog('Storing Address...', Images.docerAnimation);
-
-      // Check Internet Connectivity
-      final isConnected = await NetworkManager.instance.isConnected();
-      if (!isConnected) {
-        TFullScreenLoader.stopLoading();
-        return;
-      }
-
-      // Form Validation
-      if (!addressFormKey.currentState!.validate()) {
-        TFullScreenLoader.stopLoading();
-        return;
-      }
-
-      // Save Address Data
-      final address = AddressModel(
-        id: '',
-        name: name.text.trim(),
-        phoneNumber: phoneNumber.text.trim(),
-        street: street.text.trim(),
-        city: city.text.trim(),
-        state: state.text.trim(),
-        postalCode: postalCode.text.trim(),
-        country: country.text.trim(),
-        selectedAddress: true,
-      );
-      final id = await addressRepository.addAddress(address, AuthenticationRepository.instance.getUserID);
-
-      // Update Selected Address status
-      address.id = id;
-      await selectAddress(address);
-
-      // Remove Loader
-      TFullScreenLoader.stopLoading();
-
-      // Show Success Message
-      TLoaders.successSnackBar(title: 'Congratulations', message: 'Your address has been saved successfully.');
-
-      // Refresh Addresses Data
-      refreshData.toggle();
-
-      // Reset fields
-      resetFormFields();
-
-      // Redirect
-      Navigator.of(Get.context!).pop();
-    } catch (e) {
-      // Remove Loader
-      TFullScreenLoader.stopLoading();
-      TLoaders.errorSnackBar(title: 'Address not found', message: e.toString());
-    }
+  Future<void> removeUserAddress(String id, BuildContext context) async {
+    await _userRepo.removeUserAddress(id, context, updateUserDetails);
+    updateUserDetails();
   }
 
-  /// Show Addresses ModalBottomSheet at Checkout
-  Future<dynamic> selectNewAddressPopup(BuildContext context) {
-    return showModalBottomSheet(
-      context: context,
-      builder: (_) => Container(
-        padding: const EdgeInsets.all(Sizes.lg),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const TSectionHeading(title: 'Select Address'),
-            FutureBuilder(
-              future: allUserAddresses(),
-              builder: (_, snapshot) {
-                /// Helper Function: Handle Loader, No Record, OR ERROR Message
-                final response = TCloudHelperFunctions.checkMultiRecordState(snapshot: snapshot);
-                if (response != null) return response;
-
-                return ListView.builder(
-                  shrinkWrap: true,
-                  itemCount: snapshot.data!.length,
-                  itemBuilder: (_, index) => TSingleAddress(
-                    address: snapshot.data![index],
-                    onTap: () async {
-                      await selectAddress(snapshot.data![index]);
-                      Get.back();
-                    },
-                  ),
-                );
-              },
-            ),
-            const SizedBox(height: Sizes.defaultSpace * 2),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(onPressed: () => Get.to(() => const AddNewAddressScreen()), child: const Text('Add new address')),
-            ),
-          ],
+  Future<void> updateAddressInfo(index) async {
+    await _userRepo.updateAddressInfo(
+        AddressModel(
+          phoneNumber: phoneNumber.text,
+          name: name.text,
+          province: province.text,
+          district: district.text,
+          street: street.text,
+          ward: ward.text,
+          id: listUserAddress[index]['id'],
+          isDefault: listUserAddress[index]['isDefault'],
+          districtId: districtid!,
+          wardCode: wardCode!,
+          provinceId: provinceId!,
+          lat: lat,
+          lng: lng,
+          optional: optional.text,
         ),
+        index);
+    await updateUserDetails();
+  }
+
+  void fillFullField(Map<String, dynamic> addressInfo) {
+    name.text = addressInfo['name'];
+    phoneNumber.text = addressInfo['phoneNumber'];
+    province.text = addressInfo['province'];
+    district.text = addressInfo['district'];
+    ward.text = addressInfo['ward'];
+    street.text = addressInfo['street'];
+    optional.text = addressInfo['optional'];
+    lat = addressInfo['lat'];
+    lng = addressInfo['lng'];
+    districtid = addressInfo['districtId'];
+    provinceId = addressInfo['provinceId'];
+    wardCode = addressInfo['wardCode'];
+
+    address.text = '${province.text}/${district.text}/${ward.text}';
+  }
+
+  Future<void> addUserAddress() async {
+    final addressId = const Uuid().v1();
+    await _userRepo.addUserAddress(
+      AddressModel(
+        phoneNumber: phoneNumber.text,
+        name: name.text,
+        province: province.text,
+        district: district.text,
+        street: street.text,
+        ward: ward.text,
+        isDefault: false,
+        id: addressId,
+        districtId: districtid!,
+        wardCode: wardCode!,
+        provinceId: provinceId!,
+        lat: lat,
+        lng: lng,
+        optional: optional.text,
       ),
     );
+    await setDefaultAddress(addressId);
   }
 
-  /// Function to reset form fields
-  void resetFormFields() {
-    name.clear();
-    phoneNumber.clear();
-    street.clear();
-    postalCode.clear();
-    city.clear();
-    state.clear();
-    country.clear();
-    addressFormKey.currentState?.reset();
+  Future<void> updateUserDetails() async {
+    await _userRepo.updateUserDetails();
+    listUserAddress.value = (_userRepo.currentUserModel!.address as List);
+  }
+
+  List<Map<String, dynamic>> getAllUserAddress() {
+    return _userRepo.getAllUserAddress();
+  }
+
+  Map<String, dynamic> getDefaultAddress() {
+    return _userRepo.getDefaultAddress();
+  }
+
+  Future<void> setDefaultAddress(addressId) async {
+    await _userRepo.setDefaultAddress(addressId);
+    await updateUserDetails();
+  }
+
+  Future<List<Map<String, dynamic>>> getAllProvinceVN() async {
+    try {
+      var url = Uri.https(
+          'online-gateway.ghn.vn', 'shiip/public-api/master-data/province');
+      var response = await http.post(
+        url,
+        headers: {
+          'token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+        },
+      );
+      print('Response status: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch province');
+      }
+      // print('Response body: ${response.body}');
+      final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+      final List<dynamic> provinceList = responseBody['data'];
+
+      return provinceList.map(
+        (element) {
+          final e = element as Map<String, dynamic>;
+          return {
+            'ProvinceName': e['ProvinceName'],
+            'ProvinceID': e['ProvinceID'],
+          };
+        },
+      ).toList();
+    } finally {}
+  }
+
+  Future<List<Map<String, dynamic>>> getDistrictOfProvinceVN(
+      String provinceID) async {
+    try {
+      var url = Uri.https(
+          'online-gateway.ghn.vn',
+          'shiip/public-api/master-data/district',
+          {'province_id': '$provinceID'});
+      var response = await http.get(
+        url,
+        headers: {
+          'token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+        },
+      );
+      print('Response status: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch district');
+      }
+      // print('Response body: ${response.body}');
+      final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+      final List<dynamic> districtList = responseBody['data'];
+      print(districtList);
+
+      return districtList.map(
+        (element) {
+          final e = element as Map<String, dynamic>;
+          return {
+            'DistrictName': e['DistrictName'],
+            'DistrictID': e['DistrictID'],
+          };
+        },
+      ).toList();
+    } finally {}
+  }
+
+  Future<List<Map<String, dynamic>>> getWardOfDistrictOfVN(
+      String districtID) async {
+    try {
+      var url = Uri.https('online-gateway.ghn.vn',
+          'shiip/public-api/master-data/ward', {'district_id': '$districtID'});
+      var response = await http.get(
+        url,
+        headers: {
+          'token': '7dbb1c13-7e11-11ee-96dc-de6f804954c9',
+        },
+      );
+      print('Response status: ${response.statusCode}');
+      if (response.statusCode != 200) {
+        throw Exception('Failed to fetch ward');
+      }
+      // print('Response body: ${response.body}');
+      final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
+      final List<dynamic> wardList = responseBody['data'];
+      print(wardList);
+
+      return wardList.map(
+        (element) {
+          final e = element as Map<String, dynamic>;
+          return {
+            'WardName': e['WardName'],
+            'WardCode': e['WardCode'],
+          };
+        },
+      ).toList();
+    } finally {}
+  }
+
+  Future<void> displayPrediction(
+      Prediction? p, ScaffoldMessengerState messengerState) async {
+    if (p == null) {
+      // print('p null');
+      return;
+    }
+    // print('p khong null');
+
+    // get detail (lat/lng)
+    final places = GoogleMapsPlaces(
+      apiKey: 'bn7OlF8CF3syL2gzOFztPdJVLtHBLlxzAQd2VcaE',
+      apiHeaders: await const GoogleApiHeaders().getHeaders(),
+    );
+
+    final detail = await places.getDetailsByPlaceId(p.placeId!);
+    final geometry = detail.result.geometry!;
+    lat = geometry.location.lat;
+    lng = geometry.location.lng;
+
+    // final streetList = [];
+
+    // for (AddressComponent element in detail.result.addressComponents) {
+    //   // if (element.types.contains('administrative_area_level_2') ||
+    //   //     element.types.contains('administrative_area_level_1') ||
+    //   //     element.types.contains('country')) {
+    //   //   break;
+    //   // } else {
+    //   //   if (element.types.contains('street_number') ||
+    //   //       element.types.contains('plus_code')) {
+    //   //     continue;
+    //   //   }
+    //   //   streetList.add(element.longName);
+    //   // }
+    //   streetList.add(element.longName);
+    // }
+    // street.text = streetList.join(', ');
+    street.text = p.description ?? '';
+    Get.back();
   }
 }

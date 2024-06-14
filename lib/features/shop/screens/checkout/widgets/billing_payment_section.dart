@@ -1,49 +1,51 @@
+import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
+import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
+import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-
-import '../../../../../common/widgets/custom_shapes/containers/rounded_container.dart';
-import '../../../../../common/widgets/texts/section_heading.dart';
-import '../../../../../utils/constants/colors.dart';
-import '../../../../../utils/constants/sizes.dart';
-import '../../../../../utils/helpers/helper_functions.dart';
-import '../../../controllers/checkout_controller.dart';
 
 class TBillingPaymentSection extends StatelessWidget {
-  const TBillingPaymentSection({
-    super.key,
-  });
+  const TBillingPaymentSection({super.key, this.showChangeButton = true});
+
+  final bool showChangeButton;
 
   @override
   Widget build(BuildContext context) {
-    final controller = CheckoutController.instance;
+    final dark = THelperFunctions.isDarkMode(context);
     return Column(
       children: [
         TSectionHeading(
-          title: 'Payment Method',
-          buttonTitle: 'Change',
-          showActionButton: true,
-          onPressed: () {
-            controller.selectPaymentMethod(context);
-          },
+          title: "Payment Method",
+          buttonTitle: "Change",
+          onPressed: showChangeButton ? () {} : null,
         ),
-        const SizedBox(height: Sizes.spaceBtwItems / 2),
-        Obx(
-          () => Row(
-            children: [
-              TRoundedContainer(
-                width: 60,
-                height: 35,
-                backgroundColor: HelperFunctions.isDarkMode(context) ? MyColors.light : MyColors.white,
-                padding: const EdgeInsets.all(Sizes.sm),
-                child: Image(image: AssetImage(controller.selectedPaymentMethod.value.image), fit: BoxFit.contain),
+        const SizedBox(
+          height: TSizes.spaceBtwItems / 2,
+        ),
+        Row(
+          children: [
+            TRoundedContainer(
+              width: 60,
+              height: 35,
+              backgroundColor: dark ? TColors.dark : TColors.white,
+              padding: const EdgeInsets.all(TSizes.sm),
+              child: const Image(
+                image: AssetImage(TImages.paypal),
+                fit: BoxFit.contain,
               ),
-              const SizedBox(width: Sizes.spaceBtwItems / 2),
-              Text(controller.selectedPaymentMethod.value.name.capitalize.toString(), style: Theme.of(context).textTheme.bodyLarge),
-            ],
-          ),
-        ),
+            ),
+            const SizedBox(
+              height: TSizes.spaceBtwItems / 2,
+            ),
+            Text(
+              "Paypal",
+              style: Theme.of(context).textTheme.bodyLarge,
+            )
+          ],
+        )
       ],
     );
   }
-
 }

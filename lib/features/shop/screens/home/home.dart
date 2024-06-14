@@ -1,101 +1,173 @@
-import 'package:btl/features/shop/controllers/product/product_controller.dart';
-import 'package:btl/utils/constants/sizes.dart';
-import 'package:btl/utils/constants/text_strings.dart';
-import 'package:btl/utils/device/device_utils.dart';
+import 'package:ecommerce_app_mobile/Service/repository/user_repository.dart';
+import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/primary_header_container.dart';
+import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/search_container.dart';
+import 'package:ecommerce_app_mobile/common/widgets/layout/grid_layout.dart';
+import 'package:ecommerce_app_mobile/common/widgets/products/product_cards/product_card_vertical.dart';
+import 'package:ecommerce_app_mobile/common/widgets/texts/section_heading.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/home_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/brand_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/product_controller/product_variant_controller.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/detail_product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/all_products/all_products.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_appbar.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/home_categories.dart';
+import 'package:ecommerce_app_mobile/features/shop/screens/home/widget/promo_slider.dart';
+import 'package:ecommerce_app_mobile/utils/constants/image_strings.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
-import '../../../../common/widgets/custom_shapes/containers/primary_header_container.dart';
-import '../../../../common/widgets/layouts/grid_layout.dart';
-import '../../../../common/widgets/products/product_cards/product_card_vertical.dart';
-import '../../../../common/widgets/shimmers/vertical_product_shimmer.dart';
-import '../../../../common/widgets/texts/section_heading.dart';
-import '../../../../data/repositories/product/product_repository.dart';
-import '../all_products/all_products.dart';
-import 'widgets/header_categories.dart';
-import 'widgets/header_search_container.dart';
-import 'widgets/home_appbar.dart';
-import 'widgets/promo_slider.dart';
+import '../../../../utils/constants/colors.dart';
 
 class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+  HomeScreen({super.key});
+
+  final brandController = Get.put(BrandController());
+  final productController = Get.put(ProductController());
+  final variantController = Get.put(ProductVariantController());
+  final homeController = Get.put(HomeController());
+  final userRepository = Get.put(UserRepository());
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(ProductController());
     return Scaffold(
-      body: SingleChildScrollView(
+        body: RefreshIndicator(
+      onRefresh: () async {
+        await userRepository.updateUserDetails();
+        (context as Element).reassemble();
+      },
+      child: SingleChildScrollView(
         child: Column(
           children: [
-            /// Header
-            const TPrimaryHeaderContainer(
+            /// Headerø
+            TPrimaryHeaderContainer(
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   /// -- Appbar
                   THomeAppBar(),
-                  SizedBox(height: Sizes.spaceBtwSections),
+                  const SizedBox(height: TSizes.spaceBtwSections),
 
-                  /// -- Searchbar
-                  TSearchContainer(text: 'Search in Store', showBorder: false),
-                  SizedBox(height: Sizes.spaceBtwSections),
+                  /// -- SearchBar
+                  const TSearchContainer(text: 'Search in Store'),
+                  const SizedBox(height: TSizes.spaceBtwSections),
 
                   /// -- Categories
-                  THeaderCategories(),
-                  SizedBox(height: Sizes.spaceBtwSections * 2),
+                  Padding(
+                    padding: const EdgeInsets.only(left: TSizes.defaultSpace),
+                    child: Column(
+                      children: [
+                        /// -- Heading
+                        const TSectionHeading(
+                          title: 'Popular Categories',
+                          showActionButton: false,
+                          textColor: TColors.white,
+                        ),
+                        const SizedBox(height: TSizes.spaceBtwItems),
+
+                        /// Categories
+                        THomeCategories(),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(height: TSizes.spaceBtwSections),
                 ],
               ),
             ),
 
-            /// -- Body
-            Container(
-              padding: const EdgeInsets.all(Sizes.defaultSpace),
+            /// Body
+            Padding(
+              padding: const EdgeInsets.all(TSizes.defaultSpace),
               child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  /// -- Promo Slider 1
-                  const TPromoSlider(),
-                  const SizedBox(height: Sizes.spaceBtwSections),
-
-                  /// -- Products Heading
-                  TSectionHeading(
-                    title: Texts.popularProducts,
-                    onPressed: () => Get.to(
-                      () => AllProducts(
-                        title: Texts.popularProducts,
-                        futureMethod: ProductRepository.instance.getAllFeaturedProducts(),
-                      ),
-                    ),
+                  const TPromoSlider(banners: [
+                    TImages.promoBanner1,
+                    TImages.promoBanner2,
+                    TImages.promoBanner3
+                  ]),
+                  const SizedBox(
+                    height: TSizes.spaceBtwSections,
                   ),
-                  const SizedBox(height: Sizes.spaceBtwItems),
 
-                  /// Products Section
-                  Obx(
-                    () {
-                      // Display loader while products are loading
-                      if (controller.isLoading.value) return const TVerticalProductShimmer();
-
-                      // Check if no featured products are found
-                      if (controller.featuredProducts.isEmpty) {
-                        return Center(child: Text('No Data Found!', style: Theme.of(context).textTheme.bodyMedium));
-                      } else {
-                        // Featured Products Found! 🎊
-                        return TGridLayout(
-                          itemCount: controller.featuredProducts.length,
-                          itemBuilder: (_, index) =>
-                              TProductCardVertical(product: controller.featuredProducts[index], isNetworkImage: true),
-                        );
-                      }
+                  /// -- Heading
+                  TSectionHeading(
+                    title: "Popular Products",
+                    onPressed: () {
+                      Get.to(() => const AllProductsScreen(
+                            typeShowAll: "popular",
+                          ));
                     },
                   ),
-
-                  SizedBox(height: DeviceUtils.getBottomNavigationBarHeight() + Sizes.defaultSpace),
+                  const SizedBox(height: TSizes.spaceBtwItems),
+                  FutureBuilder(
+                      future: productController.getListPopularProduct(),
+                      builder: (context, snapshot) {
+                        if (snapshot.connectionState == ConnectionState.done) {
+                          if (snapshot.hasData) {
+                            List<ProductModel> listProducts = snapshot.data!;
+                            int lenghtShow = snapshot.data!.length > 4
+                                ? 4
+                                : snapshot.data!.length;
+                            productController.listPopular = [];
+                            return TGridLayout(
+                              itemCount: lenghtShow,
+                              itemBuilder: (_, index) => FutureBuilder(
+                                  future: Future.wait([
+                                    brandController.getBrandById(
+                                        listProducts[index].brand_id),
+                                    variantController.getVariantByIDs(
+                                        listProducts[index].variants_path),
+                                  ]),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.connectionState ==
+                                        ConnectionState.done) {
+                                      if (snapshot.hasData) {
+                                        var brand =
+                                            snapshot.data![0] as BrandModel;
+                                        var listVariants = snapshot.data![1]
+                                            as List<ProductVariantModel>;
+                                        DetailProductModel model =
+                                            DetailProductModel(
+                                                brand: brand,
+                                                product: listProducts[index],
+                                                listVariants: listVariants);
+                                        productController.listPopular
+                                            .add(model);
+                                        return TProductCardVertical(
+                                            modelDetail: model);
+                                        // return Container();
+                                      } else if (snapshot.hasError) {
+                                        return Center(
+                                            child: Text(
+                                                snapshot.error.toString()));
+                                      } else {
+                                        return const Center(
+                                            child: Text("smt went wrong"));
+                                      }
+                                    } else {
+                                      return const CircularProgressIndicator();
+                                    }
+                                  }),
+                            );
+                          } else if (snapshot.hasError) {
+                            return Center(
+                                child: Text(snapshot.error.toString()));
+                          } else {
+                            return const Center(child: Text("smt went wrong"));
+                          }
+                        } else {
+                          return const CircularProgressIndicator();
+                        }
+                      })
                 ],
               ),
-            )
+            ),
           ],
         ),
       ),
-    );
+    ));
   }
 }

@@ -1,32 +1,56 @@
-import 'package:btl/utils/constants/image_paths.dart';
+import 'package:ecommerce_app_mobile/features/personalization/screens/profile/profile_screen.dart';
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-import '../../../../utils/constants/colors.dart';
-import '../../../features/personalization/controllers/user_controller.dart';
-import '../images/t_circular_image.dart';
-
-class TUserProfileTile extends StatelessWidget {
-  TUserProfileTile({
+class TUserProfileTitle extends StatefulWidget {
+  const TUserProfileTitle({
     super.key,
-    required this.onPressed,
+    required this.lastName,
+    required this.firstName,
+    required this.email,
+    required this.profileUrl,
   });
 
-  final VoidCallback onPressed;
-  final controller = UserController.instance;
+  final String lastName;
+  final String firstName;
+  final String email;
+  final String profileUrl;
 
   @override
+  State<TUserProfileTitle> createState() => _TUserProfileTitleState();
+}
+
+class _TUserProfileTitleState extends State<TUserProfileTitle> {
+  @override
   Widget build(BuildContext context) {
-    return Obx(() {
-      final isNetworkImage = controller.user.value.profilePicture.isNotEmpty;
-      final image = isNetworkImage ? controller.user.value.profilePicture : Images.user;
-      return ListTile(
-        leading: TCircularImage(padding: 0, image: image, width: 50, height: 50, isNetworkImage: isNetworkImage),
-        title: Text(controller.user.value.fullName, style: Theme.of(context).textTheme.headlineSmall!.apply(color: MyColors.white)),
-        subtitle: Text(controller.user.value.email, style: Theme.of(context).textTheme.bodyMedium!.apply(color: MyColors.white)),
-        trailing: IconButton(onPressed: onPressed, icon: const Icon(Iconsax.edit, color: MyColors.white)),
-      );
-    });
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundImage: NetworkImage(
+          widget.profileUrl,
+        ),
+        radius: 30,
+      ),
+      title: Text(
+        '${widget.firstName} ${widget.lastName}',
+        style: Theme.of(context).textTheme.headlineSmall!.apply(
+              color: TColors.white,
+            ),
+      ),
+      subtitle: Text(
+        widget.email,
+        style: Theme.of(context).textTheme.labelLarge!.apply(
+              color: TColors.white,
+            ),
+      ),
+      trailing: IconButton(
+        onPressed: () => Get.to(const ProfileScreen()),
+        icon: const Icon(
+          Iconsax.edit,
+          color: TColors.white,
+        ),
+      ),
+    );
   }
 }

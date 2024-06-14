@@ -1,12 +1,11 @@
-
-import 'package:btl/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
 
-class SpacingStyle {
-  static const EdgeInsetsGeometry paddingWithAppBarHeight = EdgeInsets.only(
-    top: Sizes.appBarHeight,
-    left: Sizes.defaultSpace,
-    bottom: Sizes.defaultSpace,
-    right: Sizes.defaultSpace,    
+class TSpacingStyle {
+  static const EdgeInsets paddingWithAppBarHeight = EdgeInsets.only(
+    top: TSizes.appBarHeight,
+    bottom: TSizes.defaultSpace,
+    left: TSizes.defaultSpace,
+    right: TSizes.defaultSpace,
   );
 }

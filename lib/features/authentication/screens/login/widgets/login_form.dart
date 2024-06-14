@@ -1,84 +1,148 @@
-import 'package:btl/features/authentication/controllers/login_in_controller.dart';
-import 'package:btl/features/authentication/screens/password_configuration/forget_password.dart';
-import 'package:btl/features/authentication/screens/signup/signup_screen.dart';
-import 'package:btl/utils/constants/colors.dart';
-import 'package:btl/utils/constants/sizes.dart';
-import 'package:btl/utils/constants/text_strings.dart';
-import 'package:btl/validators/validation.dart';
-import 'package:flutter/material.dart';
+import 'package:ecommerce_app_mobile/Controller/log_in_controller.dart';
+import 'package:ecommerce_app_mobile/common/widgets/loading/custom_loading.dart';
+import 'package:ecommerce_app_mobile/features/authentication/screens/password_configuration/forget_password.dart';
+import 'package:ecommerce_app_mobile/features/authentication/screens/signup/sign_up_screen.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
+import 'package:ecommerce_app_mobile/utils/constants/text_strings.dart';
+import 'package:ecommerce_app_mobile/utils/validators/validation.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_smart_dialog/flutter_smart_dialog.dart';
 import 'package:get/get.dart';
+import 'package:rounded_loading_button/rounded_loading_button.dart';
+
+import 'package:flutter/material.dart';
 import 'package:iconsax/iconsax.dart';
 
-class LoginForm extends StatelessWidget {
-  const LoginForm({
+// ignore: must_be_immutable
+class TLoginForm extends StatefulWidget {
+  const TLoginForm({
     super.key,
   });
 
   @override
+  State<TLoginForm> createState() => _TLoginFormState();
+}
+
+class _TLoginFormState extends State<TLoginForm> {
+  final controller = Get.put(SignInController());
+
+  final _formKey = GlobalKey<FormState>();
+
+  final btnController = RoundedLoadingButtonController();
+
+  @override
   Widget build(BuildContext context) {
-    final controller = Get.put(LoginController());
     return Form(
-      key: controller.loginFormKey,
+      key: _formKey,
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: Sizes.spaceBtwSections),
+        padding: const EdgeInsets.symmetric(vertical: TSizes.spaceBtwSections),
         child: Column(
           children: [
-            /// Email
+            //Email
             TextFormField(
               controller: controller.email,
-              validator: Validator.validateEmail,
-              decoration: const InputDecoration(prefixIcon: Icon(Iconsax.direct_right), labelText: Texts.email),
-            ),
-            const SizedBox(height: Sizes.spaceBtwInputFields),
-
-            /// Password
-            Obx(
-              () => TextFormField(
-                obscureText: controller.hidePassword.value,
-                controller: controller.password,
-                validator: (value) => Validator.validateEmptyText('Password', value),
-                decoration: InputDecoration(
-                  labelText: Texts.password,
-                  prefixIcon: const Icon(Iconsax.password_check),
-                  suffixIcon: IconButton(
-                    onPressed: () => controller.hidePassword.value = !controller.hidePassword.value,
-                    icon: const Icon(Iconsax.eye_slash),
-                  ),
-                ),
+              validator: TValidator.validateEmail,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: const InputDecoration(
+                prefixIcon: Icon(Iconsax.direct_right),
+                labelText: TTexts.email,
               ),
             ),
-            const SizedBox(height: Sizes.spaceBtwInputFields / 2),
+            const SizedBox(
+              height: TSizes.spaceBtwInputFields,
+            ),
 
-            /// Remember Me & Forget Password
+            //Password
+            TextFormField(
+              controller: controller.password,
+              obscureText: controller.isPasswordObscure.value,
+              validator: TValidator.validatePassword,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Iconsax.password_check),
+                suffixIcon: IconButton(
+                  icon: controller.isPasswordObscure.value
+                      ? const Icon(Iconsax.eye)
+                      : const Icon(Iconsax.eye_slash),
+                  onPressed: () {
+                    setState(() {
+                      controller.isPasswordObscure.value =
+                          !controller.isPasswordObscure.value;
+                    });
+                  },
+                ),
+                labelText: TTexts.password,
+              ),
+            ),
+            const SizedBox(
+              height: TSizes.spaceBtwInputFields / 2,
+            ),
+
+            //Remember me and forget the password
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                /// Remember Me
+                //Remember me
                 Row(
-                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    Obx(() => Checkbox(value: controller.rememberMe.value, onChanged: (value) => controller.rememberMe.value = value!)),
-                    const Text(Texts.rememberMe),
+                    Checkbox(
+                      value: controller.isRememberMe.value,
+                      onChanged: (value) {
+                        setState(() {
+                          controller.isRememberMe.value =
+                              !controller.isRememberMe.value;
+                        });
+                      },
+                    ),
+                    const Text(TTexts.rememberMe)
                   ],
                 ),
 
-                /// Forget Password
-                TextButton(onPressed: () => Get.to(() => const ForgetPasswordScreen()), child: const Text(Texts.forgetPassword, style: TextStyle(color: MyColors.darkerGrey))),
+                //Forget the password
+                TextButton(
+                  onPressed: () => Get.to(() => const ForgetPassword()),
+                  child: const Text(TTexts.forgetPassword),
+                ),
               ],
             ),
-            const SizedBox(height: Sizes.spaceBtwSections),
 
-            /// Sign In Button
+            const SizedBox(height: TSizes.spaceBtwSections),
+
+            //Sign in
             SizedBox(
               width: double.infinity,
-              child: ElevatedButton(onPressed: () => controller.emailAndPasswordSignIn(), child: const Text(Texts.signIn)),
+              child: ElevatedButton(
+                onPressed: () async {
+                  if (_formKey.currentState!.validate()) {
+                    SmartDialog.showLoading(
+                      animationType: SmartAnimationType.scale,
+                      builder: (_) => const CustomLoading(),
+                    );
+                    try {
+                      await controller.signIn(
+                          controller.email.text, controller.password.text);
+                    } catch (error) {
+                      if (kDebugMode) {
+                        print(error);
+                      }
+                    } finally {
+                      await SmartDialog.dismiss();
+                    }
+                  }
+                },
+                child: const Text(TTexts.signIn),
+              ),
             ),
-            const SizedBox(height: Sizes.spaceBtwItems),
 
-            /// Create Account Button
+            const SizedBox(height: TSizes.spaceBtwItems),
+
+            //Sign up
             SizedBox(
               width: double.infinity,
-              child: OutlinedButton(onPressed: () => Get.to(() => const SignupScreen()), child: const Text(Texts.createAccount)),
+              child: OutlinedButton(
+                onPressed: () => Get.to(() => const SignUpScreen()),
+                child: const Text(TTexts.createAccount),
+              ),
             ),
           ],
         ),
@@ -86,4 +150,3 @@ class LoginForm extends StatelessWidget {
     );
   }
 }
-

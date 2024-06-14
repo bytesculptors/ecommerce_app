@@ -1,53 +1,63 @@
-import 'package:btl/utils/constants/colors.dart';
-import 'package:btl/utils/constants/sizes.dart';
-import 'package:btl/utils/device/device_utils.dart';
-import 'package:btl/utils/helpers/helper_functions.dart';
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
+import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
-
-class MyAppBar extends StatelessWidget implements PreferredSizeWidget {
-  /// Custom appbar for achieving a desired design goal.
-  /// - Set [title] for a custom title.
-  /// - [showBackArrow] to toggle the visibility of the back arrow.
-  /// - [leadingIcon] for a custom leading icon.
-  /// - [leadingOnPressed] callback for the leading icon press event.
-  /// - [actions] for adding a list of action widgets.
-  /// - Horizontal padding of the appbar can be customized inside this widget.
-  const MyAppBar({
+class TAppBar extends StatelessWidget implements PreferredSizeWidget {
+  const TAppBar({
     super.key,
     this.title,
-    this.actions,
-    this.leadingIcon,
-    this.leadingOnPressed,
     this.showBackArrow = false,
+    this.leadingIcon,
+    this.leadingOnPress,
+    this.actions,
+    this.backOnPress,
+    this.backgroundColor,
+    this.isForceWhiteBackArrow,
   });
 
   final Widget? title;
   final bool showBackArrow;
   final IconData? leadingIcon;
+  final void Function()? leadingOnPress;
+  final void Function()? backOnPress;
   final List<Widget>? actions;
-  final VoidCallback? leadingOnPressed;
+  final Color? backgroundColor;
+  final bool? isForceWhiteBackArrow;
 
   @override
   Widget build(BuildContext context) {
-    final dark = HelperFunctions.isDarkMode(context);
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: Sizes.md),
-      child: AppBar(
-        automaticallyImplyLeading: false,
-        leading: showBackArrow
-            ? IconButton(onPressed: () => Get.back(), icon: Icon(Iconsax.arrow_left, color: dark ? MyColors.white : MyColors.dark))
-            : leadingIcon != null
-            ? IconButton(onPressed: leadingOnPressed, icon: Icon(leadingIcon))
-            : null,
-        title: title,
-        actions: actions,
-      ),
+    return AppBar(
+      backgroundColor: backgroundColor,
+      automaticallyImplyLeading: false,
+      leading: showBackArrow
+          ? IconButton(
+              onPressed: backOnPress ?? () => Get.back(),
+              icon: Icon(
+                Iconsax.arrow_left,
+                color: (isForceWhiteBackArrow != null && isForceWhiteBackArrow!)
+                    ? TColors.light
+                    : (THelperFunctions.isDarkMode(context)
+                        ? TColors.light
+                        : TColors.dark),
+              ))
+          : leadingIcon != null
+              ? IconButton(
+                  onPressed: () => leadingOnPress,
+                  icon: Icon(
+                    leadingIcon,
+                    color: (THelperFunctions.isDarkMode(context)
+                        ? TColors.light
+                        : TColors.dark),
+                  ))
+              : null,
+      title: title,
+      actions: actions,
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(DeviceUtils.getAppBarHeight());
+  Size get preferredSize => Size.fromHeight(TDeviceUtils.getAppBarHeight());
 }

@@ -1,34 +1,33 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:flutter/material.dart';
-import '../../../utils/constants/sizes.dart';
-import '../shimmers/shimmer.dart';
 
 class TRoundedImage extends StatelessWidget {
   const TRoundedImage({
     super.key,
     this.border,
-    this.padding,
     this.onPressed,
     this.width,
     this.height,
+    this.padding,
+    this.borderRadius = TSizes.md,
     this.applyImageRadius = true,
-    required this.imageUrl,
-    this.fit = BoxFit.contain,
     this.backgroundColor,
+    this.fit = BoxFit.contain,
     this.isNetworkImage = false,
-    this.borderRadius = Sizes.md,
+    required this.imageUrl,
   });
 
+  final VoidCallback? onPressed;
   final double? width, height;
-  final String imageUrl;
+  final EdgeInsetsGeometry? padding;
+  final double borderRadius;
   final bool applyImageRadius;
   final BoxBorder? border;
   final Color? backgroundColor;
   final BoxFit? fit;
-  final EdgeInsetsGeometry? padding;
   final bool isNetworkImage;
-  final VoidCallback? onPressed;
-  final double borderRadius;
+  final String imageUrl;
 
   @override
   Widget build(BuildContext context) {
@@ -38,19 +37,40 @@ class TRoundedImage extends StatelessWidget {
         width: width,
         height: height,
         padding: padding,
-        decoration: BoxDecoration(border: border, color: backgroundColor, borderRadius: BorderRadius.circular(borderRadius)),
+        decoration: BoxDecoration(
+            border: border,
+            color: backgroundColor,
+            borderRadius: BorderRadius.circular(borderRadius)),
         child: ClipRRect(
-          borderRadius: applyImageRadius ? BorderRadius.circular(borderRadius) : BorderRadius.zero,
+          borderRadius: applyImageRadius
+              ? BorderRadius.circular(borderRadius)
+              : BorderRadius.zero,
           child: isNetworkImage
               ? CachedNetworkImage(
-                  fit: fit,
                   imageUrl: imageUrl,
-                  progressIndicatorBuilder: (context, url, downloadProgress) => TShimmerEffect(width: width ?? double.infinity, height: height ?? 158),
-                  errorWidget: (context, url, error) => const Icon(Icons.error),
+                  imageBuilder: (context, imageProvider) => Container(
+                    height: height,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        //image size fill
+                        image: imageProvider,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                  placeholder: (context, url) => Container(
+                    height: height,
+                    alignment: Alignment.center,
+                    child:
+                        const CircularProgressIndicator(), // you can add pre loader iamge as well to show loading.
+                  ), //show progress  while loading image
+                  errorWidget: (context, url, error) =>
+                      Image.asset("assets/error/image-error-placeholder.png"),
+                  //show no image available image on error loading
                 )
               : Image(
-                  fit: fit,
                   image: AssetImage(imageUrl),
+                  fit: fit,
                 ),
         ),
       ),

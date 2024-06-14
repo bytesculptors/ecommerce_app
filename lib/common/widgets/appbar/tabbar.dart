@@ -1,33 +1,28 @@
-import 'package:btl/utils/constants/colors.dart';
-import 'package:btl/utils/device/device_utils.dart';
-import 'package:btl/utils/helpers/helper_functions.dart';
+import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
+import 'package:ecommerce_app_mobile/utils/device/device_utility.dart';
+import 'package:ecommerce_app_mobile/utils/helpers/helper_functions.dart';
 import 'package:flutter/material.dart';
 
-/// A custom tab bar widget with customizable appearance.
-class MyTabBar extends StatelessWidget implements PreferredSizeWidget {
-  /// Default constructor for the TTabBar.
-  ///
-  /// Parameters:
-  ///   - tabs: List of widgets representing the tabs.
-  const MyTabBar({super.key, required this.tabs});
+class TTabBar extends StatelessWidget implements PreferredSizeWidget {
+  const TTabBar({super.key, required this.tabs});
 
   final List<Widget> tabs;
 
   @override
   Widget build(BuildContext context) {
-    final dark = HelperFunctions.isDarkMode(context);
+    final dark = THelperFunctions.isDarkMode(context);
     return Material(
-      color: dark ? MyColors.black : MyColors.white, // Background color of the tab bar
+      color: dark ? TColors.black : TColors.white,
       child: TabBar(
-        tabs: tabs, // List of tabs
-        isScrollable: true, // Enable scrollable tabs
-        indicatorColor: MyColors.primary, // Color of the tab indicator
-        labelColor: dark ? MyColors.white : MyColors.primary, // Color of the selected tab label
-        unselectedLabelColor: MyColors.darkGrey, // Color of unselected tab labels
+        tabs: tabs,
+        isScrollable: true,
+        indicatorColor: TColors.primary,
+        labelColor: dark ? TColors.white : TColors.primary,
+        unselectedLabelColor: TColors.darkGrey,
       ),
     );
   }
 
   @override
-  Size get preferredSize => Size.fromHeight(DeviceUtils.getAppBarHeight()); // Preferred size of the tab bar
+  Size get preferredSize => Size.fromHeight(TDeviceUtils.getAppBarHeight());
 }
