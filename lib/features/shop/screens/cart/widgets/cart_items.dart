@@ -20,59 +20,85 @@ class TCartItems extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final cartController = CartController.instance;
-    final cartItems = cartController.cartItems;
     return Obx(
       () {
-        return ListView.separated(
-          shrinkWrap: true,
-          itemCount: cartItems.length,
-          physics: const NeverScrollableScrollPhysics(),
-          separatorBuilder: (context, index) => const SizedBox(height: Sizes.spaceBtwSections),
-          itemBuilder: (context, index) {
-            return Obx(
-              () {
-                final item = cartItems[index];
-                return Column(
-                  children: [
-                    /// -- Cart Items
-                    TCartItem(item: item),
-                    if (showAddRemoveButtons) const SizedBox(height: Sizes.spaceBtwItems),
+        final cartItemsByStore = cartController.cartItemsByStore;
+        return Column(
+          children: [
+            ...cartItemsByStore.entries.map((entry) {
+              final storeId = entry.key;
+              final storeItems = entry.value;
+              final storeName = storeItems.first.store?.storeName ?? '';
 
-                    /// -- Add Remove Buttons and Price Total
-                    if (showAddRemoveButtons)
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          /// -- Add Remove Buttons
-                          Row(
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(storeName, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold)),
+                      Checkbox(
+                        value: storeItems.every((item) => item.isSelected),
+                        onChanged: (bool? value) {
+                          cartController.toggleSelectionForStore(storeId);
+                        },
+                      ),
+                    ],
+                  ),
+                  ListView.separated(
+                    shrinkWrap: true,
+                    itemCount: storeItems.length,
+                    physics: const NeverScrollableScrollPhysics(),
+                    separatorBuilder: (context, index) => const SizedBox(height: Sizes.spaceBtwSections),
+                    itemBuilder: (context, index) {
+                      final item = storeItems[index];
+                      return Obx(
+                        () {
+                          return Column(
                             children: [
-                              // Use to add space to the left of Buttons as image space.
-                              const SizedBox(width: 70),
-
-                              /// Add Remove Buttons
-                              TProductQuantityWithAddRemoveButton(
-                                width: 32,
-                                height: 32,
-                                iconSize: Sizes.md,
-                                addBackgroundColor: MyColors.primary,
-                                removeForegroundColor: HelperFunctions.isDarkMode(context) ? MyColors.white : MyColors.black,
-                                removeBackgroundColor: HelperFunctions.isDarkMode(context) ? MyColors.darkerGrey : MyColors.light,
-                                quantity: item.quantity,
-                                add: () => cartController.addOneToCart(item),
-                                remove: () => cartController.removeOneFromCart(item),
-                              ),
+                              TCartItem(item: item),
+                              if (showAddRemoveButtons) const SizedBox(height: Sizes.spaceBtwItems),
+                              if (showAddRemoveButtons)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Row(
+                                      children: [
+                                        const SizedBox(width: 70),
+                                        TProductQuantityWithAddRemoveButton(
+                                          width: 32,
+                                          height: 32,
+                                          iconSize: Sizes.md,
+                                          addBackgroundColor: MyColors.primary,
+                                          removeForegroundColor: HelperFunctions.isDarkMode(context) ? MyColors.white : MyColors.black,
+                                          removeBackgroundColor: HelperFunctions.isDarkMode(context) ? MyColors.darkerGrey : MyColors.light,
+                                          quantity: item.quantity,
+                                          add: () => cartController.addOneToCart(item),
+                                          remove: () => cartController.removeOneFromCart(item),
+                                        ),
+                                      ],
+                                    ),
+                                    TProductPriceText(price: (item.price * item.quantity).toStringAsFixed(1)),
+                                  ],
+                                ),
                             ],
-                          ),
-
-                          /// -- Product total price
-                          TProductPriceText(price: (item.price * item.quantity).toStringAsFixed(1)),
-                        ],
-                      )
-                  ],
-                );
-              },
-            );
-          },
+                          );
+                        },
+                      );
+                    },
+                  ),
+                ],
+              );
+            }).toList(),
+            const SizedBox(height: Sizes.spaceBtwSections),
+            Text(
+              'Total: \$${cartController.totalSelectedPrice.toStringAsFixed(2)}',
+              style: const TextStyle(
+                fontSize: 20,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ],
         );
       },
     );

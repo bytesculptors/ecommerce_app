@@ -1,3 +1,4 @@
+import 'package:btl/features/personalization/models/store_model.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 import 'brand_model.dart';
@@ -22,6 +23,7 @@ class ProductModel {
   List<ProductAttributeModel>? productAttributes;
   List<ProductVariationModel>? productVariations;
   String storeId;
+  StoreModel? store;
   int weight;
   int? height;
   int? length;
@@ -49,6 +51,7 @@ class ProductModel {
     this.description,
     this.productAttributes,
     this.productVariations,
+    this.store
   });
 
   /// Create Empty func for clean code
@@ -71,11 +74,12 @@ class ProductModel {
       'ProductType': productType,
       'ProductAttributes': productAttributes != null ? productAttributes!.map((e) => e.toJson()).toList() : [],
       'ProductVariations': productVariations != null ? productVariations!.map((e) => e.toJson()).toList() : [],
-      'StoreID': storeId,
+      'StoreId': storeId,
       'Weight': weight,
       'Height': height,
       'Width': width,
-      "Length": length
+      "Length": length,
+      "Store": store!.toJson()
     };
   }
 
@@ -98,11 +102,12 @@ class ProductModel {
       images: data['Images'] != null ? List<String>.from(data['Images']) : [],
       productAttributes: (data['ProductAttributes'] as List<dynamic>).map((e) => ProductAttributeModel.fromJson(e)).toList(),
       productVariations: (data['ProductVariations'] as List<dynamic>).map((e) => ProductVariationModel.fromJson(e)).toList(),
-      storeId: data['StoreID'] ?? '',
+      storeId: data['StoreId'] ?? '',
       weight: data['Weight'] ?? 0,
       height: data['Height'] ?? 0,
       length: data['Length'] ?? 0,
-      width: data['width'] ?? 0
+      width: data['Width'] ?? 0,
+      store: data['Store'] != null ? StoreModel.fromJson(data['Store']) : null
     );
   }
 
@@ -125,11 +130,12 @@ class ProductModel {
       images: data['Images'] != null ? List<String>.from(data['Images']) : [],
       productAttributes: (data['ProductAttributes'] as List<dynamic>).map((e) => ProductAttributeModel.fromJson(e)).toList(),
       productVariations: (data['ProductVariations'] as List<dynamic>).map((e) => ProductVariationModel.fromJson(e)).toList(),
-      storeId: data['StoreID'] ?? '',
+      storeId: data['StoreId'] ?? '',
       weight: data['Weight'] ?? 0,
       height: data['Height'] ?? 0,
       length: data['Length'] ?? 0,
-      width: data['width'] ?? 0
+      width: data['Width'] ?? 0,
+      store: data['Store'] != null ? StoreModel.fromJson(data['Store']) : null
     );
   }
 }

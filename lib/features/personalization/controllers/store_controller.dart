@@ -19,4 +19,14 @@ class StoreController extends GetxController {
       return null;
     } 
   }
+
+  Future<StoreModel?> getStoreRecord(String? storeId) async {
+    try {
+      final store = await storeRepository.fetchStoreRecord(storeId);
+      return store;
+    } catch (e) {
+      TLoaders.errorSnackBar(title: 'Fetch store failed!', message: e.toString());
+      return null;
+    } 
+  }
 }

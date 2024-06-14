@@ -1,5 +1,7 @@
 import 'dart:io';
 
+import 'package:btl/features/personalization/controllers/store_controller.dart';
+import 'package:btl/features/personalization/models/store_model.dart';
 import 'package:btl/features/personalization/screens/my_store/my_store.dart';
 import 'package:btl/features/personalization/screens/my_store/tabs/product_tab.dart';
 import 'package:btl/features/shop/models/brand_model.dart';
@@ -22,6 +24,7 @@ class ProductController extends GetxController {
 
   final isLoading = false.obs;
   final productRepository = Get.put(ProductRepository());
+  final storeController = Get.put(StoreController());
   RxList<ProductModel> featuredProducts = <ProductModel>[].obs;
   RxList<ProductModel> storeProducts = <ProductModel>[].obs;
 
@@ -76,10 +79,10 @@ class ProductController extends GetxController {
     try {
       // Show loader while loading Products
       isLoading.value = true;
-
+      print ('flag 1');
       // Fetch Products
       final products = await productRepository.getAllStoreProducts(storeId);
-
+      print ('flag 2');
       // Assign Products
       storeProducts.assignAll(products);
     } catch (e) {
@@ -236,6 +239,8 @@ class ProductController extends GetxController {
         }
       }
 
+      StoreModel? store = await storeController.getStoreRecord(storeId);
+      
       // Save Product Data
       final product = ProductModel(
         id: '',
@@ -258,10 +263,12 @@ class ProductController extends GetxController {
         description: description.text.trim(),
         productAttributes: productAttributes,
         productVariations: productVariations,
+        store: store
       );
-      print('still ok');
+      
       await productRepository.addNewProduct(product);
 
+      print('still ok');
       // Remove Loader
       TFullScreenLoader.stopLoading();
 
@@ -307,6 +314,8 @@ class ProductController extends GetxController {
               style: TextButton.styleFrom(foregroundColor: Colors.red),
               onPressed: () async {
                 try {
+                  Navigator.of(context).pop();
+                  Get.back();
                   if (product.thumbnail != '') {
                     await deleteImage(product.thumbnail);
                   }
@@ -338,8 +347,7 @@ class ProductController extends GetxController {
                       title: 'Deleted',
                       message: 'Your product has been deleted successfully.');
 
-                  Navigator.of(context).pop();
-                  Get.to(() => const MyStoreScreen());
+                  
                 } catch (e) {
                   TLoaders.warningSnackBar(
                       title: 'Oh Snap!', message: e.toString());

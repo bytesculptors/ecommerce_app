@@ -56,7 +56,7 @@ class ProductRepository extends GetxController {
   Future<List<ProductModel>> getAllStoreProducts(String storeId) async {
     final snapshot = await _db
         .collection('Products')
-        .where('StoreID', isEqualTo: storeId)
+        .where('StoreId', isEqualTo: storeId)
         .get();
     return snapshot.docs
         .map((querySnapshot) => ProductModel.fromSnapshot(querySnapshot))

@@ -64,6 +64,7 @@ class TDummyData {
         brandName: products[0].brand!.name,
         price: products[0].productVariations![0].price,
         selectedVariation: products[0].productVariations![0].attributeValues,
+        storeId: ''
       ),
       CartItemModel(
         productId: '002',
@@ -74,6 +75,7 @@ class TDummyData {
         brandName: products[1].brand!.name,
         price: products[1].price,
         selectedVariation: products[1].productVariations != null ? products[1].productVariations![1].attributeValues : {},
+        storeId: ''
       ),
     ],
   );

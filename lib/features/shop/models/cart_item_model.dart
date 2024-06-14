@@ -1,3 +1,5 @@
+import 'package:btl/features/personalization/models/store_model.dart';
+
 class CartItemModel {
   String productId;
   String title;
@@ -7,6 +9,9 @@ class CartItemModel {
   String variationId;
   String? brandName;
   Map<String, String>? selectedVariation;
+  bool isSelected;
+  String storeId; 
+  StoreModel? store; 
 
   /// Constructor
   CartItemModel({
@@ -18,10 +23,13 @@ class CartItemModel {
     this.title = '',
     this.brandName,
     this.selectedVariation,
+    this.isSelected = false,
+    required this.storeId,
+    this.store,
   });
 
   /// Empty Cart
-  static CartItemModel empty() => CartItemModel(productId: '', quantity: 0);
+  static CartItemModel empty() => CartItemModel(productId: '', quantity: 0, storeId: '');
 
   /// Convert a CartItem to a JSON Map
   Map<String, dynamic> toJson() {
@@ -34,6 +42,9 @@ class CartItemModel {
       'variationId': variationId,
       'brandName': brandName,
       'selectedVariation': selectedVariation,
+      'isSelected': isSelected,
+      'storeId': storeId,
+      'store': store?.toJson(),
     };
   }
 
@@ -48,6 +59,9 @@ class CartItemModel {
       variationId: json['variationId'],
       brandName: json['brandName'],
       selectedVariation: json['selectedVariation'] != null ? Map<String, String>.from(json['selectedVariation']) : null,
+      isSelected: json['isSelected'] ?? false,
+      storeId: json['storeId'],
+      store: StoreModel.fromJson(json['store']),
     );
   }
 }

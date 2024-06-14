@@ -92,6 +92,27 @@ class StoreModel {
     );
   }
 
+    /// Map Json oriented document snapshot from Firebase to StoreModel
+  factory StoreModel.fromJson(Map<String, dynamic> document) {
+    final data = document;
+    if (data.isEmpty) return StoreModel.empty();
+    return StoreModel(
+      id: '',
+      storeName: data['StoreName'] ?? '',
+      ownerName: data['OwnerName'] ?? '',
+      ownerCitizenID: data['OwnerCitizenID'] ?? '',
+      phoneNumber: data['PhoneNumber'] ?? '',
+      provinceID: data['ProvinceID'] ?? '',
+      province: data['Province'] ?? '',
+      districtID: data['DistrictID'] ?? '',
+      district: data['District'] ?? '',
+      communeID: data['CommuneID'] ?? '',
+      commune: data['Commune'] ?? '',
+      detailedAddress: data['DetailedAddress'] ?? '',
+      image: data['Image'] ?? ''
+    );
+  }
+
   @override
   String toString() {
     return '$detailedAddress, $commune, $district, $province';
