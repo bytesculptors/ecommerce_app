@@ -54,13 +54,13 @@ class ShopModel {
   // Factory method to create ShopModel from a Firestore DocumentSnapshot
   factory ShopModel.fromSnapshot(DocumentSnapshot snapshot) {
     Map<String, dynamic>? data = snapshot.data() as Map<String, dynamic>?;
-
+    print(snapshot.id);
     return ShopModel(
       id: snapshot.id,
       name: data?["name"],
-      address: (data?['address'] as List)
+      address: data?['address'] != null ? (data?['address'] as List)
           .map((item) => item as Map<String, dynamic>)
-          .toList(),
+          .toList() : [],
       owner: data?['owner'] ?? '',
       income: data?['income'] ?? 0,
       image: data?[shopImageField],

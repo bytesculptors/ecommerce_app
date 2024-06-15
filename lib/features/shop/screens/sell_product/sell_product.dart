@@ -8,10 +8,12 @@ import 'package:ecommerce_app_mobile/features/shop/controllers/product_controlle
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/brand_model.dart';
 import 'package:ecommerce_app_mobile/features/shop/models/product_model/product_variant_model.dart';
 import 'package:ecommerce_app_mobile/utils/constants/colors.dart';
+import 'package:ecommerce_app_mobile/utils/constants/sizes.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:get/get.dart';
+import 'package:iconsax/iconsax.dart';
 
 import 'package:image_picker/image_picker.dart';
 
@@ -79,13 +81,13 @@ class _SellProductScreenState extends State<SellProductScreen> {
 
   XFile? _image;
 
-  Future<void> _pickImage() async {
+  Future<void> _pickImage(int index) async {
     var pickedFile = await ImagePicker().pickImage(source: ImageSource.gallery);
 
     if (pickedFile != null) {
       _image = pickedFile;
       setState(() {
-        _imageList.last = _image;
+        _imageList[index] = _image;
       });
       String uniqueFileName = '${DateTime.now().millisecondsSinceEpoch}.jpg';
 
@@ -99,12 +101,31 @@ class _SellProductScreenState extends State<SellProductScreen> {
         await referenceImageToUpload.putFile(File(_image!.path));
         image_url = await referenceImageToUpload.getDownloadURL();
         setState(() {
-          imageList_url.add(image_url);
+          imageList_url[index]= image_url;
         });
         //print(imageList_url.length);
       } catch (error) {
         print(error);
       }
+    }
+  }
+
+  void deleteVariant(int index) async {
+    if (index < variants.length) {
+      setState(() {
+        variants.removeAt(index);
+        imageList_url.removeAt(index);
+        _imageList.removeAt(index);
+      });
+    }
+  }
+
+  void deleteVariantImage(int index) async {
+    if (index < variants.length) {
+      setState(() {
+        imageList_url[index] = '';
+        _imageList[index] = null;
+      });
     }
   }
 
@@ -171,19 +192,20 @@ class _SellProductScreenState extends State<SellProductScreen> {
       },
       child: Scaffold(
         appBar: const TAppBar(
-          title: Text('Add product'),
+          title: Text('Add new Product'),
           showBackArrow: true,
         ),
         body: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(16.0),
+            padding: const EdgeInsets.all(TSizes.defaultSpace),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 DropdownMenu<String>(
                   hintText: 'Category',
+                  leadingIcon: const Icon(Iconsax.category),
                   textStyle: const TextStyle(
-                    fontSize: 16,
+                    fontSize: 15,
                   ),
                   width: 200,
                   initialSelection: null,
@@ -200,8 +222,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         value: value, label: value);
                   }).toList(),
                 ),
-                const SizedBox(height: 16),
-                const SizedBox(height: 16),
+                const SizedBox(height: TSizes.spaceBtwInputFields),
                 FutureBuilder<List<String>>(
                   future: _brandNameData,
                   builder: (context, snapshot) {
@@ -240,9 +261,9 @@ class _SellProductScreenState extends State<SellProductScreen> {
                               });
                             },
                             decoration: const InputDecoration(
-                              labelText: 'Brand',
-                              border: OutlineInputBorder(),
-                            ),
+                                labelText: 'Brand',
+                                border: OutlineInputBorder(),
+                                prefixIcon: Icon(Iconsax.star_1)),
                           );
                         },
                       );
@@ -252,55 +273,46 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     return const CircularProgressIndicator();
                   },
                 ),
-                const SizedBox(height: 16),
-                const SizedBox(height: 16),
+                const SizedBox(height: TSizes.spaceBtwInputFields),
                 TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Name',
-                    border: OutlineInputBorder(),
-                  ),
+                      labelText: 'Name',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Iconsax.note_text)),
                   onChanged: (value) {
                     setState(() {
                       name = value;
                     });
                   },
                 ),
-                const SizedBox(height: 16),
-                const SizedBox(height: 16),
-                TextField(
+                const SizedBox(height: TSizes.spaceBtwInputFields),
+                TextFormField(
                   decoration: const InputDecoration(
-                    labelText: 'Description',
-                    border: OutlineInputBorder(),
-                  ),
+                      labelText: 'Description',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Iconsax.clipboard_text)),
                   onChanged: (value) {
                     setState(() {
                       description = value;
                     });
                   },
-                  maxLines: 3,
+                  keyboardType: TextInputType.multiline,
+                  minLines: 3,
+                  maxLines: null,
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: TSizes.spaceBtwInputFields),
                 TextField(
                   decoration: const InputDecoration(
-                    labelText: 'Discount',
-                    border: OutlineInputBorder(),
-                  ),
+                      labelText: 'Discount (%)',
+                      border: OutlineInputBorder(),
+                      prefixIcon: Icon(Iconsax.flash_circle)),
                   onChanged: (value) {
                     setState(() {
                       discount = int.parse(value);
                     });
                   },
                 ),
-                const SizedBox(height: 16),
-                const Text(
-                  'Product variants',
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: TColors.black,
-                  ),
-                ),
-                const SizedBox(height: 8),
-                const SizedBox(height: 8),
+                const SizedBox(height: TSizes.spaceBtwSections),
                 ListView.builder(
                   physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
@@ -309,24 +321,34 @@ class _SellProductScreenState extends State<SellProductScreen> {
                     return Column(
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        Text(
-                          'Variant ${index + 1}',
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.bold),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Text(
+                              'Variant ${index + 1}',
+                              style: const TextStyle(
+                                  fontSize: 16, fontWeight: FontWeight.bold),
+                            ),
+                            IconButton(
+                              icon:
+                                  const Icon(Iconsax.trash, color: Colors.red),
+                              onPressed: () => deleteVariant(index),
+                            ),
+                          ],
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Size',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Size',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.size)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].size = value;
                             });
                           },
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         InkWell(
                           onTap: () {
                             _openColorPicker(context, index);
@@ -364,12 +386,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Price',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Price (\$)',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.wallet_1)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].price = double.parse(value);
@@ -377,12 +399,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           },
                           keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Quantity',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Stock',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.more_square)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].quantity = int.parse(value);
@@ -390,12 +412,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           },
                           keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Height',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Height (cm)',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.arrow_swap)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].height = int.parse(value);
@@ -403,12 +425,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           },
                           keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Length',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Length (cm)',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.arrow_swap_horizontal)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].length = int.parse(value);
@@ -416,12 +438,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           },
                           keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Width',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Width (cm)',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.arrow_swap)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].width = int.parse(value);
@@ -429,12 +451,12 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           },
                           keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
                         TextField(
                           decoration: const InputDecoration(
-                            labelText: 'Weight',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Weight (g)',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.d_square)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].weight = int.parse(value);
@@ -442,42 +464,94 @@ class _SellProductScreenState extends State<SellProductScreen> {
                           },
                           keyboardType: TextInputType.number,
                         ),
-                        const SizedBox(height: 8),
-                        TextField(
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
+                        TextFormField(
                           decoration: const InputDecoration(
-                            labelText: 'Variant Description',
-                            border: OutlineInputBorder(),
-                          ),
+                              labelText: 'Variant Description',
+                              border: OutlineInputBorder(),
+                              prefixIcon: Icon(Iconsax.clipboard_text)),
                           onChanged: (value) {
                             setState(() {
                               variants[index].descriptionVariant = value;
                             });
                           },
+                          keyboardType: TextInputType.multiline,
+                          minLines: 3,
+                          maxLines: null,
                         ),
-                        const SizedBox(height: 16),
+                        const SizedBox(height: TSizes.spaceBtwInputFields),
+                        const Text(
+                          'Variant Image',
+                          style: TextStyle(
+                              fontSize: 17, fontWeight: FontWeight.w500),
+                        ),
                         GestureDetector(
-                          onTap: _pickImage,
-                          child: Container(
-                              height: 200,
-                              decoration: BoxDecoration(
-                                color: Colors.grey[200],
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                              child: _imageList.length > index &&
-                                      _imageList[index] == null
-                                  ? const Center(
-                                      child: Icon(Icons.camera_alt,
-                                          size: 40, color: Colors.grey),
-                                    )
-                                  : (_imageList[index]!.path.contains('http')
-                                      ? Image.network(_imageList[index]!.path,
-                                          fit: BoxFit.contain)
-                                      : Image.file(
-                                          File(_imageList[index]!.path),
-                                          fit: BoxFit.contain,
-                                        ))),
-                        ),
-                        const SizedBox(height: 16),
+                            onTap: () => _pickImage(index),
+                            child: Container(
+                                height: 200,
+                                decoration: BoxDecoration(
+                                  color: Colors.grey[200],
+                                  borderRadius: BorderRadius.circular(10),
+                                ),
+                                child: _imageList.length > index &&
+                                        _imageList[index] == null
+                                    ? const Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Icon(
+                                              Icons.camera_alt,
+                                              size: 40,
+                                              color: Colors.grey,
+                                            ),
+                                            SizedBox(
+                                                height:
+                                                    8), // Add space between icon and text
+                                            Text(
+                                              'Tap to add image',
+                                              style: TextStyle(
+                                                color: Colors.grey,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      )
+                                    : Stack(
+                                        children: [
+                                          Positioned.fill(
+                                              child: (_imageList[index]!
+                                                      .path
+                                                      .contains('http')
+                                                  ? Image.network(
+                                                      _imageList[index]!.path,
+                                                      fit: BoxFit.contain)
+                                                  : Image.file(
+                                                      File(_imageList[index]!
+                                                          .path),
+                                                      fit: BoxFit.contain,
+                                                    ))),
+                                          Positioned(
+                                            top: 3,
+                                            right: 103,
+                                            child: GestureDetector(
+                                              onTap: () =>
+                                                  deleteVariantImage(index),
+                                              child: const CircleAvatar(
+                                                radius: 15,
+                                                backgroundColor: Colors.black54,
+                                                child: Icon(
+                                                  Icons.close,
+                                                  size: 15,
+                                                  color: Colors.white,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ))),
+                        const SizedBox(height: TSizes.defaultSpace),
                       ],
                     );
                   },
@@ -506,6 +580,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                         weight: 0,
                       ));
                       _imageList.add(null);
+                      imageList_url.add('');
                     });
                   },
                   child: const Text(
@@ -566,6 +641,7 @@ class _SellProductScreenState extends State<SellProductScreen> {
                       variants_path: variants_path,
                       shopEmail: authRepo.firebaseUser.value!.email,
                     );
+                    
                   },
                   child: const Text('Add product'),
                 ),

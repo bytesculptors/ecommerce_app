@@ -20,11 +20,11 @@ class ProductsManagementScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     Color color = TColors.darkerGrey;
-    return Scaffold(
+    return const Scaffold(
       backgroundColor: TColors.primaryBackground,
-      appBar: const TAppBar(
+      appBar: TAppBar(
         showBackArrow: true,
-        title: Text("My shop products"),
+        title: Text("My shop's products"),
       ),
       body: ShopSortableProducts(),
     );

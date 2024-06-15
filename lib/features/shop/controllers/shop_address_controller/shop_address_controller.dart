@@ -146,7 +146,9 @@ class ShopAddressController extends GetxController {
   }
 
   Future<void> addShopAddress() async {
+    
     final addressId = const Uuid().v1();
+    
     await _shopRepo.addShopAddress(
       AddressModel(
         phoneNumber: phoneNumber.text,
@@ -165,8 +167,10 @@ class ShopAddressController extends GetxController {
         optional: optional.text,
       ),
     );
+    print('still ok but not ok');
     await setDefaultAddress(addressId);
   }
+  
 
   // List<Map<String, dynamic>> getAllShopAddress() {
   //   return _shopRepo.getAllShopAddress();
@@ -206,7 +210,7 @@ class ShopAddressController extends GetxController {
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
       final List<dynamic> provinceList = responseBody['data'];
 
-      return provinceList.map(
+      final list = provinceList.map(
         (element) {
           final e = element as Map<String, dynamic>;
           return {
@@ -215,6 +219,8 @@ class ShopAddressController extends GetxController {
           };
         },
       ).toList();
+      list.sort((a, b) => a['ProvinceName'].compareTo(b['ProvinceName']));
+      return list;
     } finally {}
   }
 
@@ -238,7 +244,7 @@ class ShopAddressController extends GetxController {
       // print('Response body: ${response.body}');
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
       final List<dynamic> districtList = responseBody['data'];
-      return districtList.map(
+      final list = districtList.map(
         (element) {
           final e = element as Map<String, dynamic>;
           return {
@@ -247,6 +253,8 @@ class ShopAddressController extends GetxController {
           };
         },
       ).toList();
+      list.sort((a, b) => a['DistrictName'].compareTo(b['DistrictName']));
+      return list;
     } finally {}
   }
 
@@ -270,7 +278,7 @@ class ShopAddressController extends GetxController {
       final List<dynamic> wardList = responseBody['data'];
       print(wardList);
 
-      return wardList.map(
+      final list = wardList.map(
         (element) {
           final e = element as Map<String, dynamic>;
           return {
@@ -279,6 +287,8 @@ class ShopAddressController extends GetxController {
           };
         },
       ).toList();
+      list.sort((a, b) => a['WardName'].compareTo(b['WardName']));
+      return list;
     } finally {}
   }
 

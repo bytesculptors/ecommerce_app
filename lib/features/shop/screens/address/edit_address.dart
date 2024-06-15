@@ -42,7 +42,7 @@ class _ShopEditAddressScreenState extends State<ShopEditAddressScreen> {
                   controller: controller.name,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Iconsax.user),
-                    labelText: 'Name',
+                    labelText: 'Owner\'s Name',
                   ),
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -75,8 +75,8 @@ class _ShopEditAddressScreenState extends State<ShopEditAddressScreen> {
                   controller: controller.street,
                   readOnly: true,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.building_31),
-                    labelText: 'Street',
+                    prefixIcon: Icon(Iconsax.house),
+                    labelText: 'Street, Building, House Number...',
                   ),
                   onTap: () async {
                     showModalBottomSheet(
@@ -92,8 +92,8 @@ class _ShopEditAddressScreenState extends State<ShopEditAddressScreen> {
                 TextFormField(
                   controller: controller.optional,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.mobile),
-                    labelText: 'Optional',
+                    prefixIcon: Icon(Iconsax.information),
+                    labelText: 'Other information (optional)',
                   ),
                 ),
                 const SizedBox(height: TSizes.defaultSpace),

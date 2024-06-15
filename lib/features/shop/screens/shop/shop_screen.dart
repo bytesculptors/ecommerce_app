@@ -1,6 +1,7 @@
 import 'package:ecommerce_app_mobile/common/widgets/appbar/appbar.dart';
 import 'package:ecommerce_app_mobile/common/widgets/custom_shapes/container/rounded_container.dart';
 import 'package:ecommerce_app_mobile/common/widgets/product_history/product_order_history_bar_item.dart';
+import 'package:ecommerce_app_mobile/features/shop/controllers/shop_address_controller/shop_address_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/controllers/shop_controller/shop_controller.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/address/address.dart';
 import 'package:ecommerce_app_mobile/features/shop/screens/chat/shop_reply_chatting_screen.dart';
@@ -26,13 +27,9 @@ class MyShopScreen extends StatelessWidget {
       backgroundColor: TColors.primaryBackground,
       appBar: const TAppBar(
         showBackArrow: true,
-        title: Text("Here is your shop"),
+        title: Text("Here's your shop"),
       ),
-      endDrawer: Drawer(
-        child: ListView(
-          children: [],
-        ),
-      ),
+      
       body: Padding(
           padding: const EdgeInsets.all(TSizes.spaceBtwItems),
           child: ListView(
@@ -126,32 +123,27 @@ class MyShopScreen extends StatelessWidget {
                 onTap: () => Get.to(() => const SellProductScreen()),
               ),
               ListTitleCustom(
-                title: 'Reply chatting',
+                title: 'Reply to messages',
                 subTitle: 'Chat with customers',
                 icon: Iconsax.message,
                 onTap: () => Get.to(() => const ShopReplyChattingScreen()),
               ),
               ListTitleCustom(
-                title: 'Address',
+                title: 'Addresses',
                 subTitle: 'Add shop address',
                 icon: Iconsax.location,
                 onTap: () => Get.to(() => const ShopAddressScreen()),
               ),
               ListTitleCustom(
                 title: 'My products',
-                subTitle: 'Management products',
+                subTitle: 'Manage products',
                 icon: Iconsax.shopping_bag,
                 onTap: () => Get.to(() => const ProductsManagementScreen()),
               ),
-              ListTitleCustom(
-                title: 'Statistics',
-                subTitle: 'See chart',
-                icon: Iconsax.chart,
-                onTap: () => Get.to(() => const StatisticScreen()),
-              ),
+              
               ListTitleCustom(
                 title: 'Create Voucher',
-                subTitle: 'Create your shop voucher',
+                subTitle: 'Create your shop\'s voucher',
                 icon: Iconsax.ticket_discount,
                 onTap: () => Get.to(() => const ShopCreateVoucher()),
               ),

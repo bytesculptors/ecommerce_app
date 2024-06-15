@@ -89,12 +89,7 @@ class _VerifyEmailScreenState extends State<VerifyEmailScreen> {
                 style: Theme.of(context).textTheme.headlineMedium,
                 textAlign: TextAlign.center,
               ),
-              const SizedBox(height: TSizes.spaceBtwItems),
-              Text(
-                'support@hcmmuseum.com',
-                style: Theme.of(context).textTheme.labelLarge,
-                textAlign: TextAlign.center,
-              ),
+          
               const SizedBox(height: TSizes.spaceBtwItems),
               Text(
                 TTexts.confirmEmailSubTitle,

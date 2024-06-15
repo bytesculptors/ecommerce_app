@@ -77,8 +77,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                   controller: controller.street,
                   readOnly: true,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.building_31),
-                    labelText: 'Street',
+                    prefixIcon: Icon(Iconsax.house),
+                    labelText: 'Street, Building, House Number...',
                   ),
                   onTap: () async {
                     showModalBottomSheet(
@@ -94,8 +94,8 @@ class _EditAddressScreenState extends State<EditAddressScreen> {
                 TextFormField(
                   controller: controller.optional,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.mobile),
-                    labelText: 'Optional',
+                    prefixIcon: Icon(Iconsax.information),
+                    labelText: 'Other information (optional)',
                   ),
                 ),
                 const SizedBox(height: TSizes.defaultSpace),

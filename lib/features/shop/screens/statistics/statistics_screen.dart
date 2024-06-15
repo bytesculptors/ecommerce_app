@@ -16,62 +16,67 @@ class StatisticScreen extends StatelessWidget {
     // ignore: unused_local_variable
     final dark = THelperFunctions.isDarkMode(context);
     return const Scaffold(
-      appBar: TAppBar(title: Text("Statistics"), showBackArrow: true),
-      body: Padding(
-        padding: EdgeInsets.all(TSizes.defaultSpace),
-        child: Column(
-          children: [
-            TRoundedContainer(
-                showBorder: true,
-                padding: EdgeInsets.all(16),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    DropDownMenu(),
-                    Divider(
-                      height: 1,
-                    ),
-                    SizedBox(height: TSizes.spaceBtwSections),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        StatisticNumber(
-                            text: "Total", color: Colors.red, number: 20),
-                        StatisticNumber(
-                            text: "Waiting", color: Colors.black, number: 10),
-                        StatisticNumber(
-                            text: "In Shipping", color: Colors.blue, number: 5),
-                        StatisticNumber(
-                            text: "Success", color: Colors.green, number: 5)
-                      ],
-                    ),
-                  ],
-                )),
-            SizedBox(height: TSizes.spaceBtwSections),
-            SizedBox(
-              height: 350,
-              child: BarChartGraph(),
-            ),
-            SizedBox(height: TSizes.spaceBtwSections),
-            AnnotatedChart(),
-            SizedBox(height: TSizes.spaceBtwSections),
-            Divider(
-              height: 0.7,
-            ),
-            SizedBox(height: TSizes.spaceBtwSections),
-            Row(
+        appBar: TAppBar(title: Text("Statistics"), showBackArrow: true),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: EdgeInsets.all(TSizes.defaultSpace),
+            child: Column(
               children: [
-                Text(
-                  "Received Money:",
-                  style: TextStyle(
-                      color: Colors.green, fontWeight: FontWeight.bold),
+                TRoundedContainer(
+                    showBorder: true,
+                    padding: EdgeInsets.all(16),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        DropDownMenu(),
+                        Divider(
+                          height: 1,
+                        ),
+                        SizedBox(height: TSizes.spaceBtwSections),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            StatisticNumber(
+                                text: "Total", color: Colors.red, number: 12),
+                            StatisticNumber(
+                                text: "Waiting",
+                                color: Colors.black,
+                                number: 2),
+                            StatisticNumber(
+                                text: "In Shipping",
+                                color: Colors.blue,
+                                number: 3),
+                            StatisticNumber(
+                                text: "Success", color: Colors.green, number: 7)
+                          ],
+                        ),
+                      ],
+                    )),
+                SizedBox(height: TSizes.spaceBtwSections),
+                SizedBox(
+                  height: 350,
+                  child: BarChartGraph(),
                 ),
-                Text(" \$300")
+                SizedBox(height: TSizes.spaceBtwSections),
+                AnnotatedChart(),
+                SizedBox(height: TSizes.spaceBtwSections),
+                Divider(
+                  height: 0.7,
+                ),
+                SizedBox(height: TSizes.spaceBtwSections),
+                Row(
+                  children: [
+                    Text(
+                      "Received Money:",
+                      style: TextStyle(
+                          color: Colors.green, fontWeight: FontWeight.bold),
+                    ),
+                    Text(" \$300")
+                  ],
+                )
               ],
-            )
-          ],
-        ),
-      ),
-    );
+            ),
+          ),
+        ));
   }
 }

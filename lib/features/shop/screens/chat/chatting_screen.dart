@@ -274,7 +274,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 ),
                 borderRadius: BorderRadius.all(Radius.circular(18)),
               ),
-              hintText: 'Nhập tin nhắn của bạn',
+              hintText: 'Enter your message...',
             ),
           ),
         ),

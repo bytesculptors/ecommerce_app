@@ -100,6 +100,7 @@ class ShopRepository extends GetxController {
     do {
       await userRepo.updateUserDetails();
     } while (userRepo.currentUserModel == null);
+
     final snapshot = await _db
         .collection('Shop')
         .where(
@@ -112,14 +113,18 @@ class ShopRepository extends GetxController {
       (error) {
         if (kDebugMode) {
           print(error);
+          
         }
       },
     );
+    
     if (snapshot.docs.map((e) => ShopModel.fromSnapshot(e)).isEmpty) {
       return null;
     }
-
-    final shopData = snapshot.docs.map((e) => ShopModel.fromSnapshot(e)).single;
+    
+    print('huhuuu');
+    final ShopModel? shopData = snapshot.docs.map((e) => ShopModel.fromSnapshot(e)).single;
+    print('please do');
     return shopData;
   }
 
@@ -215,7 +220,10 @@ class ShopRepository extends GetxController {
 
   Future<void> addShopAddress(AddressModel addressModel) async {
     final shopData = currentShopModel;
+    print('where');
+    print(shopData == null);
     shopData!.address!.add(addressModel.toMap());
+    print('haiz');
     await _db
         .collection('Shop')
         .doc(shopData.id)

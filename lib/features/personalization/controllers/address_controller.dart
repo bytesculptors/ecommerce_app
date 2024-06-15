@@ -203,7 +203,7 @@ class AddressController extends GetxController {
       final responseBody = jsonDecode(response.body) as Map<String, dynamic>;
       final List<dynamic> provinceList = responseBody['data'];
 
-      return provinceList.map(
+      final list = provinceList.map(
         (element) {
           final e = element as Map<String, dynamic>;
           return {
@@ -212,6 +212,8 @@ class AddressController extends GetxController {
           };
         },
       ).toList();
+      list.sort((a, b) => a['ProvinceName'].compareTo(b['ProvinceName']));
+      return list;
     } finally {}
   }
 
@@ -237,7 +239,7 @@ class AddressController extends GetxController {
       final List<dynamic> districtList = responseBody['data'];
       print(districtList);
 
-      return districtList.map(
+      final list = districtList.map(
         (element) {
           final e = element as Map<String, dynamic>;
           return {
@@ -246,6 +248,8 @@ class AddressController extends GetxController {
           };
         },
       ).toList();
+      list.sort((a, b) => a['DistrictName'].compareTo(b['DistrictName']));
+      return list;
     } finally {}
   }
 
@@ -269,7 +273,7 @@ class AddressController extends GetxController {
       final List<dynamic> wardList = responseBody['data'];
       print(wardList);
 
-      return wardList.map(
+      final list = wardList.map(
         (element) {
           final e = element as Map<String, dynamic>;
           return {
@@ -278,6 +282,8 @@ class AddressController extends GetxController {
           };
         },
       ).toList();
+      list.sort((a, b) => a['WardName'].compareTo(b['WardName']));
+      return list;
     } finally {}
   }
 

@@ -22,7 +22,7 @@ class _PasswordUpdateScreenState extends State<PasswordUpdateScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Đổi mật khẩu'),
+        title: const Text('Change Password'),
         automaticallyImplyLeading: false,
         leading: IconButton(
             onPressed: () => Get.off(const ProfileScreen()),
@@ -152,7 +152,7 @@ class _PasswordUpdateScreenState extends State<PasswordUpdateScreen> {
                                     }
                                   },
                                   child: const Text(
-                                    'Cập nhật mật khẩu',
+                                    'Update Password',
                                   ),
                                 ),
                               )

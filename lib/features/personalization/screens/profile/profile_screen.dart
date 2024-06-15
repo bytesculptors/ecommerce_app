@@ -296,10 +296,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               Get.off(() => const ProfileUpdateScreen());
                             },
                             child: const Text(
-                              'Update profile info',
+                              'Update Profile',
                               style: TextStyle(
                                 color: Colors.blue,
-                                fontSize: 16,
+                                fontSize: 14,
                               ),
                             ),
                           ),
@@ -312,10 +312,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 Get.off(() => const PasswordUpdateScreen());
                               },
                               child: const Text(
-                                'Change password',
+                                'Change Password',
                                 style: TextStyle(
                                   color: Colors.blue,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                 ),
                               ),
                             ),

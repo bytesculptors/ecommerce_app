@@ -21,6 +21,8 @@ class ProductsManagementController extends GetxController {
   void onReady() async {
     super.onReady();
     await updateCategoryList();
+
+    print('how to');
   }
 
   getProductList() {

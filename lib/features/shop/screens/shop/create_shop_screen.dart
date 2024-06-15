@@ -210,6 +210,7 @@ class _CreateShopScreenState extends State<CreateShopScreen> {
                               name: shopNameController.text,
                               owner: FirebaseAuth.instance.currentUser!.email!,
                               image: _imageUrl));
+                      Navigator.of(context).pop();
                       Get.to(() => const MyShopScreen());
                     } else {
                       print("Unchecked but tried to register");

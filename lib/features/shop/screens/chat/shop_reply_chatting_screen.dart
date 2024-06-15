@@ -45,7 +45,7 @@ class _ShopReplyChattingScreenState extends State<ShopReplyChattingScreen> {
                 List<ChatModel> chatList = snapshot.data!;
 
                 if (chatList.isEmpty) {
-                  return const Text('Chưa có tin nhắn nào');
+                  return const Text('No message found!');
                 } else {
                   return ListView.builder(
                     shrinkWrap: true,

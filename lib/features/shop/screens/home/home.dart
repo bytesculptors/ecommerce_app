@@ -51,7 +51,7 @@ class HomeScreen extends StatelessWidget {
                   const SizedBox(height: TSizes.spaceBtwSections),
 
                   /// -- SearchBar
-                  const TSearchContainer(text: 'Search in Store'),
+                  const TSearchContainer(text: 'Search in Store', showBorder: false),
                   const SizedBox(height: TSizes.spaceBtwSections),
 
                   /// -- Categories

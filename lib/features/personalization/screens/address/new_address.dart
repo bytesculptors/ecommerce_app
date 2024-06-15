@@ -30,9 +30,9 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
   Widget build(BuildContext context) {
     final popContext = context;
     return Scaffold(
-      appBar: TAppBar(
+      appBar: const TAppBar(
         showBackArrow: true,
-        title: const Text('Add new address'),
+        title: Text('Add new address'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -77,8 +77,8 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                   controller: controller.street,
                   readOnly: true,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.building_31),
-                    labelText: 'Street',
+                    prefixIcon: Icon(Iconsax.house),
+                    labelText: 'Street, Building, House Number...',
                   ),
                   onTap: () async {
                     showModalBottomSheet(
@@ -94,8 +94,8 @@ class _NewAddressScreenState extends State<NewAddressScreen> {
                 TextFormField(
                   controller: controller.optional,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.mobile),
-                    labelText: 'Optional',
+                    prefixIcon: Icon(Iconsax.information),
+                    labelText: 'Other information (optional)',
                   ),
                 ),
                 const SizedBox(height: TSizes.defaultSpace),

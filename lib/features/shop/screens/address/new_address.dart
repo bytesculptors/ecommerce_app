@@ -23,6 +23,7 @@ class _NewShopAddressScreenState extends State<NewShopAddressScreen> {
   @override
   void initState() {
     super.initState();
+  
     // controller.address.text = 'Province/District/Ward';
   }
 
@@ -47,7 +48,7 @@ class _NewShopAddressScreenState extends State<NewShopAddressScreen> {
                   controller: controller.name,
                   decoration: const InputDecoration(
                     prefixIcon: Icon(Iconsax.user),
-                    labelText: 'Name',
+                    labelText: 'Owner\'s Name',
                   ),
                 ),
                 const SizedBox(height: TSizes.spaceBtwInputFields),
@@ -80,8 +81,8 @@ class _NewShopAddressScreenState extends State<NewShopAddressScreen> {
                   controller: controller.street,
                   readOnly: true,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.building_31),
-                    labelText: 'Street',
+                    prefixIcon: Icon(Iconsax.house),
+                    labelText: 'Street, Building, House Number...',
                   ),
                   onTap: () async {
                     showModalBottomSheet(
@@ -97,8 +98,8 @@ class _NewShopAddressScreenState extends State<NewShopAddressScreen> {
                 TextFormField(
                   controller: controller.optional,
                   decoration: const InputDecoration(
-                    prefixIcon: Icon(Iconsax.mobile),
-                    labelText: 'Optional',
+                    prefixIcon: Icon(Iconsax.information),
+                    labelText: 'Other information (optional)',
                   ),
                 ),
                 const SizedBox(height: TSizes.defaultSpace),
@@ -106,7 +107,9 @@ class _NewShopAddressScreenState extends State<NewShopAddressScreen> {
                   width: double.infinity,
                   child: ElevatedButton(
                     onPressed: () async {
+                      print('add notdone');
                       await controller.addShopAddress();
+                      print('add done');
                       controller.clearTextField();
                       // ignore: use_build_context_synchronously
                       Navigator.of(popContext).pop();

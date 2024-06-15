@@ -20,69 +20,136 @@ class VoucherList extends StatelessWidget {
         shrinkWrap: true,
         itemCount: 2,
         itemBuilder: (context, index) {
-          return TRoundedContainer(
-              showBorder: true,
-              backgroundColor: dark ? TColors.dark : TColors.light,
-              padding: const EdgeInsets.all(TSizes.xs),
-              child: Column(mainAxisSize: MainAxisSize.min, children: [
-                //-- Row 2
-                Row(children: [
-                  Expanded(
+          return Column(children: [
+            TRoundedContainer(
+                showBorder: true,
+                backgroundColor: dark ? TColors.dark : TColors.light,
+                padding: const EdgeInsets.all(TSizes.xs),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  //-- Row 2
+                  Row(children: [
+                    Expanded(
                       flex: 1,
-                      child: Container(
-                        color: Colors.black,
-                        height: 100,
-                        width: 100,
-                      )),
-                  const SizedBox(
-                    width: 20,
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          height: 80,
-                          child: Column(
-                            mainAxisSize: MainAxisSize.min,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text('Giảm 50%',
+                      child: Image.asset(
+                        'assets/images/voucher/voucher25.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Container(
+                            height: 80,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Giảm 50%',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium),
+                                    Text(
+                                      "Gỉảm đơn tối thiểu 70k",
                                       style: Theme.of(context)
                                           .textTheme
-                                          .titleMedium),
-                                  Text(
-                                    "Gỉảm đơn tối thiểu 100k",
-                                    style:
-                                        Theme.of(context).textTheme.labelLarge,
-                                  )
-                                ],
-                              ),
-                              Text(
-                                "Hạn sử dụng: 17/10/2025",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelSmall
-                                    ?.copyWith(color: Colors.red),
-                              )
-                            ],
+                                          .labelLarge,
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                  "Hạn sử dụng: 01/07/2024",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(color: Colors.red),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        Container(
-                            child: TextButton(
-                          child: Text("Dùng ngay"),
-                          onPressed: () {},
-                        )),
-                      ],
+                          Container(
+                              child: TextButton(
+                            child: Text("Dùng ngay"),
+                            onPressed: () {},
+                          )),
+                        ],
+                      ),
                     ),
-                  ),
-                ])
-              ]));
+                  ])
+                ])),
+            const SizedBox(height: TSizes.sm),
+            TRoundedContainer(
+                showBorder: true,
+                backgroundColor: dark ? TColors.dark : TColors.light,
+                padding: const EdgeInsets.all(TSizes.xs),
+                child: Column(mainAxisSize: MainAxisSize.min, children: [
+                  //-- Row 2
+                  Row(children: [
+                    Expanded(
+                      flex: 1,
+                      child: Image.asset(
+                        'assets/images/voucher/voucher25.png',
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                    const SizedBox(
+                      width: 20,
+                    ),
+                    Expanded(
+                      flex: 3,
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          SizedBox(
+                            height: 80,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text('Giảm 30%',
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .titleMedium),
+                                    Text(
+                                      "Gỉảm đơn tối thiểu 30k",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge,
+                                    )
+                                  ],
+                                ),
+                                Text(
+                                  "Hạn sử dụng: 20/06/2024",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelSmall
+                                      ?.copyWith(color: Colors.red),
+                                )
+                              ],
+                            ),
+                          ),
+                          TextButton(
+                            child: const Text("Dùng ngay"),
+                            onPressed: () {},
+                          ),
+                        ],
+                      ),
+                    ),
+                  ])
+                ]))
+          ]);
         },
         separatorBuilder: (ctx, index) => const SizedBox(height: TSizes.sm),
       ),

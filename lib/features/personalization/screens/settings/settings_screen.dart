@@ -124,20 +124,20 @@ class SettingsScreen extends StatelessWidget {
                                 ? TSettingsMenuTile(
                                     icon: Iconsax.shop,
                                     title: "My Shop",
-                                    subTitle: "Get to my shop",
+                                    subTitle: "Manage your shop",
                                     onTap: () =>
                                         Get.to(() => const MyShopScreen()),
                                   )
                                 : TSettingsMenuTile(
                                     icon: Iconsax.shop,
-                                    title: "Register Shop",
-                                    subTitle: "Register to be Seller",
+                                    title: "Start Selling",
+                                    subTitle: "Register to become a seller now",
                                     onTap: () {
                                       showDialogOnScreen(
                                         context: context,
-                                        title: "Are you sure?",
+                                        title: "Confirm registration",
                                         description:
-                                            "Are you sure to be a seller??",
+                                            "Are you sure to be a seller?",
                                         onOkPressed: () => Get.to(
                                             () => const CreateShopScreen()),
                                       );

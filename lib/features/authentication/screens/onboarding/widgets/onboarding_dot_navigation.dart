@@ -25,7 +25,7 @@ class OnBoardingDotNavigation extends StatelessWidget {
         count: 3,
         effect: ExpandingDotsEffect(
           activeDotColor: isDark ? TColors.light : TColors.dark,
-          dotHeight: 8,
+          dotHeight: 6,
         ),
       ),
     );
