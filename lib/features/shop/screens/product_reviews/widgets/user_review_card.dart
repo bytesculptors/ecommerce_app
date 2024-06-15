@@ -36,7 +36,6 @@ class UserReviewCard extends StatefulWidget {
 }
 
 class _UserReviewCardState extends State<UserReviewCard> {
-
   @override
   Widget build(BuildContext context) {
     final userController = Get.put(UserRepository());
@@ -55,7 +54,8 @@ class _UserReviewCardState extends State<UserReviewCard> {
           shopEmail: shopEmail!,
           reviewId: reviewId,
         );
-        await replyController.createReplyReview(newReplyReview, widget.productId);
+        await replyController.createReplyReview(
+            newReplyReview, widget.productId);
         // Get.to(() => ProductReviewsScreen()); //! điều hướng sau
       }
     }
@@ -63,91 +63,97 @@ class _UserReviewCardState extends State<UserReviewCard> {
     void _showBottomModal(BuildContext context, String reviewId) {
       showModalBottomSheet(
         context: context,
+        isScrollControlled: true, // Add this line
         builder: (BuildContext context) {
-          return Container(
-            height: MediaQuery.of(context).size.height * 0.3,
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
+          return Padding(
+            padding: EdgeInsets.only(
+              bottom: MediaQuery.of(context).viewInsets.bottom,
+            ),
+            child: SingleChildScrollView(
+              child: Container(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min, // Add this line
+                  children: [
+                    const SizedBox(height: TSizes.spaceBtwSections),
 
-                const SizedBox(height: TSizes.spaceBtwSections),
+                    // Text field for review content
+                    TextField(
+                      controller: commentController,
+                      maxLines: 3,
+                      decoration: const InputDecoration(
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: TColors.darkerGrey,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(18)),
+                        ),
+                        border: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: TColors.darkerGrey,
+                          ),
+                          borderRadius: BorderRadius.all(Radius.circular(18)),
+                        ),
+                        hintText: 'Enter your response',
+                      ),
+                    ),
+                    const SizedBox(height: TSizes.spaceBtwSections),
 
-                // Text field for review content
-                TextField(
-                  controller: commentController,
-                  maxLines: 3,
-                  decoration: const InputDecoration(
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: TColors.darkerGrey,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
+                    // Submit button or any other actions
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      children: [
+                        ElevatedButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: TColors.grey,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16.0,
+                              horizontal: 24.0,
+                            ),
+                          ),
+                          child: const Text(
+                            'Back',
+                            style: TextStyle(color: TColors.black),
+                          ),
+                        ),
+                        const SizedBox(width: TSizes.spaceBtwSections),
+                        ElevatedButton(
+                          onPressed: () async {
+                            await addReply(reviewId);
+                            widget.didPop();
+                            Navigator.pop(context);
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.deepOrange,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              vertical: 16.0,
+                              horizontal: 24.0,
+                            ),
+                          ),
+                          child: const Text('Send'),
+                        ),
+                      ],
                     ),
-                    border: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: TColors.darkerGrey,
-                      ),
-                      borderRadius: BorderRadius.all(Radius.circular(18)),
-                    ),
-                    hintText: 'Nhập phản hồi của bạn',
-                  ),
+                  ],
                 ),
-
-                const SizedBox(height: TSizes.spaceBtwSections),
-
-                // Submit button or any other actions
-                Row(mainAxisAlignment: MainAxisAlignment.end, children: [
-                  ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: TColors.grey,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            10), // Đặt độ cong cho viền của nút
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
-                    ),
-                    child: const Text(
-                      'Trở lại',
-                      style: TextStyle(color: TColors.black),
-                    ),
-                  ),
-                  const SizedBox(width: TSizes.spaceBtwSections),
-                  ElevatedButton(
-                    onPressed: () async {
-                      // Add logic to submit the reply
-                      await addReply(reviewId);
-                      widget.didPop();
-                      // ignore: use_build_context_synchronously
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.deepOrange,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(
-                            10), // Đặt độ cong cho viền của nút
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16.0,
-                          horizontal: 24.0), // Đặt khoảng cách giữa chữ và viền
-                    ),
-                    child: const Text(
-                      'Hoàn thành',
-                    ),
-                  ),
-                ]),
-              ],
+              ),
             ),
           );
         },
       );
     }
 
-    return Column(
+    return SingleChildScrollView(
+        child: Column(
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -168,10 +174,7 @@ class _UserReviewCardState extends State<UserReviewCard> {
                                 user.avatar_imgURL!)),
                         const SizedBox(width: TSizes.spaceBtwItems),
                         Text('${user.lastName} ${user.firstName}',
-                            style: Theme
-                                .of(context)
-                                .textTheme
-                                .titleLarge)
+                            style: Theme.of(context).textTheme.titleLarge)
                       ],
                     );
                   } else if (snapshot.hasError) {
@@ -181,21 +184,22 @@ class _UserReviewCardState extends State<UserReviewCard> {
                 return const CircularProgressIndicator();
               },
             ),
-            IconButton(onPressed: () {
-              if(authRepo.firebaseUser.value!.email == widget.shopEmail) {
-                _showBottomModal(context, widget.review.id!);
-              } else {
-                Get.snackbar(
-                  'Thông báo',
-                  'Bạn không phải là người bán sản phẩm này.',
-                  snackPosition: SnackPosition.BOTTOM,
-                  backgroundColor: Colors.redAccent.withOpacity(0.1),
-                  animationDuration: const Duration(milliseconds: 500),
-                  duration: const Duration(seconds: 1),
-                  colorText: Colors.red,
-                );
-              }
-            },
+            IconButton(
+                onPressed: () {
+                  if (authRepo.firebaseUser.value!.email == widget.shopEmail) {
+                    _showBottomModal(context, widget.review.id!);
+                  } else {
+                    Get.snackbar(
+                      'Thông báo',
+                      'Bạn không phải là người bán sản phẩm này.',
+                      snackPosition: SnackPosition.BOTTOM,
+                      backgroundColor: Colors.redAccent.withOpacity(0.1),
+                      animationDuration: const Duration(milliseconds: 500),
+                      duration: const Duration(seconds: 1),
+                      colorText: Colors.red,
+                    );
+                  }
+                },
                 icon: const Icon(Icons.more_vert)),
           ],
         ),
@@ -207,17 +211,14 @@ class _UserReviewCardState extends State<UserReviewCard> {
             TRatingBarIndicator(rating: widget.review.rating),
             const SizedBox(width: TSizes.spaceBtwItems),
             Text(widget.review.formattedDate,
-                style: Theme
-                    .of(context)
-                    .textTheme
-                    .bodyMedium)
+                style: Theme.of(context).textTheme.bodyMedium)
           ],
         ),
         const SizedBox(height: TSizes.spaceBtwItems),
         Container(
           alignment: Alignment.centerLeft,
           child: ReadMoreText(
-            //"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In nibh mauris cursus mattis. Consectetur purus ut faucibus pulvinar. Fermentum posuere urna nec tincidunt praesent semper. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Bibendum enim facilisis gravida neque convallis. Aenean pharetra magna ac placerat vestibulum lectus mauris ultrices eros. Porttitor eget dolor morbi non. Mauris pellentesque pulvinar pellentesque habitant morbi. At augue eget arcu dictum varius. Massa tempor nec feugiat nisl pretium fusce. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus.",
+              //"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In nibh mauris cursus mattis. Consectetur purus ut faucibus pulvinar. Fermentum posuere urna nec tincidunt praesent semper. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Bibendum enim facilisis gravida neque convallis. Aenean pharetra magna ac placerat vestibulum lectus mauris ultrices eros. Porttitor eget dolor morbi non. Mauris pellentesque pulvinar pellentesque habitant morbi. At augue eget arcu dictum varius. Massa tempor nec feugiat nisl pretium fusce. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus.",
               widget.review.content,
               trimLines: 1,
               trimMode: TrimMode.Line,
@@ -246,9 +247,8 @@ class _UserReviewCardState extends State<UserReviewCard> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         FutureBuilder(
-                          future:
-                          userController.getUserDetails(
-                              widget.reply!.shopEmail),
+                          future: userController
+                              .getUserDetails(widget.reply!.shopEmail),
                           builder: (context, snapshot) {
                             if (snapshot.connectionState ==
                                 ConnectionState.done) {
@@ -257,10 +257,7 @@ class _UserReviewCardState extends State<UserReviewCard> {
 
                                 return Text(
                                   '${shop.lastName} ${shop.firstName}',
-                                  style: Theme
-                                      .of(context)
-                                      .textTheme
-                                      .bodyLarge,
+                                  style: Theme.of(context).textTheme.bodyLarge,
                                 );
                               } else if (snapshot.hasError) {
                                 print(snapshot.error);
@@ -271,10 +268,7 @@ class _UserReviewCardState extends State<UserReviewCard> {
                         ),
                         Text(
                           widget.reply!.formattedDate,
-                          style: Theme
-                              .of(context)
-                              .textTheme
-                              .bodyMedium,
+                          style: Theme.of(context).textTheme.bodyMedium,
                         ),
                       ],
                     ),
@@ -282,7 +276,7 @@ class _UserReviewCardState extends State<UserReviewCard> {
                     Container(
                       alignment: Alignment.centerLeft,
                       child: ReadMoreText(
-                        //"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In nibh mauris cursus mattis. Consectetur purus ut faucibus pulvinar. Fermentum posuere urna nec tincidunt praesent semper. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Bibendum enim facilisis gravida neque convallis. Aenean pharetra magna ac placerat vestibulum lectus mauris ultrices eros. Porttitor eget dolor morbi non. Mauris pellentesque pulvinar pellentesque habitant morbi. At augue eget arcu dictum varius. Massa tempor nec feugiat nisl pretium fusce. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus.",
+                          //"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. In nibh mauris cursus mattis. Consectetur purus ut faucibus pulvinar. Fermentum posuere urna nec tincidunt praesent semper. Mauris pellentesque pulvinar pellentesque habitant morbi tristique. Bibendum enim facilisis gravida neque convallis. Aenean pharetra magna ac placerat vestibulum lectus mauris ultrices eros. Porttitor eget dolor morbi non. Mauris pellentesque pulvinar pellentesque habitant morbi. At augue eget arcu dictum varius. Massa tempor nec feugiat nisl pretium fusce. Viverra tellus in hac habitasse platea dictumst vestibulum rhoncus.",
                           widget.reply!.content,
                           textAlign: TextAlign.left,
                           trimLines: 2,
@@ -305,6 +299,6 @@ class _UserReviewCardState extends State<UserReviewCard> {
           height: TSizes.spaceBtwSections,
         )
       ],
-    );
+    ));
   }
 }
